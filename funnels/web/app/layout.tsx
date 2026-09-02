@@ -14,6 +14,9 @@ import {
   TWITTER_DESCRIPTION,
 } from "@/lib/seo";
 import "./globals.css";
+// En staging es bloqueja la indexacio: una copia de la web al index de
+// Google competiria amb la de produccio. En produccio no fa res.
+const IS_STAGING = SITE_URL.includes("staging");
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -26,10 +29,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Nimbus Telecom" }],
   creator: "Nimbus Telecom",
   publisher: "Nimbus Telecom",
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: IS_STAGING
+    ? { index: false, follow: false }
+    : { index: true, follow: true },
   openGraph: {
     title: DEFAULT_TITLE,
     description: OG_DESCRIPTION,
