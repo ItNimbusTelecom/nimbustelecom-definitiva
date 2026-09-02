@@ -1,0 +1,150 @@
+# =============================================================================
+#  nimbustelecom.cat  -  Apache
+#  Web estatica (Next.js export). Sin PHP, sin base de datos.
+#
+#  Este fichero vale IGUAL para staging y para produccion:
+#  el bloque noindex se activa solo si el host contiene "staging".
+#  NO hay que editarlo al publicar.
+# =============================================================================
+
+# -------------------------------------------------- no listar directorios
+Options -Indexes
+
+# -------------------------------------------------- pagina 404 propia
+ErrorDocument 404 /404.html
+
+# -------------------------------------------------- staging: fuera de Google
+# Evita que el buscador indexe una copia de la web (contenido duplicado).
+# Se aplica SOLO si el dominio contiene "staging", asi que en produccion
+# no hace nada. Requiere mod_headers.
+<IfModule mod_headers.c>
+  <If "%{HTTP_HOST} =~ /staging/">
+    Header always set X-Robots-Tag "noindex, nofollow"
+  </If>
+</IfModule>
+
+# -------------------------------------------------- cache de los assets
+# Los ficheros de /_next/ llevan un hash en el nombre: si cambia el
+# contenido, cambia el nombre. Por eso se pueden cachear un ano entero.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  <LocationMatch "^/_next/">
+    ExpiresDefault "access plus 1 year"
+    Header append Cache-Control "immutable"
+  </LocationMatch>
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType video/mp4 "access plus 1 month"
+</IfModule>
+
+# -------------------------------------------------- compresion
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# -------------------------------------------------- cabeceras de seguridad
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Content-Security-Policy "frame-ancestors 'self' https://ofertes.nimbustelecom.cat"
+</IfModule>
+
+# =============================================================================
+#  REDIRECCIONES 301 DE LAS URLS DEL WORDPRESS ANTIGUO
+#
+#  Se usa RedirectMatch con la ruta ANCLADA (^...$) en vez de Redirect,
+#  porque Redirect funciona por prefijo: "Redirect 301 /es /" se llevaria
+#  tambien /es/aviso-legal, y /internet entraria en bucle con
+#  /internet/fibra. Con anclaje cada regla coincide con su ruta exacta.
+#
+#  Generado a partir de los 83 stubs de funnels/web/public/.
+# =============================================================================
+
+RedirectMatch 301 ^/alarma-de-seguridad-sms-fraudulentos-en-facturas-protegete/?$ /
+RedirectMatch 301 ^/alerta-cuidado-con-las-llamadas-fraudulentas-la-doble-trucada/?$ /
+RedirectMatch 301 ^/author/nimbustelecom/?$ /
+RedirectMatch 301 ^/avis-legal-2/?$ /aviso-legal/
+RedirectMatch 301 ^/blog/?$ /
+RedirectMatch 301 ^/category/alerta/?$ /
+RedirectMatch 301 ^/category/nimbustelecom-2/?$ /
+RedirectMatch 301 ^/category/noticias/?$ /
+RedirectMatch 301 ^/chat/?$ /
+RedirectMatch 301 ^/cobertura/?$ /movil/
+RedirectMatch 301 ^/contacte/?$ /#contacte
+RedirectMatch 301 ^/contacto/?$ /#contacte
+RedirectMatch 301 ^/el-portal-del-client-de-nimbustelecom-mes-transparencia-i-control/?$ /
+RedirectMatch 301 ^/empresa/?$ /empreses/
+RedirectMatch 301 ^/es/aviso-legal/?$ /aviso-legal/
+RedirectMatch 301 ^/es/cobertura/?$ /movil/
+RedirectMatch 301 ^/es/contacto/?$ /#contacte
+RedirectMatch 301 ^/es/empresa/?$ /empreses/
+RedirectMatch 301 ^/es/fibra/?$ /internet/
+RedirectMatch 301 ^/es/fibra-fijo/?$ /internet/
+RedirectMatch 301 ^/es/fibra-fijo-movil/?$ /internet/
+RedirectMatch 301 ^/es/fibra-fix/?$ /internet/
+RedirectMatch 301 ^/es/?$ /
+RedirectMatch 301 ^/es/movil/?$ /movil/
+RedirectMatch 301 ^/es/politica-de-cookies/?$ /politica-de-cookies/
+RedirectMatch 301 ^/es/politica-de-privacidad/?$ /politica-de-privacidad/
+RedirectMatch 301 ^/es/servicios/?$ /empreses/
+RedirectMatch 301 ^/es/servicios/ingenieria/?$ /empreses/
+RedirectMatch 301 ^/es/servicios/redes-informaticas-y-wifi/?$ /empreses/
+RedirectMatch 301 ^/es/servicios/sonorizacion-megafonia-y-multimedia/?$ /empreses/
+RedirectMatch 301 ^/es/tarifas/tarifas-internet/?$ /internet/
+RedirectMatch 301 ^/es/tarifas/tarifas-telefonia-fija/?$ /movil/
+RedirectMatch 301 ^/es/tarifas/tarifas-telefonia-movil/?$ /movil/
+RedirectMatch 301 ^/faqs/?$ /movil/#faq
+RedirectMatch 301 ^/faqs-2/?$ /movil/#faq
+RedirectMatch 301 ^/fibra/?$ /internet/
+RedirectMatch 301 ^/fibra-fijo-movil/?$ /internet/
+RedirectMatch 301 ^/fibra-fijo-y-movil-en-girona/?$ /internet/
+RedirectMatch 301 ^/fibra-fix/?$ /internet/
+RedirectMatch 301 ^/fibra-fix-2/?$ /internet/
+RedirectMatch 301 ^/fibra-fix-mobil/?$ /internet/
+RedirectMatch 301 ^/fibra-para-naves-industriales-en-girona/?$ /empreses/
+RedirectMatch 301 ^/informacion-tarifas/?$ /
+RedirectMatch 301 ^/inicio/?$ /
+RedirectMatch 301 ^/internet/fibra/?$ /internet/
+RedirectMatch 301 ^/internet/wimax/?$ /internet/
+RedirectMatch 301 ^/internet-en-nave-industrial-en-girona/?$ /empreses/
+RedirectMatch 301 ^/mobil/?$ /movil/
+RedirectMatch 301 ^/nimbus-tv/?$ /
+RedirectMatch 301 ^/no-pagues-de-mas-en-tu-tarifa-de-datos/?$ /
+RedirectMatch 301 ^/novedades/?$ /
+RedirectMatch 301 ^/nuevas-tarifas-internacionales-y-roaming/?$ /
+RedirectMatch 301 ^/nueva-tarifa-fija-para-el-numero-060/?$ https://documentacio.nimbustelecom.cat/numeracion_especial/
+RedirectMatch 301 ^/ofertas-fibra-y-movil-en-girona/?$ /internet/
+RedirectMatch 301 ^/oferta-vuelta-al-cole/?$ /movil/
+RedirectMatch 301 ^/packs/fibra-fijo-movil/?$ /internet/
+RedirectMatch 301 ^/packs/?$ /internet/
+RedirectMatch 301 ^/politica-de-privacitat/?$ /politica-de-privacidad/
+RedirectMatch 301 ^/projecte/?$ /
+RedirectMatch 301 ^/projectes/?$ /
+RedirectMatch 301 ^/serveis/control-accessos-presencia/?$ /seguridad/
+RedirectMatch 301 ^/serveis/enginyeria/?$ /empreses/
+RedirectMatch 301 ^/serveis/sonoritzacio-megafonia-i-multimedia/?$ /empreses/
+RedirectMatch 301 ^/serveis/telefonia-veuip-i-videoconferencies/?$ /empreses/
+RedirectMatch 301 ^/serveis/xarxes-informatiques-i-wifi/?$ /empreses/
+RedirectMatch 301 ^/servicios/alarmas/?$ /seguridad/#serveis
+RedirectMatch 301 ^/servicios/antenas-satelite-y-tdt/?$ /empreses/
+RedirectMatch 301 ^/servicios/base-click-tarifas/?$ /movil/
+RedirectMatch 301 ^/servicios/camaras-de-videovigilancia-cctv/control-de-accesos-y-presencia/?$ /seguridad/#serveis
+RedirectMatch 301 ^/servicios/camaras-de-videovigilancia-cctv/?$ /seguridad/#protegim
+RedirectMatch 301 ^/servicios/?$ /#serveis
+RedirectMatch 301 ^/servicios/ingenieria/?$ /empreses/
+RedirectMatch 301 ^/servicios/redes-informaticas/?$ /#contacte
+RedirectMatch 301 ^/servicios/sonorizacion-megafonia-y-multimedia/?$ /empreses/
+RedirectMatch 301 ^/servicios/telefonia-veuip-y-videoconferencias/?$ /#contacte
+RedirectMatch 301 ^/servicios-tic-para-empresas-en-girona/?$ /empreses/
+RedirectMatch 301 ^/tarifes/?$ /movil/
+RedirectMatch 301 ^/telefonia/fijo/?$ /#serveis
+RedirectMatch 301 ^/telefonia/?$ /movil/
+RedirectMatch 301 ^/telefonia/movil/?$ /movil/
+RedirectMatch 301 ^/telefono-en-nave-industrial-en-girona/?$ /empreses/
+RedirectMatch 301 ^/wifi-para-naves-industriales-en-girona/?$ /empreses/
+RedirectMatch 301 ^/wimax/?$ /internet/

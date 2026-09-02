@@ -1,0 +1,26 @@
+# === Dependencias y artefactos de build de los funnels ===
+# IMPORTANTE: sin esto, un `git add -A` se traga decenas de miles de
+# archivos de node_modules. Este archivo va en la RAIZ del repo.
+
+node_modules/
+.next/
+out/
+.turbo/
+
+# Variables de entorno (nunca subir secretos: el repo es publico
+# y GitHub Pages sirve todo el contenido tal cual)
+.env
+.env.*
+!.env.example
+
+# CDK
+cdk.out/
+*.js.map
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+*-original.mp4
+*.tsbuildinfo

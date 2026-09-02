@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #1f252b;
+  background: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(244, 123, 32, 0.09), transparent 28%),
+    linear-gradient(180deg, #fffaf5 0%, #ffffff 42%, #f7f7f5 100%);
+  color: #1f252b;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(244, 123, 32, 0.35);
+  outline-offset: 3px;
+}
+
+/* La rueda de "Que integrem" en /empreses/ ahora se anima con JS
+   (requestAnimationFrame) en components/ServicesWheel.tsx: las tarjetas
+   solo se desplazan (translate), nunca rotan, para que el texto no se
+   difumine. Gira siempre en bucle a proposito: decision explicita de
+   Bernat de NO respetar prefers-reduced-motion aqui. */

@@ -1,0 +1,10 @@
+{
+  "app": "npx tsx bin/nimbus-funnel-backend.ts",
+  "context": {
+    "stage": "dev",
+    "allowedOrigins": "",
+    "recaptchaEnabled": "false",
+    "emailNotificationsEnabled": "true",
+    "tableNamePrefix": "NimbusFunnel"
+  }
+}
