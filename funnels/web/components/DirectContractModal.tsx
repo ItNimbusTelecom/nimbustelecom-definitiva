@@ -14,7 +14,11 @@ import { VisualIcon } from "./VisualIcon";
 type ContactChoice = "phone" | "whatsapp" | "office";
 
 type DirectContractModalProps = {
-  plan: MobilePlan;
+  /**
+   * Plan movil seleccionado. Si no se pasa, el modal funciona en modo
+   * contacto general: cabecera generica y campo libre en vez de plan.
+   */
+  plan?: MobilePlan;
   onClose: () => void;
 };
 
@@ -26,6 +30,8 @@ const contactChoices: Array<{ id: ContactChoice; icon: "phone" | "message-circle
 
 const WHATSAPP_URL =
   "https://wa.me/34622812604?text=Hola%20Nimbus%2C%20quiero%20informaci%C3%B3n%20para%20contratar%20una%20l%C3%ADnea%20m%C3%B3vil.";
+const WHATSAPP_URL_GENERAL =
+  "https://wa.me/34622812604?text=Hola%20Nimbus%2C%20tinc%20una%20consulta.";
 const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/5LVXuQYrybacb82U8";
 const GOOGLE_MAPS_EMBED_URL =
   "https://www.google.com/maps?q=Nimbus%20Telecom%2C%20C%2F%20Major%2042%2C%20Sils&output=embed";
@@ -35,6 +41,7 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
   const [choice, setChoice] = useState<ContactChoice>("phone");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
   const [company, setCompany] = useState("");
   const [formStartedAt] = useState(() => new Date().toISOString());
@@ -50,13 +57,13 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
     setError("");
     setSent(false);
     if (nextChoice === "office") {
-      trackEvent("contratacion_oficina_selected", { plan_id: plan.id });
+      trackEvent("contratacion_oficina_selected", { plan_id: plan?.id });
     }
   }
 
   function openWhatsapp() {
-    trackEvent("contratacion_whatsapp_clicked", { plan_id: plan.id });
-    window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
+    trackEvent("contratacion_whatsapp_clicked", { plan_id: plan?.id });
+    window.open(plan ? WHATSAPP_URL : WHATSAPP_URL_GENERAL, "_blank", "noopener,noreferrer");
   }
 
   async function submitLead(event: FormEvent<HTMLFormElement>) {
@@ -79,21 +86,29 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
     }
 
     setIsSubmitting(true);
-    trackEvent("contratacion_directa_submitted", { plan_id: plan.id, preferred_contact: preferredContact });
+    trackEvent(plan ? "contratacion_directa_submitted" : "contacto_general_submitted", {
+      plan_id: plan?.id,
+      preferred_contact: preferredContact,
+    });
     const elapsedSeconds = getElapsedSeconds(formStartedAt);
 
     const payload = {
-      funnel: "cobertura-movil",
-      leadType: "contratacion-directa",
+      // Sin plan el lead sigue entrando por /leads: submitLead solo desvia a
+      // /coverage-study cuando leadType es "estudio-cobertura".
+      funnel: plan ? "cobertura-movil" : "web-contacto",
+      leadType: plan ? "contratacion-directa" : "contacto-general",
       version: "mvp-2",
       submittedAt: new Date().toISOString(),
-      selectedPlan: {
-        id: plan.id,
-        name: plan.name,
-        price: plan.price,
-        data: plan.data,
-        description: plan.description,
-      },
+      selectedPlan: plan
+        ? {
+            id: plan.id,
+            name: plan.name,
+            price: plan.price,
+            data: plan.data,
+            description: plan.description,
+          }
+        : undefined,
+      message: plan ? undefined : message,
       source: getLeadSource(),
       antiSpam: {
         formStartedAt,
@@ -110,10 +125,13 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
 
     try {
       await submitLeadRequest(payload);
-      trackEvent("contratacion_directa_completed", { plan_id: plan.id, preferred_contact: preferredContact });
+      trackEvent(plan ? "contratacion_directa_completed" : "contacto_general_completed", {
+        plan_id: plan?.id,
+        preferred_contact: preferredContact,
+      });
       setSent(true);
     } catch (submitError) {
-      trackEvent("contratacion_submit_error", { plan_id: plan.id });
+      trackEvent("contratacion_submit_error", { plan_id: plan?.id });
       setError(submitError instanceof Error ? submitError.message : dictionary.modal.errors.submit);
     } finally {
       setIsSubmitting(false);
@@ -125,12 +143,20 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
       <div className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-soft">
         <div className="flex items-start justify-between gap-4 border-b border-nimbus-line p-6">
           <div>
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-nimbus-orange">{plan.name}</p>
-            <p className="mt-1 text-lg font-black text-nimbus-ink">
-              {plan.price} · {plan.data}
+            {plan ? (
+              <>
+                <p className="text-sm font-black uppercase tracking-[0.18em] text-nimbus-orange">{plan.name}</p>
+                <p className="mt-1 text-lg font-black text-nimbus-ink">
+                  {plan.price} · {plan.data}
+                </p>
+              </>
+            ) : null}
+            <h3 className={`text-2xl font-black text-nimbus-ink ${plan ? "mt-2" : ""}`}>
+              {plan ? dictionary.modal.title : dictionary.modal.generalTitle}
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-nimbus-muted">
+              {plan ? dictionary.modal.text : dictionary.modal.generalText}
             </p>
-            <h3 className="mt-2 text-2xl font-black text-nimbus-ink">{dictionary.modal.title}</h3>
-            <p className="mt-2 text-sm leading-6 text-nimbus-muted">{dictionary.modal.text}</p>
           </div>
           <button
             type="button"
@@ -221,6 +247,20 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
                   <Field label={dictionary.modal.name} value={name} onChange={setName} autoComplete="name" required />
                   <Field label={dictionary.modal.phone} value={phone} onChange={setPhone} autoComplete="tel" required />
                 </div>
+
+                {!plan ? (
+                  <label className="mt-4 block text-sm font-bold text-nimbus-ink">
+                    {dictionary.modal.message}{" "}
+                    <span className="font-normal text-nimbus-muted">{dictionary.modal.optional}</span>
+                    <textarea
+                      value={message}
+                      onChange={(event) => setMessage(event.target.value)}
+                      rows={3}
+                      maxLength={500}
+                      className="mt-2 w-full rounded-lg border border-nimbus-line px-4 py-3 font-normal text-nimbus-ink"
+                    />
+                  </label>
+                ) : null}
 
                 <LegalConsentCheckbox
                   id="direct-contract-consent"
