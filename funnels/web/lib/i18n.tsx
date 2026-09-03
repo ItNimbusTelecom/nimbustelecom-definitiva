@@ -277,6 +277,10 @@ export const translations = {
     },
     modal: {
       title: "¿Cómo prefieres contratar?",
+      generalTitle: "Habla con nosotros",
+      generalText:
+        "Déjanos tus datos y te contactamos por el canal que prefieras. Sin compromiso y sin insistir.",
+      message: "¿En qué te podemos ayudar?",
       text: "Te ayudamos a cerrar la contratación de esta línea móvil y resolver cualquier duda antes de activar el servicio.",
       choices: { phone: "Que me llaméis", whatsapp: "Prefiero WhatsApp", office: "Quiero acercarme a la oficina" },
       officeTitle: "Puedes venir a nuestra oficina en C/Major, 42 - Sils.",
@@ -716,6 +720,10 @@ export const translations = {
     },
     modal: {
       title: "Com prefereixes contractar?",
+      generalTitle: "Parla amb nosaltres",
+      generalText:
+        "Deixa’ns les teves dades i et contactem pel canal que prefereixis. Sense compromís i sense insistir.",
+      message: "En què et podem ajudar?",
       text: "T’ajudem a tancar la contractació d’aquesta línia mòbil i resoldre qualsevol dubte abans d’activar el servei.",
       choices: { phone: "Que em truqueu", whatsapp: "Prefereixo WhatsApp", office: "Vull venir a l’oficina" },
       officeTitle: "Pots venir a la nostra oficina a C/Major, 42 - Sils.",
@@ -1152,6 +1160,10 @@ export const translations = {
     },
     modal: {
       title: "How would you prefer to subscribe?",
+      generalTitle: "Let’s talk",
+      generalText:
+        "Leave us your details and we will contact you through your preferred channel. No commitment, no pushing.",
+      message: "How can we help you?",
       text: "We help you complete the subscription for this mobile line and resolve any questions before activating the service.",
       choices: { phone: "Call me", whatsapp: "I prefer WhatsApp", office: "I want to visit the office" },
       officeTitle: "You can visit our office at C/Major, 42 - Sils.",
@@ -1338,15 +1350,67 @@ type I18nContextValue = {
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
+/**
+ * Lee la eleccion guardada. localStorage puede lanzar en modo privado o con
+ * cookies de terceros bloqueadas, asi que nunca debe tumbar el render.
+ */
+export function getStoredLocale(): Locale | null {
+  try {
+    const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
+    return isLocale(stored) ? stored : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Idioma del navegador -> locale soportado. Recorre navigator.languages en
+ * orden de preferencia y se queda con la primera coincidencia por prefijo
+ * ("ca-ES" y "ca-valencia" -> "ca", "es-419" -> "es"). Si no coincide
+ * ninguno, DEFAULT_LOCALE (catalan).
+ */
+export function detectBrowserLocale(): Locale {
+  if (typeof navigator === "undefined") {
+    return DEFAULT_LOCALE;
+  }
+
+  const candidates =
+    Array.isArray(navigator.languages) && navigator.languages.length > 0
+      ? navigator.languages
+      : [navigator.language];
+
+  for (const candidate of candidates) {
+    const prefix = typeof candidate === "string" ? candidate.toLowerCase().split("-")[0] : "";
+    if (isLocale(prefix)) {
+      return prefix;
+    }
+  }
+
+  return DEFAULT_LOCALE;
+}
+
+/**
+ * Locale activo: eleccion guardada > idioma del navegador > catalan.
+ * Solo debe llamarse en cliente (tras el montaje): con output: export el HTML
+ * es estatico y leer navigator durante el render rompe la hidratacion.
+ */
+export function resolveLocale(): Locale {
+  if (typeof window === "undefined") {
+    return DEFAULT_LOCALE;
+  }
+
+  return getStoredLocale() ?? detectBrowserLocale();
+}
+
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
-      const storedLocale = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-      if (isLocale(storedLocale)) {
-        setLocaleState(storedLocale);
-      }
+      // El idioma detectado NO se persiste: solo se guarda la eleccion
+      // explicita del usuario en el selector. Asi el visitante sigue al
+      // navegador mientras no decida otra cosa.
+      setLocaleState(resolveLocale());
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
@@ -1358,7 +1422,11 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   function setLocale(nextLocale: Locale) {
     setLocaleState(nextLocale);
-    window.localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
+    try {
+      window.localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
+    } catch {
+      // Sin persistencia (modo privado): el cambio vale para esta sesion.
+    }
   }
 
   const value = useMemo(
