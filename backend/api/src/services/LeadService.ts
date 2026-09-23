@@ -22,6 +22,7 @@ export class LeadService {
       id: randomUUID(),
       entityType: "lead",
       status: "new",
+      source: input.source,
       language: input.language,
       pageUrl: input.pageUrl,
       payload: input,

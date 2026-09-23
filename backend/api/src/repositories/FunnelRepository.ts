@@ -9,6 +9,7 @@ export type FunnelRecord<TPayload> = {
   id: string;
   entityType: FunnelEntityType;
   status: "new";
+  source?: string;
   language?: string;
   pageUrl?: string;
   payload: TPayload;
@@ -57,6 +58,7 @@ export function mapRecordToItem<TPayload>(record: FunnelRecord<TPayload>, now = 
     createdAt: timestamp,
     updatedAt: timestamp,
     status: "new",
+    source: record.source,
     language: record.language,
     pageUrl: record.pageUrl,
     payload: record.payload,

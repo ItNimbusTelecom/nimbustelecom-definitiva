@@ -22,6 +22,7 @@ export class CoverageStudyService {
       id: randomUUID(),
       entityType: "coverage-study",
       status: "new",
+      source: input.source,
       language: input.language,
       pageUrl: input.pageUrl,
       payload: input,

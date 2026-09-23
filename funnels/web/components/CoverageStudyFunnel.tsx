@@ -184,7 +184,9 @@ const completedSteps = [
     if (!isValidSpanishPhone(phone)) {
       return dictionary.form.errors.phone;
     }
-    if (!isValidEmail(email)) {
+    // El email deja de ser obligatorio: con el telefono ya se puede contactar.
+    // Si lo escriben, se valida; si lo dejan en blanco, se acepta.
+    if (email.trim() && !isValidEmail(email)) {
       return dictionary.form.errors.email;
     }
     if (!consent) {
@@ -420,7 +422,7 @@ const completedSteps = [
                         required
                       />
                       <Field
-                        label={dictionary.form.fields.email}
+                        label={dictionary.form.fields.emailOptional}
                         value={email}
                         onChange={(value) => {
                           setEmail(value);
@@ -429,7 +431,6 @@ const completedSteps = [
                         }}
                         autoComplete="email"
                         helpText={dictionary.form.emailHelp}
-                        required
                       />
                       <Field
                         label={dictionary.form.fields.currentOperator}

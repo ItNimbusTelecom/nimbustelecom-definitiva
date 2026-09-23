@@ -148,6 +148,7 @@ describe("Nimbus funnel API", () => {
   it("accepts a coverage study with problem location type", async () => {
     const response = await invoke(createTestApp(), "POST", "/coverage-study", {
       name: "Patricia",
+      phone: "972850155",
       email: "info@nimbustelecom.es",
       problemLocationType: "En interiores, dentro de casa o del trabajo",
       preferredContactMethod: "email",
@@ -161,23 +162,7 @@ describe("Nimbus funnel API", () => {
     expect(response.body.ok).toBe(true);
   });
 
-  it("accepts a coverage study for office contact with email and no phone", async () => {
-    const response = await invoke(createTestApp(), "POST", "/coverage-study", {
-      name: "Patricia",
-      email: "info@nimbustelecom.es",
-      problemLocationText: "Sils",
-      preferredContactMethod: "office",
-      currentProblem: "Los datos van lentos",
-      serviceType: "mobile",
-      language: "es",
-      consentAccepted: true
-    });
-
-    expect(response.status).toBe(201);
-    expect(response.body.ok).toBe(true);
-  });
-
-  it("rejects a coverage study without email", async () => {
+  it("accepts a coverage study without email", async () => {
     const response = await invoke(createTestApp(), "POST", "/coverage-study", {
       name: "Patricia",
       phone: "972850155",
@@ -189,8 +174,57 @@ describe("Nimbus funnel API", () => {
       consentAccepted: true
     });
 
+    expect(response.status).toBe(201);
+    expect(response.body.ok).toBe(true);
+  });
+
+  it("rejects a coverage study without phone", async () => {
+    const response = await invoke(createTestApp(), "POST", "/coverage-study", {
+      name: "Patricia",
+      email: "info@nimbustelecom.es",
+      problemLocationText: "Sils",
+      preferredContactMethod: "office",
+      currentProblem: "Los datos van lentos",
+      serviceType: "mobile",
+      language: "es",
+      consentAccepted: true
+    });
+
     expect(response.status).toBe(400);
     expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
+  it("rejects a coverage study that prefers email but does not give one", async () => {
+    const response = await invoke(createTestApp(), "POST", "/coverage-study", {
+      name: "Patricia",
+      phone: "972850155",
+      problemLocationText: "Sils",
+      preferredContactMethod: "email",
+      currentProblem: "Los datos van lentos",
+      serviceType: "mobile",
+      language: "es",
+      consentAccepted: true
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
+  it("accepts the campaign source of a coverage study", async () => {
+    const response = await invoke(createTestApp(), "POST", "/coverage-study", {
+      name: "Patricia",
+      phone: "972850155",
+      problemLocationText: "Sils",
+      preferredContactMethod: "phone",
+      currentProblem: "Los datos van lentos",
+      serviceType: "mobile",
+      source: "utm_source=google|utm_campaign=llancament-web",
+      language: "es",
+      consentAccepted: true
+    });
+
+    expect(response.status).toBe(201);
+    expect(response.body.ok).toBe(true);
   });
 
   it("rejects a coverage study without problem location", async () => {
