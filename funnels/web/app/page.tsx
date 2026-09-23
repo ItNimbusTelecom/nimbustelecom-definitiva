@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { HomePageContent } from "@/components/HomePageContent";
+import { StructuredData } from "@/components/StructuredData";
 import { HOME_DESCRIPTION, HOME_TITLE, openGraphFor } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -10,5 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return <HomePageContent />;
+  return (
+    <>
+      <StructuredData />
+      <HomePageContent />
+    </>
+  );
 }

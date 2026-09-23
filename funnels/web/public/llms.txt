@@ -1,0 +1,44 @@
+# Nimbus Telecom
+
+> Operador local de telecomunicacions a la Selva i el Gironès (Girona,
+> Catalunya). Internet, telefonia mòbil, fibra i seguretat per a particulars i
+> empreses, amb tècnics propis i botiga física a Sils.
+
+Nimbus Telecom S.L. no és una comercialitzadora: té equip tècnic propi i
+atenció presencial. Les línies mòbils treballen amb cobertura triple (poden
+operar sobre diverses xarxes disponibles), cosa que permet buscar l'opció que
+funcioni millor segons on visqui o es mogui cada persona.
+
+- Adreça: Carrer Major, 42 — 17410 Sils (Girona)
+- Telèfon: +34 972 85 01 55
+- Horari d'atenció: de dilluns a divendres, de 9:00 a 17:00
+- Zona de servei: la Selva i el Gironès
+
+## Pàgines
+
+- [Inici](https://nimbustelecom.cat/): qui som, els quatre serveis i com contactar.
+- [Cobertura mòbil](https://nimbustelecom.cat/movil/): problemes de cobertura, tarifes mòbils i estudi de cobertura gratuït.
+- [Internet a casa](https://nimbustelecom.cat/internet/): fibra i connexions per a habitatges on no arriba la fibra.
+- [Seguretat](https://nimbustelecom.cat/seguridad/): càmeres, alarmes i control d'accessos.
+- [Empreses](https://nimbustelecom.cat/empreses/): connectivitat i serveis TIC per a negocis i naus industrials.
+
+## Documentació i condicions
+
+- [Tarifes internacionals](https://documentacio.nimbustelecom.cat/tarifas_internacional/)
+- [Numeració especial](https://documentacio.nimbustelecom.cat/numeracion_especial/)
+- [Roaming](https://documentacio.nimbustelecom.cat/roaming/)
+- [Fixos i internacional](https://documentacio.nimbustelecom.cat/fijos-internacional/)
+
+## Legal
+
+- [Avís legal](https://nimbustelecom.cat/aviso-legal/)
+- [Política de privacitat](https://nimbustelecom.cat/politica-de-privacidad/)
+- [Política de cookies](https://nimbustelecom.cat/politica-de-cookies/)
+- [Declaració d'accessibilitat](https://nimbustelecom.cat/declaracion-de-accesibilidad/)
+
+## Notes
+
+- Cap operador pot garantir cobertura perfecta a tot arreu. Nimbus revisa cada
+  cas abans de recomanar una línia.
+- Les tarifes mòbils indicades al web són sense permanència.
+- L'atenció de suport entra pel xat del web; el telèfon és per a vendes.
