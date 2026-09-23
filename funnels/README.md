@@ -1,36 +1,47 @@
 # Funnels — código fuente
 
-Esta carpeta contiene el **código fuente** de los funnels por producto.
-No es lo que se publica: lo publicado son las carpetas de la raíz del repo.
+Esta carpeta contiene el **código fuente** de la web. No es lo que se sirve.
 
 ## Regla mental
 
-- `funnels/` → **código fuente** (no lo mira nadie de fuera)
-- `/movil/`, `/fibra/`, … en la raíz → **build publicado** (esto es lo que ve el cliente)
+- `main` → **código fuente**. GitHub Pages no lo mira.
+- `gh-pages` → **el build publicado**. Esto es lo que ve el cliente en
+  https://nimbustelecom.cat.
+
+No hay un build copiado a la raíz de `main`: la rama `gh-pages` se regenera
+entera a partir de `funnels/web/out/`.
 
 ## Estructura
 
 ```
 funnels/
-├── shared/            componentes y lib comunes a todos los funnels
-├── web/   funnel de cobertura móvil  → se publica en /movil/
-├── fibra/             funnel de fibra (futuro)   → se publica en /fibra/
-├── backend/           API (Express/Lambda) + infra CDK, común a todos
+├── web/                 la web entera: home + los cuatro funnels
 └── scripts/
-    ├── publicar-funnel.sh   build + publicación
-    └── next.config.ts       config con soporte de basePath
+    └── publicar.sh      build + publicación en gh-pages
 ```
 
-## Publicar un funnel
+Cada página de servicio (`/movil/`, `/internet/`, `/seguridad/`, `/empreses/`)
+es un funnel dentro de la misma app Next.js, no un proyecto aparte. El backend
+(API en Lambda + infra CDK) vive en `backend/`, en la raíz del repo, y es común
+a todos.
 
-Desde Git Bash, en la raíz del repo:
+## Publicar
+
+Desde la raíz del repo, con la rama `main` limpia:
 
 ```bash
-./funnels/scripts/publicar-funnel.sh web movil
+./funnels/scripts/publicar.sh --dry-run   # compila y verifica, no publica
+./funnels/scripts/publicar.sh             # publica de verdad
 ```
 
-Compila `funnels/web` y deja el resultado en `/movil/`.
-No hace commit: revisa antes de subir.
+El script comprueba el CNAME y el `robots.txt` antes de tocar nada, compila con
+las variables de producción, espeja el resultado sobre un worktree de
+`gh-pages` y pide confirmación antes del push.
+
+**No publiques con `npm run deploy`.** Ese script compila sin
+`NEXT_PUBLIC_API_BASE_URL`, y sin esa variable `lib/submitLead.ts` se cree que
+está en modo maqueta: da los envíos por buenos sin llamar a la API. Los
+formularios parecerían funcionar y no entraría ni un lead.
 
 ## Trabajar en local (sin publicar)
 
@@ -40,24 +51,26 @@ npm install
 npm run dev
 ```
 
-Se abre en `http://localhost:3000` con recarga en caliente. Es la forma
-de iterar el diseño sin tocar producción.
+Se abre en `http://localhost:3000` con recarga en caliente.
+
+Para ver el export estático tal cual quedaría publicado:
+
+```bash
+cd funnels/web && npx next build && (cd out && python3 -m http.server 8124)
+```
 
 ## Reglas importantes
 
-1. **Ningún funnel debe tener `public/CNAME`.** El dominio lo define el
-   `CNAME` de la raíz del repo. Si un funnel publica el suyo, sobreescribe
-   el de la web principal y la tumba. El script lo borra por si acaso,
-   pero lo correcto es que no exista en el código fuente.
+1. **El dominio lo fija `funnels/web/public/CNAME`.** Next copia `public/` tal
+   cual al export, así que ese fichero acaba en la raíz de `gh-pages` y es el
+   que decide en qué dominio se sirve la web. Si se borra, el sitio se queda
+   sin dominio; si aparece un segundo `CNAME` en otra carpeta, el resultado es
+   impredecible. El script aborta en los dos casos.
 
-2. **Nada de secretos en esta carpeta.** El repo es público y GitHub Pages
-   sirve todo el contenido tal cual (hay un `.nojekyll`), así que cualquier
-   archivo aquí es accesible desde internet.
+2. **Nada de secretos aquí.** El repo es público y GitHub Pages sirve todo el
+   contenido tal cual (hay un `.nojekyll`), así que cualquier archivo de
+   `public/` es accesible desde internet.
 
 3. **Un solo backend para todos los funnels.** No se despliega un stack por
    funnel: se reutiliza `NimbusFunnelBackend-prod` y cada funnel envía su
-   `serviceType` (`mobile`, `fiber`, `internet`, `business`).
-
-4. **Lo común va en `shared/`.** Si un cambio (footer, cookies, i18n…) hay
-   que repetirlo en dos funnels, es que ese componente debería estar en
-   `shared/`.
+   `serviceType` (`mobile`, `internet`, `security`, `business`).
