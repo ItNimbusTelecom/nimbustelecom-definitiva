@@ -40,15 +40,7 @@ export type HubContent = {
     eyebrow: string;
     title: string;
     subtitle: string;
-    phoneTitle: string;
-    whatsappTitle: string;
-    emailTitle: string;
-    officeTitle: string;
-    officeCta: string;
-    hours: string;
-    copyEmail: string;
-    copyNumber: string;
-    copied: string;
+    ctaLabel: string;
   };
   services: HubService[];
   about: {
@@ -100,16 +92,8 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       eyebrow: "Contacto",
       title: "Habla con nosotros",
       subtitle:
-        "Elige el canal que te vaya mejor. Al otro lado hay personas del equipo, no un contestador.",
-      phoneTitle: "Llámanos",
-      whatsappTitle: "Escríbenos por WhatsApp",
-      emailTitle: "Envíanos un email",
-      officeTitle: "Ven a vernos",
-      officeCta: "Cómo llegar",
-      hours: "Lunes a viernes, de 9:00 a 17:00",
-      copyEmail: "Copiar correo",
-      copyNumber: "Copiar número",
-      copied: "Copiado",
+        "Déjanos tus datos y te llamamos, o pásate por la tienda. Al otro lado hay personas del equipo, no un contestador.",
+      ctaLabel: "Contacta con nosotros",
     },
     about: {
       eyebrow: "Quiénes somos",
@@ -239,16 +223,8 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       eyebrow: "Contacte",
       title: "Parla amb nosaltres",
       subtitle:
-        "Tria el canal que et vagi millor. A l'altra banda hi ha persones de l'equip, no un contestador.",
-      phoneTitle: "Truca'ns",
-      whatsappTitle: "Escriu-nos per WhatsApp",
-      emailTitle: "Envia'ns un correu",
-      officeTitle: "Vine a veure'ns",
-      officeCta: "Com arribar-hi",
-      hours: "De dilluns a divendres, de 9:00 a 17:00",
-      copyEmail: "Copiar el correu",
-      copyNumber: "Copiar el número",
-      copied: "Copiat",
+        "Deixa'ns les teves dades i et truquem, o passa per la botiga. A l'altra banda hi ha persones de l'equip, no un contestador.",
+      ctaLabel: "Contacta amb nosaltres",
     },
     about: {
       eyebrow: "Qui som",
@@ -378,16 +354,8 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       eyebrow: "Contact",
       title: "Let's talk",
       subtitle:
-        "Pick whichever channel suits you best. There are real team members on the other side, not a machine.",
-      phoneTitle: "Call us",
-      whatsappTitle: "Message us on WhatsApp",
-      emailTitle: "Send us an email",
-      officeTitle: "Visit us",
-      officeCta: "Get directions",
-      hours: "Monday to Friday, 9:00–17:00",
-      copyEmail: "Copy email",
-      copyNumber: "Copy number",
-      copied: "Copied",
+        "Leave us your details and we will call you, or drop by the shop. There are real team members on the other side, not a machine.",
+      ctaLabel: "Get in touch",
     },
     about: {
       eyebrow: "Who we are",

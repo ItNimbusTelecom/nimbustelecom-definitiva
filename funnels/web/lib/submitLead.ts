@@ -1,8 +1,11 @@
 "use client";
 
+import { resolveLocale } from "@/lib/i18n";
+
 type LegacyLeadPayload = {
   leadType?: unknown;
   serviceType?: unknown;
+  message?: unknown;
   selectedPlan?: {
     id?: unknown;
     name?: unknown;
@@ -125,6 +128,7 @@ function toLeadPayload(payload: LegacyLeadPayload) {
   const contact = payload.contact ?? {};
   const selectedPlan = payload.selectedPlan;
   const preferredContact = toPreferredContactMethod(contact.preferredContact);
+  const freeText = toText(payload.message);
   const planSummary = selectedPlan
     ? [
         `Plan solicitado: ${toText(selectedPlan.name)}`,
@@ -132,7 +136,7 @@ function toLeadPayload(payload: LegacyLeadPayload) {
         `Datos: ${toText(selectedPlan.data)}`,
         `Descripción: ${toText(selectedPlan.description)}`,
       ].join("\n")
-    : undefined;
+    : freeText || undefined;
 
   return {
     name: toText(contact.name) || "Solicitud desde funnel Nimbus",
@@ -208,9 +212,14 @@ function toPreferredContactMethod(value: unknown) {
   return "phone";
 }
 
+/**
+ * Idioma con el que se marca el lead. Debe salir de la misma resolucion que
+ * usa la interfaz (eleccion guardada > navegador > catalan). Si aqui se
+ * leyera solo localStorage, un visitante catalan sin eleccion previa veria la
+ * web en catalan y el lead llegaria a Make marcado como "es".
+ */
 function getCurrentLocale() {
-  const locale = window.localStorage.getItem("nimbus-locale");
-  return locale === "ca" || locale === "en" ? locale : "es";
+  return resolveLocale();
 }
 
 function getPageUrl(payload: LegacyLeadPayload) {
