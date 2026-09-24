@@ -1,146 +1,104 @@
 #!/usr/bin/env bash
 #
-# Publica la web de Nimbus en produccion. De principio a fin.
+# Publica la web de Nimbus en produccion (https://nimbustelecom.cat).
 #
 #   Uso:
-#     ./funnels/scripts/publicar.sh --dry-run   <- hace TODO menos commit y push
+#     ./funnels/scripts/publicar.sh --dry-run   <- compila y verifica, no publica
 #     ./funnels/scripts/publicar.sh             <- publica de verdad
 #
-# Que hace, en orden:
-#   1. Comprobaciones previas (aborta si algo no cuadra)
-#   2. Build limpia de funnels/web
-#   3. Verifica el export
-#   4. Copia el resultado a la raiz del repo
-#   5. Verifica los stubs de redireccion
-#   6. Commit y push  (solo si NO es --dry-run)
+# Como funciona esto, que no es obvio:
 #
-# Ejecutar desde Git Bash. Si algo falla, el script para: no deja
-# la web a medias en produccion.
+#   main      -> codigo fuente. NO se sirve.
+#   gh-pages  -> lo que GitHub Pages sirve en el dominio. Es el build.
+#
+# Por eso el script no copia nada a la raiz de main: compila funnels/web y
+# espeja el resultado sobre un worktree de gh-pages. Si algo falla, para:
+# no deja la web a medias en produccion.
 #
 set -euo pipefail
 
 # ---------------------------------------------------------------- parametros
+# El build hornea estas dos variables. Si falta la del API, submitLead se cree
+# que esta en modo maqueta y da los envios por buenos sin llamar a nadie: los
+# formularios pareceran funcionar y no entrara ni un lead. Por eso van aqui y
+# no en un `npm run deploy` pelado.
 API_BASE_URL="${API_BASE_URL:-https://qzgkq7ipcg.execute-api.eu-west-1.amazonaws.com}"
 SITE_URL="${SITE_URL:-https://nimbustelecom.cat}"
-APP="${APP:-funnels/web}"
 DOMINIO_ESPERADO="nimbustelecom.cat"
-REMOTO_ESPERADO="ItNimbusTelecom/nimbus-telecom-home"
-RAMA="main"
-TAG_BACKUP="wordpress-produccion"
+# Se puede sobreescribir para ensayar el script desde una rama de trabajo:
+#   RAMA_FUENTE=mi-rama ./funnels/scripts/publicar.sh --dry-run
+RAMA_FUENTE="${RAMA_FUENTE:-main}"
+RAMA_PUBLICACION="gh-pages"
+APP="funnels/web"
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+WORKTREE="${TMPDIR:-/tmp}/nimbus-gh-pages"
 
 DRY_RUN=0
-if [ "${1:-}" = "--dry-run" ]; then
-  DRY_RUN=1
-fi
+[ "${1:-}" = "--dry-run" ] && DRY_RUN=1
 
 FALLOS=0
-AVISOS=0
-
 titulo() { echo ""; echo "=============================================================="; echo "  $1"; echo "=============================================================="; }
 ok()     { echo "  [OK]    $1"; }
-aviso()  { echo "  [AVISO] $1"; AVISOS=$((AVISOS+1)); }
+aviso()  { echo "  [AVISO] $1"; }
 fallo()  { echo "  [FALLO] $1"; FALLOS=$((FALLOS+1)); }
+
+limpiar() { git -C "$RAIZ" worktree remove --force "$WORKTREE" >/dev/null 2>&1 || true; }
+trap limpiar EXIT
 
 # ============================================================ 1. PREFLIGHT
 titulo "1. COMPROBACIONES PREVIAS"
+cd "$RAIZ"
 
-# --- estamos en el repo correcto
-if [ -f "$RAIZ/CNAME" ]; then
-  CNAME_CONTENIDO="$(tr -d '\r\n' < "$RAIZ/CNAME")"
+# --- el CNAME que se publicara sale de aqui, no de la raiz del repo
+CNAME_FUENTE="$RAIZ/$APP/public/CNAME"
+if [ -f "$CNAME_FUENTE" ]; then
+  CNAME_CONTENIDO="$(tr -d '\r\n' < "$CNAME_FUENTE")"
   if [ "$CNAME_CONTENIDO" = "$DOMINIO_ESPERADO" ]; then
-    ok "CNAME en la raiz: $CNAME_CONTENIDO"
+    ok "public/CNAME: $CNAME_CONTENIDO"
   else
-    fallo "CNAME contiene '$CNAME_CONTENIDO', se esperaba '$DOMINIO_ESPERADO'"
+    fallo "public/CNAME dice '$CNAME_CONTENIDO'; al publicar cambiaria el dominio a ese"
   fi
 else
-  fallo "no hay CNAME en la raiz. Estas en el repo correcto?"
+  fallo "falta $APP/public/CNAME: la publicacion dejaria el sitio sin dominio"
 fi
 
-# --- regla critica: ningun CNAME fuera de la raiz
-CNAMES_EXTRA="$(find "$RAIZ" -name CNAME -not -path "*/node_modules/*" -not -path "$RAIZ/CNAME" 2>/dev/null || true)"
+# --- ningun CNAME suelto que pueda colarse en el build
+CNAMES_EXTRA="$(find "$RAIZ/funnels" -name CNAME -not -path "*/node_modules/*" -not -path "*/out/*" -not -path "$CNAME_FUENTE" 2>/dev/null || true)"
 if [ -z "$CNAMES_EXTRA" ]; then
-  ok "ningun CNAME en subcarpetas (regla critica)"
+  ok "ningun CNAME duplicado en funnels/"
 else
-  fallo "hay CNAME fuera de la raiz, sobreescribiria el dominio:"
+  fallo "hay mas de un CNAME, el dominio publicado seria impredecible:"
   echo "$CNAMES_EXTRA" | sed 's/^/          /'
 fi
 
-# --- .nojekyll: sin el, Jekyll se come _next/
-if [ -f "$RAIZ/.nojekyll" ]; then
-  ok ".nojekyll presente (necesario para servir _next/)"
-else
-  fallo "falta .nojekyll en la raiz: la web se publicaria sin CSS ni JS"
-fi
+[ -f "$RAIZ/$APP/public/.nojekyll" ] && ok ".nojekyll presente (sin el, Jekyll se come _next/)" \
+                                     || fallo "falta $APP/public/.nojekyll: la web saldria sin CSS ni JS"
 
-# --- la app existe
-if [ -d "$RAIZ/$APP" ]; then
-  ok "la app esta en $APP"
-else
-  fallo "no existe $RAIZ/$APP"
-fi
-
-# --- rama y arbol limpio
-cd "$RAIZ"
 RAMA_ACTUAL="$(git rev-parse --abbrev-ref HEAD)"
-if [ "$RAMA_ACTUAL" = "$RAMA" ]; then
-  ok "rama actual: $RAMA_ACTUAL"
-else
-  fallo "estas en la rama '$RAMA_ACTUAL', se esperaba '$RAMA'"
-fi
+[ "$RAMA_ACTUAL" = "$RAMA_FUENTE" ] && ok "rama actual: $RAMA_ACTUAL" \
+                                    || fallo "estas en '$RAMA_ACTUAL'; se publica desde '$RAMA_FUENTE'"
 
-if [ -z "$(git status --porcelain)" ]; then
+if [ -z "$(git status --porcelain -- "$APP" backend)" ]; then
   ok "arbol de trabajo limpio"
 else
-  aviso "hay cambios sin comitear (se incluiran en el commit de publicacion):"
-  git status --porcelain | sed 's/^/          /'
+  aviso "hay cambios sin comitear: se publicaria codigo que no esta en $RAMA_FUENTE"
+  git status --porcelain -- "$APP" backend | sed 's/^/          /'
 fi
 
-# --- copia de seguridad del sitio actual
-if git rev-parse -q --verify "refs/tags/$TAG_BACKUP" >/dev/null; then
-  ok "tag de vuelta atras presente: $TAG_BACKUP"
+if git fetch origin "$RAMA_PUBLICACION" --quiet 2>/dev/null; then
+  ok "contacto con el remoto"
 else
-  fallo "no existe el tag '$TAG_BACKUP'. Sin el, no hay vuelta atras marcada."
-fi
-
-# --- remoto
-if git remote get-url origin >/dev/null 2>&1; then
-  URL_REMOTO="$(git remote get-url origin)"
-  if echo "$URL_REMOTO" | grep -qi "$REMOTO_ESPERADO"; then
-    ok "remoto correcto: $URL_REMOTO"
-    echo "          comprobando que el push seria fast-forward ..."
-    if git fetch origin "$RAMA" --quiet 2>/dev/null; then
-      if git merge-base --is-ancestor "origin/$RAMA" HEAD 2>/dev/null; then
-        PENDIENTES="$(git rev-list --count "origin/$RAMA..HEAD")"
-        ok "fast-forward limpio ($PENDIENTES commits por subir)"
-      else
-        fallo "historiales divergentes: el push NO seria fast-forward. Parar y revisar."
-      fi
-    else
-      aviso "no se ha podido contactar con el remoto (sin red o sin credenciales)"
-    fi
-  else
-    fallo "el remoto apunta a '$URL_REMOTO', se esperaba '$REMOTO_ESPERADO'"
-  fi
-else
-  if [ "$DRY_RUN" = "1" ]; then
-    aviso "no hay remoto configurado (normal mientras no se publique)"
-  else
-    fallo "no hay remoto configurado. Anadelo antes de publicar:"
-    echo "          git remote add origin https://github.com/$REMOTO_ESPERADO.git"
-  fi
+  fallo "no se ha podido contactar con el remoto (sin red o sin credenciales)"
 fi
 
 if [ "$FALLOS" -gt 0 ]; then
-  echo ""
-  echo "  >> $FALLOS comprobacion(es) fallida(s). No se publica nada."
+  echo ""; echo "  >> $FALLOS comprobacion(es) fallida(s). No se publica nada."
   exit 1
 fi
 
 # ============================================================ 2. BUILD
 titulo "2. BUILD LIMPIA"
-
 cd "$RAIZ/$APP"
 echo "  Borrando out/ y .next/ (la cache de Turbopack ya ha dado builds a medias)..."
 rm -rf out .next
@@ -156,156 +114,89 @@ echo "  SITE: $SITE_URL"
 echo ""
 npx next build
 
-# Un funnel nunca debe publicar su propio CNAME
-rm -f out/CNAME
-
 # --- Apano para Next 16.2.5 (prefetch) ---
-# El export escribe out/<ruta>/__next.<ruta>/__PAGE__.txt pero el router
-# lo pide como out/<ruta>/__next.<ruta>.__PAGE__.txt. Solo provoca 404 en
-# consola, pero se duplica para dejarlo limpio.
+# El export escribe out/<ruta>/__next.<ruta>/__PAGE__.txt pero el router lo pide
+# como out/<ruta>/__next.<ruta>.__PAGE__.txt. Solo provoca 404 en consola, pero
+# se duplica para dejarlo limpio.
 # REVISAR al actualizar Next: si lo corrigen, este bloque sobra.
 find out -name "__PAGE__.txt" | while read -r f; do
-  dir="$(dirname "$f")"
-  cp "$f" "${dir}.__PAGE__.txt"
+  cp "$f" "$(dirname "$f").__PAGE__.txt"
 done
 
-# ============================================================ 3. VERIFICAR EXPORT
+# ============================================================ 3. VERIFICAR
 titulo "3. VERIFICACION DEL EXPORT"
-
-PAGINAS="index.html movil/index.html internet/index.html seguridad/index.html empreses/index.html 404.html sitemap.xml robots.txt"
-for p in $PAGINAS; do
-  if [ -f "out/$p" ]; then
-    ok "$p"
-  else
-    fallo "falta out/$p"
-  fi
+for p in index.html movil/index.html internet/index.html seguridad/index.html \
+         empreses/index.html 404.html sitemap.xml robots.txt CNAME .nojekyll; do
+  [ -e "out/$p" ] && ok "$p" || fallo "falta out/$p"
 done
+[ -d "out/_next" ] && ok "_next/ generado" || fallo "falta out/_next/"
 
-if [ -d "out/_next" ]; then
-  ok "_next/ generado"
+# El robots del export depende de SITE_URL: si lleva "staging" se bloquea el
+# rastreo entero. Publicar eso en produccion saca la web de Google.
+if grep -qi "^Disallow: /" out/robots.txt 2>/dev/null; then
+  fallo "robots.txt bloquea el rastreo (SITE_URL apunta a staging?)"
 else
-  fallo "falta out/_next/"
+  ok "robots.txt permite el rastreo"
 fi
 
 if [ "$FALLOS" -gt 0 ]; then
-  echo ""
-  echo "  >> El build esta incompleto. No se toca la raiz del repo."
+  echo ""; echo "  >> El build esta incompleto. No se toca $RAMA_PUBLICACION."
   exit 1
 fi
 
-# ============================================================ 4. COPIA A LA RAIZ
-titulo "4. COPIA A LA RAIZ DEL REPO"
+# ============================================================ 4. ESPEJO
+titulo "4. ESPEJO SOBRE $RAMA_PUBLICACION"
+cd "$RAIZ"
+limpiar
+git worktree add --quiet "$WORKTREE" "$RAMA_PUBLICACION"
+git -C "$WORKTREE" reset --hard --quiet "origin/$RAMA_PUBLICACION"
 
-echo "  Se van a sobreescribir en $RAIZ :"
-echo "    index.html, 404.html, sitemap.xml, robots.txt"
-echo "    _next/  (se regenera entero)"
-echo "    movil/ internet/ seguridad/ empreses/ y las paginas legales"
-echo "    los 82 stubs de redireccion"
-echo ""
-if [ "$DRY_RUN" = "1" ]; then
-  echo "  MODO --dry-run: se copia igualmente para poder verificar y verlo en local,"
-  echo "  pero NO se hara commit ni push. La raiz queda modificada en tu disco;"
-  echo "  para deshacerlo:  git checkout -- . && git clean -fd"
-  echo ""
-fi
-read -r -p "  Continuar? (s/N) " RESPUESTA
-if [ "$RESPUESTA" != "s" ] && [ "$RESPUESTA" != "S" ]; then
-  echo "  Cancelado. No se ha tocado nada."
+rsync -a --delete --exclude '.git' "$RAIZ/$APP/out/" "$WORKTREE/"
+git -C "$WORKTREE" add -A
+
+if git -C "$WORKTREE" diff --cached --quiet; then
+  echo "  No hay cambios: lo publicado ya es identico a este build."
   exit 0
 fi
 
-rm -rf "$RAIZ/_next"
-cp -r out/. "$RAIZ/"
-ok "build copiado a la raiz"
+echo "  Cambios que se publicarian:"
+git -C "$WORKTREE" diff --cached --stat | tail -15
+echo ""
+git -C "$WORKTREE" diff --cached --name-status | awk '{print $1}' | sort | uniq -c | sed 's/^/     /'
 
-# ============================================================ 5. STUBS
-titulo "5. VERIFICACION DE LOS STUBS DE REDIRECCION"
-
-cd "$RAIZ"
-TOTAL_STUBS=0
-STUBS_ROTOS=0
-STUBS_EXTERNOS=0
-
-while IFS= read -r f; do
-  grep -qi 'http-equiv="refresh"' "$f" 2>/dev/null || continue
-  TOTAL_STUBS=$((TOTAL_STUBS+1))
-  RUTA="$(dirname "$f" | sed 's|^\./||')"
-  DESTINO="$(grep -o 'url=[^"]*' "$f" | head -1 | cut -d= -f2-)"
-  DESTINO="${DESTINO%%#*}"
-  [ -z "$DESTINO" ] && DESTINO="/"
-
-  # Destinos externos (p.ej. documentacio.nimbustelecom.cat): no se pueden
-  # comprobar en disco. Se listan para revisarlos a ojo.
-  case "$DESTINO" in
-    http://*|https://*|//*)
-      STUBS_EXTERNOS=$((STUBS_EXTERNOS+1))
-      echo "  [EXT]   $RUTA -> $DESTINO"
-      continue
-      ;;
-  esac
-
-  OBJETIVO="$RAIZ$DESTINO"
-  if [ -f "$OBJETIVO" ] || { [ -d "$OBJETIVO" ] && [ -f "$OBJETIVO/index.html" ]; }; then
-    :
-  else
-    fallo "stub '$RUTA' apunta a '$DESTINO', que no existe"
-    STUBS_ROTOS=$((STUBS_ROTOS+1))
-  fi
-done < <(find . -name "index.html" -not -path "./node_modules/*" -not -path "./funnels/*" -not -path "./_next/*")
-
-echo "  Stubs encontrados: $TOTAL_STUBS  (internos: $((TOTAL_STUBS-STUBS_EXTERNOS)), externos: $STUBS_EXTERNOS)"
-if [ "$STUBS_ROTOS" -eq 0 ]; then
-  ok "todos los stubs internos apuntan a una ruta que existe"
-else
-  echo ""
-  echo "  >> $STUBS_ROTOS stub(s) rotos. Corrigelos antes de publicar."
-  echo "     La raiz ya esta modificada; para deshacer:  git checkout -- . && git clean -fd"
-  exit 1
-fi
-
-# ============================================================ 6. PUBLICAR
 if [ "$DRY_RUN" = "1" ]; then
   titulo "ENSAYO COMPLETADO"
-  echo "  Todo correcto. No se ha comiteado ni subido nada."
+  echo "  No se ha comiteado ni subido nada."
   echo ""
   echo "  Para verlo tal cual quedaria publicado:"
-  echo "    cd \"$RAIZ\" && npx serve ."
+  echo "    cd \"$RAIZ/$APP/out\" && python3 -m http.server 8124"
   echo ""
-  echo "  Para dejar el repo como estaba:"
-  echo "    cd \"$RAIZ\" && git checkout -- . && git clean -fd"
-  echo ""
-  [ "$AVISOS" -gt 0 ] && echo "  ($AVISOS aviso(s) mas arriba, revisalos)"
   exit 0
 fi
 
-titulo "6. PUBLICACION"
-
-echo "  Ultima parada. A partir de aqui la web nueva sustituye a la actual"
-echo "  en https://$DOMINIO_ESPERADO (unos minutos hasta que GitHub la sirva)."
+# ============================================================ 5. PUBLICAR
+titulo "5. PUBLICACION"
+echo "  A partir de aqui la web nueva sustituye a la actual en"
+echo "  https://$DOMINIO_ESPERADO (unos minutos hasta que GitHub la sirva)."
 echo ""
-echo "  Vuelta atras si algo sale mal:"
-echo "    git revert --no-commit HEAD && git commit -m 'revert publicacion' && git push"
-echo "    (el estado del WordPress viejo sigue en el tag '$TAG_BACKUP')"
+echo "  Vuelta atras:"
+echo "    git push origin $(git -C "$WORKTREE" rev-parse --short HEAD):$RAMA_PUBLICACION --force"
+echo "    (ese es el commit que hay publicado ahora mismo, antes de este cambio)"
 echo ""
 read -r -p "  Publicar de verdad? (escribe PUBLICAR) " CONFIRMA
 if [ "$CONFIRMA" != "PUBLICAR" ]; then
-  echo "  Cancelado. La raiz queda modificada pero sin comitear."
-  echo "  Para deshacer:  git checkout -- . && git clean -fd"
+  echo "  Cancelado. No se ha subido nada."
   exit 0
 fi
 
-git add -A
-git commit -m "publicacion: web nueva (home + funnels) sustituye al export de WordPress"
-git push origin "$RAMA"
+git -C "$WORKTREE" commit -q -m "publicacio: $(git -C "$RAIZ" rev-parse --short HEAD)"
+git -C "$WORKTREE" push origin "$RAMA_PUBLICACION"
 
 titulo "PUBLICADO"
 echo "  Comprobar en unos minutos:"
-echo "    https://$DOMINIO_ESPERADO/"
-echo "    https://$DOMINIO_ESPERADO/movil/"
-echo "    https://$DOMINIO_ESPERADO/internet/"
-echo "    https://$DOMINIO_ESPERADO/seguridad/"
-echo "    https://$DOMINIO_ESPERADO/empreses/"
-echo "    https://$DOMINIO_ESPERADO/servicios/   (debe redirigir)"
+for p in "" movil/ internet/ seguridad/ empreses/ ofertas-qr/ servicios/; do
+  echo "    https://$DOMINIO_ESPERADO/$p"
+done
 echo ""
-echo "  Y despues: enviar el sitemap nuevo en Search Console."
+echo "  Y despues: reenviar el sitemap en Search Console si han cambiado rutas."
 echo ""
