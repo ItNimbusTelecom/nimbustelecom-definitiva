@@ -177,6 +177,7 @@ function toCoverageStudyPayload(payload: LegacyLeadPayload) {
     preferredContactMethod: toPreferredContactMethod(contact.preferredContact),
     currentProblem,
     currentOperator: toText(answers.currentOperator),
+    source: getSourceLabel(payload),
     serviceType:
       payload.serviceType === "internet" ||
       payload.serviceType === "fiber" ||
