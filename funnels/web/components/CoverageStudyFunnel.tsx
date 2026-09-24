@@ -5,9 +5,11 @@ import { trackEvent } from "@/lib/analytics";
 import { getElapsedSeconds } from "@/lib/antispam";
 import { isValidEmail, isValidPersonName, isValidSpanishPhone } from "@/lib/formValidation";
 import { useI18n } from "@/lib/i18n";
+import { getRecaptchaToken, precargarRecaptcha } from "@/lib/recaptcha";
 import { submitLead } from "@/lib/submitLead";
 import { getLeadSource } from "@/lib/utm";
 import { LegalConsentCheckbox } from "./LegalConsentCheckbox";
+import { RecaptchaNotice } from "./RecaptchaNotice";
 import { VisualIcon } from "./VisualIcon";
 import { CROSS_SELL_HREF, type CrossSellTarget } from "@/lib/crossSell";
 
@@ -94,6 +96,8 @@ const completedSteps = [
     if (step === 1 && !coverageProblem) {
       setFormStartedAt(new Date().toISOString());
       trackEvent("estudio_cobertura_started", { funnel: v.funnel });
+      // Se adelanta la carga: para cuando llegue al paso 5 ya estara.
+      void precargarRecaptcha().catch(() => {});
     }
   }
 
@@ -206,6 +210,15 @@ const completedSteps = [
     }
 
     setIsSubmitting(true);
+
+    const recaptchaToken = await getRecaptchaToken("estudio_cobertura");
+    if (!recaptchaToken) {
+      setIsSubmitting(false);
+      setContactError(dictionary.form.errors.recaptcha);
+      trackEvent("recaptcha_no_disponible", { funnel: v.funnel });
+      return;
+    }
+
     trackEvent("estudio_cobertura_contact_submitted", { preferred_contact: preferredContact });
     const elapsedSeconds = getElapsedSeconds(formStartedAt);
 
@@ -216,6 +229,7 @@ const completedSteps = [
       submittedAt: new Date().toISOString(),
       serviceType: v.serviceType,
       source: getLeadSource(),
+      recaptchaToken,
       antiSpam: {
         formStartedAt,
         elapsedSeconds,
@@ -448,6 +462,8 @@ const completedSteps = [
                         className="mt-2 min-h-24 w-full rounded-lg border border-nimbus-line px-4 py-3 font-normal text-nimbus-ink"
                       />
                     </label>
+
+                    <RecaptchaNotice className="mt-4" />
 
                     <LegalConsentCheckbox
                       id="coverage-study-consent"

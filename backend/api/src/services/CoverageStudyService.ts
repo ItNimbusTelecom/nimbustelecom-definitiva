@@ -16,7 +16,7 @@ export class CoverageStudyService {
 
   async create(input: CoverageStudyInput, context?: RequestContext) {
     this.antiSpamService.validate(input.antiSpam);
-    await this.recaptchaService.verify(input.recaptchaToken);
+    await this.recaptchaService.verify(input.recaptchaToken, "estudio_cobertura");
 
     const item = await this.repository.create({
       id: randomUUID(),
