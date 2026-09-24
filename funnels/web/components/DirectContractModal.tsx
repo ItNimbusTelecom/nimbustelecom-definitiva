@@ -1,14 +1,16 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { getElapsedSeconds } from "@/lib/antispam";
 import { isValidPersonName, isValidSpanishPhone } from "@/lib/formValidation";
 import { useI18n } from "@/lib/i18n";
 import { type MobilePlan } from "@/lib/plans";
+import { getRecaptchaToken, precargarRecaptcha } from "@/lib/recaptcha";
 import { submitLead as submitLeadRequest } from "@/lib/submitLead";
 import { getLeadSource } from "@/lib/utm";
 import { LegalConsentCheckbox } from "./LegalConsentCheckbox";
+import { RecaptchaNotice } from "./RecaptchaNotice";
 import { VisualIcon } from "./VisualIcon";
 
 type ContactChoice = "phone" | "whatsapp" | "office";
@@ -38,6 +40,13 @@ const GOOGLE_MAPS_EMBED_URL =
 
 export function DirectContractModal({ plan, onClose }: DirectContractModalProps) {
   const { dictionary } = useI18n();
+
+  // Si el modal esta abierto es que habra envio: se adelanta la carga del
+  // script para que el boton no tenga que esperarla.
+  useEffect(() => {
+    void precargarRecaptcha().catch(() => {});
+  }, []);
+
   const [choice, setChoice] = useState<ContactChoice>("phone");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -86,6 +95,15 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
     }
 
     setIsSubmitting(true);
+
+    const recaptchaToken = await getRecaptchaToken("lead");
+    if (!recaptchaToken) {
+      setIsSubmitting(false);
+      setError(dictionary.modal.errors.recaptcha);
+      trackEvent("recaptcha_no_disponible", { plan_id: plan?.id });
+      return;
+    }
+
     trackEvent(plan ? "contratacion_directa_submitted" : "contacto_general_submitted", {
       plan_id: plan?.id,
       preferred_contact: preferredContact,
@@ -110,6 +128,7 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
         : undefined,
       message: plan ? undefined : message,
       source: getLeadSource(),
+      recaptchaToken,
       antiSpam: {
         formStartedAt,
         elapsedSeconds,
@@ -262,6 +281,7 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
                   </label>
                 ) : null}
 
+                <RecaptchaNotice className="mt-4" />
                 <LegalConsentCheckbox
                   id="direct-contract-consent"
                   checked={consent}
