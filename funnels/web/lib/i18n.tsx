@@ -144,10 +144,11 @@ export const translations = {
       eyebrow: "Dudas habituales",
       title: "Dudas habituales antes de cambiar de línea móvil",
       subtitle:
-        "Haz clic en una duda y el asistente Nimbus se abrirá para ayudarte con esa pregunta.",
+        "Despliega la que te interese. Si quieres más detalle, el asistente Nimbus sigue a un clic.",
       ctaText: "¿Sigues teniendo dudas sobre tu cobertura?",
       studyCta: "Quiero que estudiéis mi caso",
       plansCta: "Ver tarifas móviles",
+      assistantCta: "Preguntar al asistente",
       items: [
         ["¿Me garantizáis que siempre tendré cobertura?", "No. Ninguna compañía puede garantizar cobertura perfecta en todos los lugares. Lo que sí hacemos es darte más opciones reales trabajando con triple cobertura y revisando tu caso antes de recomendarte una línea."],
         ["¿Qué significa triple cobertura?", "Significa que trabajamos con líneas móviles que pueden operar sobre varias redes disponibles, como Movistar, Orange y MásMóvil/Yoigo. Eso nos permite tener más margen para buscar una opción que funcione mejor según dónde uses el móvil."],
@@ -587,10 +588,11 @@ export const translations = {
       eyebrow: "Dubtes habituals",
       title: "Dubtes habituals abans de canviar de línia mòbil",
       subtitle:
-        "Fes clic en un dubte i l’assistent Nimbus s’obrirà per ajudar-te amb aquesta pregunta.",
+        "Desplega el que t’interessi. Si vols més detall, l’assistent Nimbus és a un clic.",
       ctaText: "Encara tens dubtes sobre la teva cobertura?",
       studyCta: "Vull que estudieu el meu cas",
       plansCta: "Veure tarifes mòbils",
+      assistantCta: "Preguntar a l’assistent",
       items: [
         ["Em garantiu que sempre tindré cobertura?", "No. Cap companyia pot garantir cobertura perfecta a tots els llocs. El que sí que fem és donar-te més opcions reals treballant amb triple cobertura i revisant el teu cas abans de recomanar-te una línia."],
         ["Què significa triple cobertura?", "Significa que treballem amb línies mòbils que poden operar sobre diverses xarxes disponibles, com Movistar, Orange i MásMóvil/Yoigo. Això ens dona més marge per buscar una opció que funcioni millor segons on fas servir el mòbil."],
@@ -1027,10 +1029,11 @@ export const translations = {
     faq: {
       eyebrow: "Common questions",
       title: "Common questions before changing mobile line",
-      subtitle: "Click a question and the Nimbus assistant will open to help you with it.",
+      subtitle: "Open the one you need. If you want more detail, the Nimbus assistant is one click away.",
       ctaText: "Still have questions about your coverage?",
       studyCta: "I want you to review my case",
       plansCta: "View mobile plans",
+      assistantCta: "Ask the assistant",
       items: [
         ["Do you guarantee I will always have coverage?", "No. No company can guarantee perfect coverage everywhere. What we do is give you more real options by working with triple coverage and reviewing your case before recommending a line."],
         ["What does triple coverage mean?", "It means we work with mobile lines that can operate over several available networks, such as Movistar, Orange and MásMóvil/Yoigo. That gives us more room to look for an option that works better depending on where you use your mobile."],
