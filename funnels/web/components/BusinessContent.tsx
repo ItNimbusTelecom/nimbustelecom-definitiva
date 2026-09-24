@@ -11,14 +11,19 @@ import { LocalServiceSection } from "@/components/LocalServiceSection";
 import { ServicesWheel } from "@/components/ServicesWheel";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { VisualIcon } from "@/components/VisualIcon";
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { linkTo } from "@/lib/routes";
+import { LanguageBanner } from "@/components/LanguageBanner";
+import { DEFAULT_LOCALE, I18nProvider, useI18n, type Locale } from "@/lib/i18n";
 import { BUSINESS_CONTENT } from "@/lib/business";
 
 const heroCardIcons = ["pencil", "wrench", "network", "eye"] as const;
 
-export function BusinessContent() {
+export function BusinessContent({ locale = DEFAULT_LOCALE }: { locale?: Locale } = {}) {
   return (
-    <I18nProvider>
+    <I18nProvider locale={locale}>
+      {/* El aviso solo va en las paginas catalanas, que son las que no
+          llevan prefijo y donde puede caer quien no lee catalan. */}
+      {locale === DEFAULT_LOCALE ? <LanguageBanner page="empreses" /> : null}
       <BusinessPageContent />
     </I18nProvider>
   );
@@ -33,13 +38,13 @@ function BusinessPageContent() {
       <LandingTracker />
       <ChatbaseEmbed />
       <Header
-        logoHref="/"
+        page="empreses"
         navItems={[
           { label: content.nav.problem, href: "#problema" },
           { label: content.nav.services, href: "#integrem" },
           { label: content.nav.how, href: "#com-funciona" },
           { label: content.nav.reviews, href: "#opinions" },
-          { label: content.nav.contact, href: "/#contacte" },
+          { label: content.nav.contact, href: linkTo("home", locale, "#contacte") },
         ]}
         ctaLabel={content.primaryCta}
         ctaHref="#formulari"

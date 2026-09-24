@@ -13,7 +13,9 @@ import { LocalServiceSection } from "@/components/LocalServiceSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { VisualIcon } from "@/components/VisualIcon";
 import { NIMBUS_WIMAX_IMAGE } from "@/lib/brand";
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { linkTo } from "@/lib/routes";
+import { LanguageBanner } from "@/components/LanguageBanner";
+import { DEFAULT_LOCALE, I18nProvider, useI18n, type Locale } from "@/lib/i18n";
 import { INTERNET_CONTENT } from "@/lib/internet";
 
 const approachIcons = [
@@ -27,9 +29,12 @@ const approachIcons = [
 
 const heroCardIcons = ["home", "masia", "store"] as const;
 
-export function InternetContent() {
+export function InternetContent({ locale = DEFAULT_LOCALE }: { locale?: Locale } = {}) {
   return (
-    <I18nProvider>
+    <I18nProvider locale={locale}>
+      {/* El aviso solo va en las paginas catalanas, que son las que no
+          llevan prefijo y donde puede caer quien no lee catalan. */}
+      {locale === DEFAULT_LOCALE ? <LanguageBanner page="internet" /> : null}
       <InternetPageContent />
     </I18nProvider>
   );
@@ -44,13 +49,13 @@ function InternetPageContent() {
       <LandingTracker />
       <ChatbaseEmbed />
       <Header
-        logoHref="/"
+        page="internet"
         navItems={[
           { label: content.nav.solution, href: "#com-funciona" },
           { label: content.nav.options, href: "#opcions" },
           { label: content.nav.faq, href: "#dubtes" },
-          { label: content.nav.contact, href: "/#contacte" },
-          { label: content.nav.business, href: "/empreses/", highlight: true },
+          { label: content.nav.contact, href: linkTo("home", locale, "#contacte") },
+          { label: content.nav.business, href: linkTo("empreses", locale), highlight: true },
         ]}
         ctaLabel={content.primaryCta}
         ctaHref="#formulari"
