@@ -19,8 +19,12 @@ export class NimbusFunnelBackendStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: NimbusFunnelBackendStackProps) {
     super(scope, id, props);
 
-    const allowedOrigins = this.node.tryGetContext("allowedOrigins") ?? process.env.FRONTEND_ALLOWED_ORIGINS ?? "";
-    const recaptchaEnabled = this.node.tryGetContext("recaptchaEnabled") ?? process.env.RECAPTCHA_ENABLED ?? "false";
+    // Ojo con el operador: cdk.json define allowedOrigins como cadena vacia y
+    // recaptchaEnabled como "false". Con ?? esos valores ganan siempre —una
+    // cadena vacia no es nullish— y las variables de entorno no se leen nunca.
+    // Con || la cadena vacia cae al siguiente, que es lo que se buscaba.
+    const allowedOrigins: string = this.node.tryGetContext("allowedOrigins") || process.env.FRONTEND_ALLOWED_ORIGINS || "";
+    const recaptchaEnabled: string = this.node.tryGetContext("recaptchaEnabled") || process.env.RECAPTCHA_ENABLED || "false";
     const tableNamePrefix = this.node.tryGetContext("tableNamePrefix") ?? "NimbusFunnel";
 
     const table = new dynamodb.Table(this, "NimbusFunnelTable", {
