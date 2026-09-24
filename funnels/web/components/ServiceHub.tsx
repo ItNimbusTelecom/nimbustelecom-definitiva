@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { HUB_CONTENT } from "@/lib/hub";
 import { useI18n } from "@/lib/i18n";
+import { linkToService } from "@/lib/routes";
 import { VisualIcon } from "./VisualIcon";
 
 export function ServiceHub() {
@@ -61,7 +62,7 @@ export function ServiceHub() {
 
             <div className="mt-7 pt-1">
               <Link
-                href={service.href}
+                href={linkToService(service.id, locale) ?? "/"}
                 className="inline-flex items-center gap-2 rounded-full bg-nimbus-orange px-5 py-3 text-sm font-black text-white transition hover:bg-nimbus-orangeDark"
               >
                 {service.cta}

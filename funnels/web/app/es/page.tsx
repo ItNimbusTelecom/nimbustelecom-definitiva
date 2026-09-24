@@ -4,7 +4,7 @@ import { alternatesFor } from "@/lib/routes";
 import { HOME_SEO, openGraphFor } from "@/lib/seo";
 
 // Una URL, un idioma. El mapa de rutas esta en lib/routes.ts.
-const LOCALE = "ca" as const;
+const LOCALE = "es" as const;
 const { title, description } = HOME_SEO[LOCALE];
 
 export const metadata: Metadata = {

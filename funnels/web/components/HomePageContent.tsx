@@ -14,11 +14,16 @@ import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { VisualIcon } from "@/components/VisualIcon";
 import { NIMBUS_STOREFRONT_IMAGE } from "@/lib/brand";
 import { HUB_CONTENT } from "@/lib/hub";
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { linkTo } from "@/lib/routes";
+import { LanguageBanner } from "@/components/LanguageBanner";
+import { DEFAULT_LOCALE, I18nProvider, useI18n, type Locale } from "@/lib/i18n";
 
-export function HomePageContent() {
+export function HomePageContent({ locale = DEFAULT_LOCALE }: { locale?: Locale } = {}) {
   return (
-    <I18nProvider>
+    <I18nProvider locale={locale}>
+      {/* El aviso solo va en las paginas catalanas, que son las que no
+          llevan prefijo y donde puede caer quien no lee catalan. */}
+      {locale === DEFAULT_LOCALE ? <LanguageBanner page="home" /> : null}
       <HomeContent />
     </I18nProvider>
   );
@@ -34,13 +39,13 @@ function HomeContent() {
       <ChatbaseEmbed />
 
       <Header
-        logoHref="/"
+        page="home"
         navItems={[
           { label: content.nav.company, href: "#qui-som" },
           { label: content.nav.services, href: "#serveis" },
           { label: content.nav.reviews, href: "#opinions" },
           { label: content.nav.contact, href: "#contacte" },
-          { label: content.nav.business, href: "/empreses/", highlight: true },
+          { label: content.nav.business, href: linkTo("empreses", locale), highlight: true },
         ]}
         ctaLabel={content.primaryCta}
         ctaHref="#serveis"

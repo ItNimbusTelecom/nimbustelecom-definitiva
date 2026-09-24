@@ -17,7 +17,11 @@ export const LOCALES: Array<{ code: Locale; label: string }> = [
 
 export const translations = {
   es: {
-    language: { ariaLabel: "Seleccionar idioma" },
+    language: {
+      ariaLabel: "Seleccionar idioma",
+      alsoAvailable: "Esta web también está en tu idioma:",
+      dismiss: "Cerrar aviso",
+    },
     nav: {
       solution: "Solución",
       plans: "Tarifas",
@@ -460,7 +464,11 @@ export const translations = {
     },
   },
   ca: {
-    language: { ariaLabel: "Seleccionar idioma" },
+    language: {
+      ariaLabel: "Seleccionar idioma",
+      alsoAvailable: "Aquest web també està en la teva llengua:",
+      dismiss: "Tancar avís",
+    },
     nav: {
       solution: "Solució",
       plans: "Tarifes",
@@ -901,7 +909,11 @@ export const translations = {
     },
   },
   en: {
-    language: { ariaLabel: "Select language" },
+    language: {
+      ariaLabel: "Select language",
+      alsoAvailable: "This site is also available in your language:",
+      dismiss: "Dismiss",
+    },
     nav: {
       solution: "Solution",
       plans: "Plans",
@@ -1402,10 +1414,27 @@ export function resolveLocale(): Locale {
   return getStoredLocale() ?? detectBrowserLocale();
 }
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
+/**
+ * Con `locale`, el idioma lo fija la RUTA y no se detecta nada: es lo que
+ * hacen las paginas que tienen una URL por idioma (/mobil/, /es/movil/,
+ * /en/mobile/). Cada URL sirve un solo idioma, que es la unica forma de que
+ * el buscador sepa cual indexar; si la pagina se tradujese sola en la misma
+ * URL, las tres versiones competirian entre ellas.
+ *
+ * Sin `locale` se mantiene el comportamiento anterior —seguir al navegador y
+ * recordar la eleccion— para las paginas que todavia no estan separadas por
+ * idioma: las legales y /ofertas-qr/.
+ *
+ * A quien llega a una URL catalana con el navegador en otro idioma no se le
+ * redirige: se le avisa con LanguageBanner y decide. Redirigir por JavaScript
+ * tambien redirigiria a Googlebot, que navega en ingles.
+ */
+export function I18nProvider({ children, locale: fixedLocale }: { children: React.ReactNode; locale?: Locale }) {
+  const [locale, setLocaleState] = useState<Locale>(fixedLocale ?? DEFAULT_LOCALE);
 
   useEffect(() => {
+    if (fixedLocale) return;
+
     const timeoutId = window.setTimeout(() => {
       // El idioma detectado NO se persiste: solo se guarda la eleccion
       // explicita del usuario en el selector. Asi el visitante sigue al
@@ -1414,7 +1443,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
-  }, []);
+  }, [fixedLocale]);
 
   useEffect(() => {
     document.documentElement.lang = locale;

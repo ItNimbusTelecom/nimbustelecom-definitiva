@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import { InternetContent } from "@/components/InternetContent";
-import { INTERNET_CONTENT } from "@/lib/internet";
+import { BusinessContent } from "@/components/BusinessContent";
+import { BUSINESS_CONTENT } from "@/lib/business";
 import { alternatesFor } from "@/lib/routes";
 import { openGraphFor } from "@/lib/seo";
 
 // Una URL, un idioma. El mapa de rutas esta en lib/routes.ts.
-const LOCALE = "ca" as const;
-const { title, description } = INTERNET_CONTENT[LOCALE].meta;
+const LOCALE = "es" as const;
+const { title, description } = BUSINESS_CONTENT[LOCALE].meta;
 
 export const metadata: Metadata = {
   title,
   description,
-  alternates: alternatesFor("internet", LOCALE),
+  alternates: alternatesFor("empreses", LOCALE),
   openGraph: openGraphFor(title, description, LOCALE),
 };
 
 export default function Page() {
-  return <InternetContent locale={LOCALE} />;
+  return <BusinessContent locale={LOCALE} />;
 }

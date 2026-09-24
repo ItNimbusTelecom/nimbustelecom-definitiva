@@ -73,6 +73,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // El lang se queda en "ca" en el HTML estatico y lo corrige I18nProvider
+    // al hidratar. No es por gusto: en el App Router solo el layout raiz puede
+    // pintar <html>, y con output: export no hay servidor que lo varie por
+    // ruta. La solucion limpia son varios layouts raiz con grupos de rutas,
+    // pero eso deja sin layout al not-found global y romperia la 404 propia.
+    // Google no usa este atributo para detectar el idioma —usa el contenido y
+    // los hreflang, que si son correctos—, asi que el coste real es para los
+    // lectores de pantalla durante el primer instante.
     <html lang="ca">
       <head>
         <GoogleAnalytics />
