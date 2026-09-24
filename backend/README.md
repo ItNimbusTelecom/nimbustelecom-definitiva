@@ -228,34 +228,59 @@ http://localhost:4000
 
 ## Despliegue CDK
 
-Bootstrap inicial si la cuenta no está preparada:
+Producción vive en la **cuenta de AWS de Nimbus**, no en la personal de nadie.
+Hace falta un perfil para ella:
 
 ```bash
-cd backend/infra
-npx cdk bootstrap
+aws configure --profile nimbus      # o: aws configure sso --profile nimbus
+aws sts get-caller-identity --profile nimbus
 ```
 
-Deploy dev:
+La configuración del despliegue (cuenta, orígenes de CORS y webhooks de Make)
+va en `backend/infra/.env.prod`, que **no se sube a git** porque el repo es
+público. Se crea una vez por máquina:
 
 ```bash
-cd backend/infra
-STAGE=dev \
-FRONTEND_ALLOWED_ORIGINS=https://tu-frontend.com \
-MAKE_WEBHOOK_URL=https://hook.eu1.make.com/<token> \
-npm run deploy -- --context stage=dev
+cd backend/infra && cp .env.prod.example .env.prod
 ```
 
-Deploy prod:
+Y a partir de ahí, mirar antes y desplegar después:
 
 ```bash
 cd backend/infra
-STAGE=prod npm run deploy -- --context stage=prod
+AWS_PROFILE=nimbus npm run diff   -- -c stage=prod
+AWS_PROFILE=nimbus npm run deploy -- -c stage=prod
+```
+
+El despliegue para en seco, antes de tocar nada, si:
+
+- falta `NIMBUS_PROD_ACCOUNT`;
+- las credenciales activas son de otra cuenta (sin esto, CDK crearía una copia
+  entera del stack en esa cuenta y el `cdk diff` pasaría a comparar contra la
+  copia, que es exactamente lo que pasó el 24/09);
+- falta alguna URL de webhook de Make (desplegarlas vacías hace que los leads
+  se guarden en DynamoDB y no lleguen a ISP, sin error y sin alarma).
+
+Para dev, donde no hay nada que proteger, se sigue tomando la cuenta de las
+credenciales activas:
+
+```bash
+cd backend/infra
+FRONTEND_ALLOWED_ORIGINS=http://localhost:3000 npm run deploy -- -c stage=dev
+```
+
+Bootstrap inicial, solo si la cuenta no está preparada:
+
+```bash
+AWS_PROFILE=nimbus npx cdk bootstrap
 ```
 
 ## Secretos En Producción
 
-El stack acepta variables de entorno para simplificar el primer despliegue.
-Para producción se recomienda mover `MAKE_WEBHOOK_URL`, `RECAPTCHA_SECRET` y cualquier secreto futuro a AWS Secrets Manager o SSM Parameter Store y resolverlos desde CDK/Lambda.
+Hoy están en `backend/infra/.env.prod`, fuera de git. Es un paso intermedio
+razonable, no el destino: lo correcto es moverlos a SSM Parameter Store y que
+el stack los resuelva, para que dejen de depender de un fichero en el portátil
+de quien despliega.
 
 ## Conectar El Frontend
 
