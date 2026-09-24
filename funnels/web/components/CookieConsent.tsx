@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { grantAnalyticsConsent } from "@/lib/analytics";
+import { COOKIE_CONSENT_KEY } from "@/lib/analyticsConfig";
 import { LEGAL_LINKS } from "@/lib/contact";
 import { useI18n } from "@/lib/i18n";
-
-const COOKIE_CONSENT_KEY = "nimbus-cookie-consent";
 
 export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
@@ -18,6 +18,7 @@ export function CookieConsent() {
 
   function acceptCookies() {
     localStorage.setItem(COOKIE_CONSENT_KEY, "accepted");
+    grantAnalyticsConsent();
     setIsVisible(false);
   }
 

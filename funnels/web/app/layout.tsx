@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import {
   NIMBUS_APPLE_TOUCH_ICON,
   NIMBUS_FAVICON_32,
@@ -73,6 +74,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ca">
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body>{children}</body>
     </html>
   );
