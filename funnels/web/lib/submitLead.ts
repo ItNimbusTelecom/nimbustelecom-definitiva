@@ -233,16 +233,20 @@ function getSourceLabel(payload: LegacyLeadPayload) {
   const source = payload.source;
   if (!source) return "landing";
 
-  return [
+  // Sin campana ni referrer las partes quedan todas vacias y el join daria "".
+  // El esquema de la API convierte la cadena vacia en undefined, asi que la
+  // clave desapareceria del JSON y Make no llegaria a ver nunca el campo. Con
+  // "landing" el origen viaja siempre y la plantilla del escenario no se rompe.
+  const partes = [
     toText(source.utm_source) ? `utm_source=${toText(source.utm_source)}` : "",
     toText(source.utm_medium) ? `utm_medium=${toText(source.utm_medium)}` : "",
     toText(source.utm_campaign) ? `utm_campaign=${toText(source.utm_campaign)}` : "",
     toText(source.utm_content) ? `utm_content=${toText(source.utm_content)}` : "",
     toText(source.utm_term) ? `utm_term=${toText(source.utm_term)}` : "",
     toText(source.referrer) ? `referrer=${toText(source.referrer)}` : "",
-  ]
-    .filter(Boolean)
-    .join("; ");
+  ].filter(Boolean);
+
+  return partes.length > 0 ? partes.join("; ") : "landing";
 }
 
 function toText(value: unknown) {
