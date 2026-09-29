@@ -273,6 +273,13 @@ function BusinessPageContent() {
             noSalesTitle: content.form.noSalesTitle,
             noSalesText: content.form.noSalesText,
             summaryLabels: content.form.summaryLabels,
+            step4Text: content.form.step4Text,
+            step4Secondary: content.form.step4Secondary,
+            step5Title: content.form.step5Title,
+            step5Text: content.form.step5Text,
+            requestLabel: content.form.requestLabel,
+            emailHelp: content.form.emailHelp,
+            showCurrentOperator: content.form.showCurrentOperator,
           }}
         />
       </main>
