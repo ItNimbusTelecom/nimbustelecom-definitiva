@@ -45,6 +45,12 @@ export type InternetContent = {
     cards: [string, string][];
   };
   form: {
+    step4Text: string;
+    step4Secondary: string;
+    step5Title: string;
+    step5Text: string;
+    requestLabel: string;
+    emailHelp: string;
     eyebrow: string;
     title: string;
     text: string;
@@ -236,6 +242,12 @@ export const INTERNET_CONTENT: Record<Locale, InternetContent> = {
       ],
     },
     form: {
+      step4Text: "Con lo que nos has contado podemos revisar qué opciones de internet llegan a tu dirección y cuál tiene más sentido para ti.",
+      step4Secondary: "Para enviarte el resultado o comentarlo contigo, necesitamos tus datos de contacto.",
+      step5Title: "¿Dónde te enviamos lo que encontremos?",
+      step5Text: "Te contactaremos solo para revisar qué internet llega a tu dirección y orientarte sobre la opción que mejor encaje.",
+      requestLabel: "Quiero saber qué me llega",
+      emailHelp: "Te enviaremos el resultado a este email.",
       eyebrow: "Estudio de internet",
       finalText:
         "Gracias. Revisaremos qué opciones de internet llegan a tu dirección y te enviaremos una propuesta según lo que nos has contado.",
@@ -442,6 +454,12 @@ export const INTERNET_CONTENT: Record<Locale, InternetContent> = {
       ],
     },
     form: {
+      step4Text: "Amb el que ens has explicat podem revisar quines opcions d'internet arriben a la teva adreça i quina té més sentit per a tu.",
+      step4Secondary: "Per enviar-te el resultat o comentar-lo amb tu, necessitem les teves dades de contacte.",
+      step5Title: "On t'enviem el que trobem?",
+      step5Text: "Et contactarem només per revisar quin internet arriba a la teva adreça i orientar-te sobre l'opció que millor encaixi.",
+      requestLabel: "Vull saber què m'arriba",
+      emailHelp: "T'enviarem el resultat a aquest email.",
       eyebrow: "Estudi d'internet",
       finalText:
         "Gràcies. Revisarem quines opcions d'internet arriben a la teva adreça i t'enviarem una proposta segons el que ens has explicat.",
@@ -646,6 +664,12 @@ export const INTERNET_CONTENT: Record<Locale, InternetContent> = {
       ],
     },
     form: {
+      step4Text: "With what you have told us we can check which internet options reach your address and which one makes the most sense for you.",
+      step4Secondary: "To send you the result or talk it through with you, we need your contact details.",
+      step5Title: "Where shall we send what we find?",
+      step5Text: "We will only contact you to review which internet reaches your address and to help you find the option that fits best.",
+      requestLabel: "I want to know what reaches me",
+      emailHelp: "We will send the result to this email.",
       eyebrow: "Internet review",
       finalText:
         "Thank you. We'll check which internet options reach your address and send you a proposal based on what you've told us.",

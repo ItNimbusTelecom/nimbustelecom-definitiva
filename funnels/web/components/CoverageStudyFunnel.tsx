@@ -32,6 +32,21 @@ export type StudyFunnelVariant = {
   locationPlaceholder: string;
   requireLocationText?: boolean;
   usageOptions: readonly string[];
+  /**
+   * Textos de los pasos 4 y 5. Sin estos, los tres funnels que no son el de
+   * movil arrastraban el texto del de movil justo en la pantalla donde la
+   * persona entrega sus datos: hablaban de "estudi de cobertura" y de "opcio
+   * mobil" a quien venia buscando internet, alarmes o serveis per a empreses.
+   */
+  step4Text?: string;
+  step4Secondary?: string;
+  step5Title?: string;
+  step5Text?: string;
+  /** Etiqueta del boton que cierra el paso 4 y lleva al formulario. */
+  requestLabel?: string;
+  emailHelp?: string;
+  /** El operador actual solo tiene sentido si se habla de telefonia. */
+  showCurrentOperator?: boolean;
   diagnosticPurpose?: string;
   finalText?: string;
   noSalesTitle?: string;
@@ -369,15 +384,15 @@ const completedSteps = [
 
               {step === 4 ? (
                 <QuestionStep title={dictionary.form.step4Title}>
-                  <p className="text-lg leading-8 text-nimbus-muted">{dictionary.form.step4Text}</p>
-                  <p className="mt-4 text-sm leading-6 text-nimbus-muted">{dictionary.form.step4Secondary}</p>
+                  <p className="text-lg leading-8 text-nimbus-muted">{v.step4Text ?? dictionary.form.step4Text}</p>
+                  <p className="mt-4 text-sm leading-6 text-nimbus-muted">{v.step4Secondary ?? dictionary.form.step4Secondary}</p>
                 </QuestionStep>
               ) : null}
 
               {step === 5 ? (
                 <form id="coverage-study-contact" onSubmit={submitStudy}>
-                  <QuestionStep title={dictionary.form.step5Title}>
-                    <p className="mb-5 text-sm leading-6 text-nimbus-muted">{dictionary.form.step5Text}</p>
+                  <QuestionStep title={v.step5Title ?? dictionary.form.step5Title}>
+                    <p className="mb-5 text-sm leading-6 text-nimbus-muted">{v.step5Text ?? dictionary.form.step5Text}</p>
                     <div className="grid gap-3 sm:grid-cols-2">
                       {(["phone", "whatsapp"] as PreferredContact[]).map((option) => (
                         <button
@@ -444,14 +459,16 @@ const completedSteps = [
                           setHasTriedContactSubmit(false);
                         }}
                         autoComplete="email"
-                        helpText={dictionary.form.emailHelp}
+                        helpText={v.emailHelp ?? dictionary.form.emailHelp}
                       />
-                      <Field
-                        label={dictionary.form.fields.currentOperator}
-                        value={currentOperator}
-                        onChange={setCurrentOperator}
-                        autoComplete="organization"
-                      />
+                      {(v.showCurrentOperator ?? true) ? (
+                        <Field
+                          label={dictionary.form.fields.currentOperator}
+                          value={currentOperator}
+                          onChange={setCurrentOperator}
+                          autoComplete="organization"
+                        />
+                      ) : null}
                     </div>
 
                     <label className="mt-4 block text-sm font-bold text-nimbus-ink">
@@ -507,7 +524,7 @@ const completedSteps = [
                     onClick={nextStep}
                     className="rounded-full bg-nimbus-orange px-5 py-3 text-sm font-black text-white transition hover:bg-nimbus-orangeDark"
                   >
-                    {step === 4 ? dictionary.form.requestStudy : dictionary.form.continue}
+                    {step === 4 ? (v.requestLabel ?? dictionary.form.requestStudy) : dictionary.form.continue}
                   </button>
                 )}
               </div>

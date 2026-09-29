@@ -54,6 +54,13 @@ export type SecurityContent = {
   rgpd: { eyebrow: string; title: string; text: string; checks: string[] };
   faq: { eyebrow: string; title: string; items: [string, string][] };
   form: {
+    step4Text: string;
+    step4Secondary: string;
+    step5Title: string;
+    step5Text: string;
+    requestLabel: string;
+    emailHelp: string;
+    showCurrentOperator: boolean;
     eyebrow: string;
     title: string;
     text: string;
@@ -243,6 +250,13 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
       ],
     },
     form: {
+      step4Text: "Con lo que nos has contado podemos hacernos una idea de qué necesitas proteger y qué solución encaja mejor.",
+      step4Secondary: "Para enviarte la propuesta o comentarla contigo, necesitamos tus datos de contacto.",
+      step5Title: "¿Dónde te enviamos la propuesta?",
+      step5Text: "Te contactaremos solo para revisar qué quieres proteger y orientarte sobre la solución que mejor encaje.",
+      requestLabel: "Quiero que estudiéis mi caso",
+      emailHelp: "Te enviaremos la propuesta a este email.",
+      showCurrentOperator: false,
       eyebrow: "Valoración con técnico",
       finalText:
         "Gracias. Revisaremos qué quieres proteger y te contactaremos para concertar la visita del técnico.",
@@ -448,6 +462,13 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
       ],
     },
     form: {
+      step4Text: "Amb el que ens has explicat podem fer-nos una idea de què necessites protegir i quina solució encaixa millor.",
+      step4Secondary: "Per enviar-te la proposta o comentar-la amb tu, necessitem les teves dades de contacte.",
+      step5Title: "On t'enviem la proposta?",
+      step5Text: "Et contactarem només per revisar què vols protegir i orientar-te sobre la solució que millor encaixi.",
+      requestLabel: "Vull que estudieu el meu cas",
+      emailHelp: "T'enviarem la proposta a aquest email.",
+      showCurrentOperator: false,
       eyebrow: "Valoració amb tècnic",
       finalText:
         "Gràcies. Revisarem què vols protegir i et contactarem per concertar la visita del tècnic.",
@@ -653,6 +674,13 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
       ],
     },
     form: {
+      step4Text: "With what you have told us we can get an idea of what you need to protect and which solution fits best.",
+      step4Secondary: "To send you the proposal or talk it through with you, we need your contact details.",
+      step5Title: "Where shall we send the proposal?",
+      step5Text: "We will only contact you to review what you want to protect and to help you find the solution that fits best.",
+      requestLabel: "I want you to review my case",
+      emailHelp: "We will send the proposal to this email.",
+      showCurrentOperator: false,
       eyebrow: "Technician assessment",
       finalText:
         "Thank you. We'll review what you want to protect and contact you to arrange the technician's visit.",

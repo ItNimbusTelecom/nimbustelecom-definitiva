@@ -54,6 +54,13 @@ export type BusinessContent = {
     cards: [string, string][];
   };
   form: {
+    step4Text: string;
+    step4Secondary: string;
+    step5Title: string;
+    step5Text: string;
+    requestLabel: string;
+    emailHelp: string;
+    showCurrentOperator: boolean;
     eyebrow: string;
     title: string;
     text: string;
@@ -228,6 +235,13 @@ export const BUSINESS_CONTENT: Record<Locale, BusinessContent> = {
       ],
     },
     form: {
+      step4Text: "Con lo que nos has contado podemos revisar qué necesita tu negocio y qué combinación de servicios tiene más sentido.",
+      step4Secondary: "Para enviarte la propuesta o comentarla contigo, necesitamos tus datos de contacto.",
+      step5Title: "¿Dónde te enviamos la propuesta?",
+      step5Text: "Te contactaremos solo para revisar qué necesita tu negocio y orientarte sobre la opción que mejor encaje.",
+      requestLabel: "Quiero que estudiéis mi caso",
+      emailHelp: "Te enviaremos la propuesta a este email.",
+      showCurrentOperator: false,
       eyebrow: "Estudio para empresas",
       title: "¿Quieres que analicemos el sistema TIC de tu empresa?",
       text: "Cuéntanos cómo es tu empresa y qué necesitas. Te llamamos, lo analizamos y, si tiene sentido, concertamos la visita. Sin compromiso.",
@@ -418,6 +432,13 @@ export const BUSINESS_CONTENT: Record<Locale, BusinessContent> = {
       ],
     },
     form: {
+      step4Text: "Amb el que ens has explicat podem revisar què necessita el teu negoci i quina combinació de serveis té més sentit.",
+      step4Secondary: "Per enviar-te la proposta o comentar-la amb tu, necessitem les teves dades de contacte.",
+      step5Title: "On t'enviem la proposta?",
+      step5Text: "Et contactarem només per revisar què necessita el teu negoci i orientar-te sobre l'opció que millor encaixi.",
+      requestLabel: "Vull que estudieu el meu cas",
+      emailHelp: "T'enviarem la proposta a aquest email.",
+      showCurrentOperator: false,
       eyebrow: "Estudi per a empreses",
       title: "Vols que analitzem el sistema TIC de la teva empresa?",
       text: "Explica'ns com és la teva empresa i què necessites. Et truquem, ho analitzem i, si té sentit, concertem la visita. Sense compromís.",
@@ -608,6 +629,13 @@ export const BUSINESS_CONTENT: Record<Locale, BusinessContent> = {
       ],
     },
     form: {
+      step4Text: "With what you have told us we can review what your business needs and which combination of services makes the most sense.",
+      step4Secondary: "To send you the proposal or talk it through with you, we need your contact details.",
+      step5Title: "Where shall we send the proposal?",
+      step5Text: "We will only contact you to review what your business needs and to help you find the option that fits best.",
+      requestLabel: "I want you to review my case",
+      emailHelp: "We will send the proposal to this email.",
+      showCurrentOperator: false,
       eyebrow: "Business study",
       title: "Want us to analyse your company's ICT system?",
       text: "Tell us about your business and what you need. We'll call you, analyse it and, if it makes sense, arrange the visit. No obligation.",
