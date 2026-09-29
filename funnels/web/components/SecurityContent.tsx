@@ -11,16 +11,21 @@ import { LocalServiceSection } from "@/components/LocalServiceSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { VisualIcon } from "@/components/VisualIcon";
 import { useEffect, useState } from "react";
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { linkTo } from "@/lib/routes";
+import { LanguageBanner } from "@/components/LanguageBanner";
+import { DEFAULT_LOCALE, I18nProvider, useI18n, type Locale } from "@/lib/i18n";
 import { SECURITY_CONTENT } from "@/lib/security";
 import Image from "next/image";
 import { NIMBUS_SECURITY_IMAGES, NIMBUS_SECURITY_VIDEOS } from "@/lib/brand";
 
 const heroCardIcons = ["technician", "sliders", "wrench"] as const;
 
-export function SecurityContent() {
+export function SecurityContent({ locale = DEFAULT_LOCALE }: { locale?: Locale } = {}) {
   return (
-    <I18nProvider>
+    <I18nProvider locale={locale}>
+      {/* El aviso solo va en las paginas catalanas, que son las que no
+          llevan prefijo y donde puede caer quien no lee catalan. */}
+      {locale === DEFAULT_LOCALE ? <LanguageBanner page="seguretat" /> : null}
       <SecurityPageContent />
     </I18nProvider>
   );
@@ -35,15 +40,15 @@ function SecurityPageContent() {
       <LandingTracker />
       <ChatbaseEmbed />
       <Header
-        logoHref="/"
+        page="seguretat"
         wide
         navItems={[
           { label: content.nav.what, href: "#protegim" },
           { label: content.services.eyebrow, href: "#serveis" },
           { label: content.nav.how, href: "#com-funciona" },
           { label: content.nav.faq, href: "#dubtes" },
-          { label: content.nav.contact, href: "/#contacte" },
-          { label: content.nav.business, href: "/empreses/", highlight: true },
+          { label: content.nav.contact, href: linkTo("home", locale, "#contacte") },
+          { label: content.nav.business, href: linkTo("empreses", locale), highlight: true },
         ]}
         ctaLabel={content.primaryCta}
         ctaHref="#formulari"

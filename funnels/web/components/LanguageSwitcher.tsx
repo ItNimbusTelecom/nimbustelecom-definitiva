@@ -1,15 +1,65 @@
 "use client";
 
-import { LOCALES, useI18n } from "@/lib/i18n";
+import { LOCALE_STORAGE_KEY, LOCALES, useI18n, type Locale } from "@/lib/i18n";
+import { localesFor, pathFor, type PageKey } from "@/lib/routes";
 
-export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
+/**
+ * Con `page`, cada idioma es un ENLACE a la URL de esa pagina en ese idioma,
+ * no un boton que traduce en el sitio. Es la consecuencia de que cada idioma
+ * tenga su propia URL: cambiar de idioma es cambiar de pagina.
+ *
+ * Solo se muestran los idiomas en los que esa pagina existe de verdad. Las
+ * legales, por ejemplo, estan en un unico idioma: alli el selector muestra
+ * uno solo en vez de ofrecer enlaces que no llevarian a ninguna traduccion.
+ *
+ * Sin `page` se mantiene el selector de botones de siempre, para las paginas
+ * que todavia no estan separadas por idioma.
+ */
+export function LanguageSwitcher({ compact = false, page }: { compact?: boolean; page?: PageKey }) {
   const { locale, setLocale, dictionary } = useI18n();
 
+  const contenedor =
+    "inline-flex w-fit items-center gap-1 rounded-full border border-nimbus-line bg-white p-1";
+  const estilo = (activo: boolean) =>
+    `grid place-items-center rounded-full p-1.5 transition ${
+      activo ? "bg-nimbus-orange shadow-sm" : "text-nimbus-muted hover:bg-nimbus-soft hover:text-nimbus-ink"
+    }`;
+
+  if (page) {
+    const disponibles = localesFor(page);
+
+    // Un idioma solo: no hay nada que elegir, no se pinta el selector.
+    if (disponibles.length < 2) return null;
+
+    return (
+      <div className={contenedor} aria-label={dictionary.language.ariaLabel}>
+        {disponibles.map((code) => {
+          const item = LOCALES.find((l) => l.code === code);
+          const activo = code === locale;
+
+          return (
+            <a
+              key={code}
+              href={pathFor(page, code)}
+              hrefLang={code}
+              aria-label={item?.label}
+              aria-current={activo ? "true" : undefined}
+              title={item?.label}
+              // La eleccion se recuerda para que el aviso de idioma no vuelva
+              // a salir en las paginas catalanas.
+              onClick={() => recordarIdioma(code)}
+              className={estilo(activo)}
+            >
+              <FlagIcon locale={code} compact={compact} />
+            </a>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
-    <div
-      className="inline-flex w-fit items-center gap-1 rounded-full border border-nimbus-line bg-white p-1"
-      aria-label={dictionary.language.ariaLabel}
-    >
+    <div className={contenedor} aria-label={dictionary.language.ariaLabel}>
       {LOCALES.map((item) => {
         const isActive = item.code === locale;
         return (
@@ -19,11 +69,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
             onClick={() => setLocale(item.code)}
             aria-pressed={isActive}
             aria-label={item.label}
-            className={`grid place-items-center rounded-full p-1.5 transition ${
-              isActive
-                ? "bg-nimbus-orange shadow-sm"
-                : "text-nimbus-muted hover:bg-nimbus-soft hover:text-nimbus-ink"
-            }`}
+            className={estilo(isActive)}
             title={item.label}
           >
             <FlagIcon locale={item.code} compact={compact} />
@@ -32,6 +78,14 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
       })}
     </div>
   );
+}
+
+export function recordarIdioma(locale: Locale) {
+  try {
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+  } catch {
+    // Modo privado: sin persistencia, el aviso podra volver a salir.
+  }
 }
 
 function FlagIcon({ locale, compact }: { locale: string; compact: boolean }) {

@@ -11,7 +11,7 @@ import { getLeadSource } from "@/lib/utm";
 import { LegalConsentCheckbox } from "./LegalConsentCheckbox";
 import { RecaptchaNotice } from "./RecaptchaNotice";
 import { VisualIcon } from "./VisualIcon";
-import { CROSS_SELL_HREF, type CrossSellTarget } from "@/lib/crossSell";
+import { crossSellHref, type CrossSellTarget } from "@/lib/crossSell";
 
 type PreferredContact = "phone" | "whatsapp";
 
@@ -41,7 +41,7 @@ export type StudyFunnelVariant = {
 };
 
 export function CoverageStudyFunnel({ variant }: { variant?: StudyFunnelVariant }) {
-  const { dictionary } = useI18n();
+  const { dictionary, locale } = useI18n();
   const v: StudyFunnelVariant = variant ?? {
     funnel: "cobertura-movil",
     serviceType: "mobile",
@@ -59,7 +59,7 @@ export function CoverageStudyFunnel({ variant }: { variant?: StudyFunnelVariant 
     requireLocationText: true,
     usageOptions: dictionary.form.usageOptions,
   };
-  const crossSellHref = CROSS_SELL_HREF[v.crossSellTo] ?? "#";
+  const enllacCreuat = crossSellHref(v.crossSellTo, locale);
   const crossSellLabel = dictionary.form.crossSell[v.crossSellTo];
   const [step, setStep] = useState(1);
   const [coverageProblem, setCoverageProblem] = useState("");
@@ -316,7 +316,7 @@ const completedSteps = [
                   {dictionary.form.another}
                 </button>
                 <a
-                  href={crossSellHref}
+                  href={enllacCreuat}
                   className="rounded-full bg-nimbus-orange px-5 py-3 text-center text-sm font-black text-white transition hover:bg-nimbus-orangeDark"
                 >
                   {crossSellLabel}

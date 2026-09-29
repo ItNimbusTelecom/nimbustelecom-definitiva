@@ -3,6 +3,10 @@ import type { Locale } from "@/lib/i18n";
 /**
  * Contenido de la home (hub de servicios).
  *
+ * El destino de cada servicio NO va aqui: se deriva del id en lib/routes.ts,
+ * para que cada idioma enlace a su propia URL sin repetir doce veces la misma
+ * lista de rutas.
+ *
  * Cada servicio apunta a su funnel. Mientras un funnel no exista, `href`
  * apunta temporalmente a la página antigua de WordPress para no dejar
  * enlaces rotos: cuando el funnel esté listo, basta con cambiar el href
@@ -11,7 +15,6 @@ import type { Locale } from "@/lib/i18n";
 
 export type HubService = {
   id: string;
-  href: string;
   ready: boolean;
   icon: "smartphone" | "radio-tower" | "shield-check" | "users";
   title: string;
@@ -123,7 +126,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
     services: [
       {
         id: "movil",
-        href: "/movil/",
         ready: true,
         icon: "smartphone",
         title: "Cobertura móvil",
@@ -138,7 +140,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       },
       {
         id: "internet",
-        href: "/internet/",
         ready: true,
         icon: "radio-tower",
         title: "Internet en casa",
@@ -153,7 +154,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       },
       {
         id: "seguridad",
-        href: "/seguridad/",
         ready: true,
         icon: "shield-check",
         title: "Seguridad",
@@ -168,7 +168,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       },
       {
         id: "empresas",
-        href: "/empreses/",
         ready: true,
         icon: "users",
         title: "Soluciones TIC para empresas",
@@ -254,7 +253,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
     services: [
       {
         id: "movil",
-        href: "/movil/",
         ready: true,
         icon: "smartphone",
         title: "Cobertura mòbil",
@@ -269,7 +267,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       },
       {
         id: "internet",
-        href: "/internet/",
         ready: true,
         icon: "radio-tower",
         title: "Internet a casa",
@@ -284,7 +281,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       },
       {
         id: "seguridad",
-        href: "/seguridad/",
         ready: true,
         icon: "shield-check",
         title: "Seguretat",
@@ -299,7 +295,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       },
       {
         id: "empresas",
-        href: "/empreses/",
         ready: true,
         icon: "users",
         title: "Solucions TIC per a empreses",
@@ -385,7 +380,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
     services: [
       {
         id: "movil",
-        href: "/movil/",
         ready: true,
         icon: "smartphone",
         title: "Mobile coverage",
@@ -400,7 +394,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       },
       {
         id: "internet",
-        href: "/internet/",
         ready: true,
         icon: "radio-tower",
         title: "Home internet",
@@ -415,7 +408,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       },
       {
         id: "seguridad",
-        href: "/seguridad/",
         ready: true,
         icon: "shield-check",
         title: "Security",
@@ -430,7 +422,6 @@ export const HUB_CONTENT: Record<Locale, HubContent> = {
       },
       {
         id: "empresas",
-        href: "/empreses/",
         ready: true,
         icon: "users",
         title: "ICT solutions for businesses",

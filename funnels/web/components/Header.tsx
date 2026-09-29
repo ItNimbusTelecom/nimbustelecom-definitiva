@@ -6,10 +6,13 @@ import { NIMBUS_LOGO_URL } from "@/lib/brand";
 import { CLIENT_AREA_URL } from "@/lib/contact";
 import { useI18n } from "@/lib/i18n";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { linkTo, type PageKey } from "@/lib/routes";
 
 export type HeaderNavItem = { label: string; href: string; highlight?: boolean };
 
 type HeaderProps = {
+  /** Pagina actual: el selector la necesita para enlazar a sus traducciones. */
+  page?: PageKey;
   /** Enlaces del menu. Por defecto, los del funnel de cobertura. */
   navItems?: HeaderNavItem[];
   /** Texto del boton naranja. */
@@ -22,16 +25,16 @@ type HeaderProps = {
   wide?: boolean;
 };
 
-export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide }: HeaderProps = {}) {
+export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide, page }: HeaderProps = {}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { dictionary } = useI18n();
+  const { dictionary, locale } = useI18n();
   const items: HeaderNavItem[] = navItems ?? [
     { label: dictionary.nav.solution, href: "#solucio" },
     { label: dictionary.nav.plans, href: "#tarifes" },
     { label: dictionary.nav.reviews, href: "#opinions" },
     { label: dictionary.nav.faq, href: "#faq" },
-    { label: dictionary.nav.contact, href: "/#contacte" },
-    { label: dictionary.nav.business, href: "/empreses/", highlight: true },
+    { label: dictionary.nav.contact, href: linkTo("home", locale, "#contacte") },
+    { label: dictionary.nav.business, href: linkTo("empreses", locale), highlight: true },
   ];
   const primaryHref = ctaHref ?? "#formulari";
   const primaryLabel = ctaLabel ?? dictionary.nav.primaryCta;
@@ -58,7 +61,7 @@ export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide }: HeaderPr
           wide ? "max-w-[92rem]" : "max-w-7xl"
         }`}
       >
-        <a href={logoHref ?? "/"} className="flex shrink-0 items-center" aria-label="Nimbus Telecom">
+        <a href={logoHref ?? linkTo("home", locale)} className="flex shrink-0 items-center" aria-label="Nimbus Telecom">
           <Image
             src={NIMBUS_LOGO_URL}
             alt="Nimbus Telecom"
@@ -85,7 +88,7 @@ export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide }: HeaderPr
         </nav>
         <div className="flex items-center gap-2">
           <div className="hidden lg:block">
-            <LanguageSwitcher compact />
+            <LanguageSwitcher compact page={page} />
           </div>
           <a
             href={CLIENT_AREA_URL}
@@ -162,7 +165,7 @@ export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide }: HeaderPr
             {primaryLabel}
           </a>
           <div className="mx-auto mt-4 max-w-6xl">
-            <LanguageSwitcher />
+            <LanguageSwitcher page={page} />
           </div>
         </div>
       ) : null}
