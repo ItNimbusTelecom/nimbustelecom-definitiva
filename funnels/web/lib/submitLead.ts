@@ -5,6 +5,7 @@ import { resolveLocale } from "@/lib/i18n";
 type LegacyLeadPayload = {
   leadType?: unknown;
   serviceType?: unknown;
+  recaptchaToken?: unknown;
   message?: unknown;
   selectedPlan?: {
     id?: unknown;
@@ -149,6 +150,7 @@ function toLeadPayload(payload: LegacyLeadPayload) {
     pageUrl: getPageUrl(payload),
     antiSpam: toAntiSpamPayload(payload),
     consentAccepted: contact.consent === true,
+    recaptchaToken: toText(payload.recaptchaToken),
   };
 }
 
@@ -189,6 +191,7 @@ function toCoverageStudyPayload(payload: LegacyLeadPayload) {
     pageUrl: getPageUrl(payload),
     antiSpam: toAntiSpamPayload(payload),
     consentAccepted: contact.consent === true,
+    recaptchaToken: toText(payload.recaptchaToken),
   };
 }
 

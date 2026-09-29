@@ -16,7 +16,7 @@ export class LeadService {
 
   async create(input: LeadInput, context?: RequestContext) {
     this.antiSpamService.validate(input.antiSpam);
-    await this.recaptchaService.verify(input.recaptchaToken);
+    await this.recaptchaService.verify(input.recaptchaToken, "lead");
 
     const item = await this.repository.create({
       id: randomUUID(),

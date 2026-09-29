@@ -43,3 +43,10 @@ textarea:focus-visible {
    solo se desplazan (translate), nunca rotan, para que el texto no se
    difumine. Gira siempre en bucle a proposito: decision explicita de
    Bernat de NO respetar prefers-reduced-motion aqui. */
+
+/* El distintivo de reCAPTCHA se oculta porque se solapa con los botones
+   flotantes. Google lo permite si el aviso legal aparece en el formulario:
+   lo pinta components/RecaptchaNotice.tsx. */
+.grecaptcha-badge {
+  visibility: hidden;
+}

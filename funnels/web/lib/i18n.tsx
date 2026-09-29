@@ -17,6 +17,11 @@ export const LOCALES: Array<{ code: Locale; label: string }> = [
 
 export const translations = {
   es: {
+    recaptcha: {
+      notice: "Protegido por reCAPTCHA de Google:",
+      privacy: "Política de privacidad",
+      terms: "Condiciones del servicio",
+    },
     language: {
       ariaLabel: "Seleccionar idioma",
       alsoAvailable: "Esta web también está en tu idioma:",
@@ -310,6 +315,7 @@ export const translations = {
         name: "Indica un nombre válido de al menos 2 letras.",
         phone: "Indica un teléfono español válido de 9 números.",
         consent: "Necesitamos tu aceptación para contactar contigo.",
+        recaptcha: "No hemos podido comprobar que no eres un robot. Desactiva el bloqueador y vuelve a probar, o llámanos al 972 85 01 55.",
         submit: "No hemos podido enviar la solicitud.",
       },
     },
@@ -405,6 +411,7 @@ export const translations = {
         phone: "Indica un teléfono español válido de 9 números.",
         email: "Indica un email válido para enviarte el reporte.",
         consent: "Necesitamos tu aceptación para contactar contigo.",
+        recaptcha: "No hemos podido comprobar que no eres un robot. Desactiva el bloqueador y vuelve a probar, o llámanos al 972 85 01 55.",
         submit: "No hemos podido enviar la solicitud.",
       },
     },
@@ -465,6 +472,11 @@ export const translations = {
     },
   },
   ca: {
+    recaptcha: {
+      notice: "Protegit per reCAPTCHA de Google:",
+      privacy: "Política de privacitat",
+      terms: "Condicions del servei",
+    },
     language: {
       ariaLabel: "Seleccionar idioma",
       alsoAvailable: "Aquest web també està en la teva llengua:",
@@ -758,6 +770,7 @@ export const translations = {
         name: "Indica un nom vàlid d’almenys 2 lletres.",
         phone: "Indica un telèfon espanyol vàlid de 9 números.",
         consent: "Necessitem la teva acceptació per contactar amb tu.",
+        recaptcha: "No hem pogut comprovar que no ets un robot. Desactiva el bloquejador i torna-ho a provar, o truca’ns al 972 85 01 55.",
         submit: "No hem pogut enviar la sol·licitud.",
       },
     },
@@ -851,6 +864,7 @@ export const translations = {
         phone: "Indica un telèfon espanyol vàlid de 9 números.",
         email: "Indica un email vàlid per enviar-te l’informe.",
         consent: "Necessitem la teva acceptació per contactar amb tu.",
+        recaptcha: "No hem pogut comprovar que no ets un robot. Desactiva el bloquejador i torna-ho a provar, o truca’ns al 972 85 01 55.",
         submit: "No hem pogut enviar la sol·licitud.",
       },
     },
@@ -911,6 +925,11 @@ export const translations = {
     },
   },
   en: {
+    recaptcha: {
+      notice: "Protected by Google reCAPTCHA:",
+      privacy: "Privacy Policy",
+      terms: "Terms of Service",
+    },
     language: {
       ariaLabel: "Select language",
       alsoAvailable: "This site is also available in your language:",
@@ -1203,6 +1222,7 @@ export const translations = {
         name: "Enter a valid name with at least 2 letters.",
         phone: "Enter a valid 9-digit Spanish phone number.",
         consent: "We need your acceptance to contact you.",
+        recaptcha: "We could not verify that you are not a robot. Turn off your blocker and try again, or call us on +34 972 85 01 55.",
         submit: "We could not send the request.",
       },
     },
@@ -1296,6 +1316,7 @@ export const translations = {
         phone: "Enter a valid 9-digit Spanish phone number.",
         email: "Enter a valid email so we can send you the report.",
         consent: "We need your acceptance to contact you.",
+        recaptcha: "We could not verify that you are not a robot. Turn off your blocker and try again, or call us on +34 972 85 01 55.",
         submit: "We could not send the request.",
       },
     },
