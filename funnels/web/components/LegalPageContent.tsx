@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { HUB_CONTENT } from "@/lib/hub";
 import type { LegalDocument } from "@/lib/legal";
+import { linkTo } from "@/lib/routes";
 import { I18nProvider, useI18n } from "@/lib/i18n";
 
 export function LegalPageContent({ document }: { document: LegalDocument }) {
@@ -22,13 +23,12 @@ function LegalContent({ document }: { document: LegalDocument }) {
   return (
     <>
       <Header
-        logoHref="/"
         navItems={[
-          { label: content.nav.company, href: "/#qui-som" },
-          { label: content.nav.services, href: "/#serveis" },
-          { label: content.nav.reviews, href: "/#opinions" },
-          { label: content.nav.contact, href: "/#contacte" },
-          { label: content.nav.business, href: "/empreses/", highlight: true },
+          { label: content.nav.company, href: linkTo("home", locale, "#qui-som") },
+          { label: content.nav.services, href: linkTo("home", locale, "#serveis") },
+          { label: content.nav.reviews, href: linkTo("home", locale, "#opinions") },
+          { label: content.nav.contact, href: linkTo("home", locale, "#contacte") },
+          { label: content.nav.business, href: linkTo("empreses", locale), highlight: true },
         ]}
         ctaLabel={content.primaryCta}
         ctaHref="/#serveis"

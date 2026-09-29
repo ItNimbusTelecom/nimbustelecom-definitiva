@@ -7,6 +7,7 @@ import { VisualIcon } from "@/components/VisualIcon";
 import { CONTACT_INFO } from "@/lib/contact";
 import { HUB_CONTENT } from "@/lib/hub";
 import { I18nProvider, useI18n } from "@/lib/i18n";
+import { linkTo, linkToService } from "@/lib/routes";
 import { NOT_FOUND_CONTENT } from "@/lib/notFound";
 
 export function NotFoundContent() {
@@ -29,13 +30,12 @@ function NotFound() {
   return (
     <>
       <Header
-        logoHref="/"
         navItems={[
-          { label: hub.nav.company, href: "/#qui-som" },
-          { label: hub.nav.services, href: "/#serveis" },
-          { label: hub.nav.reviews, href: "/#opinions" },
-          { label: hub.nav.contact, href: "/#contacte" },
-          { label: hub.nav.business, href: "/empreses/", highlight: true },
+          { label: hub.nav.company, href: linkTo("home", locale, "#qui-som") },
+          { label: hub.nav.services, href: linkTo("home", locale, "#serveis") },
+          { label: hub.nav.reviews, href: linkTo("home", locale, "#opinions") },
+          { label: hub.nav.contact, href: linkTo("home", locale, "#contacte") },
+          { label: hub.nav.business, href: linkTo("empreses", locale), highlight: true },
         ]}
         ctaLabel={hub.primaryCta}
         ctaHref="/#serveis"
@@ -65,7 +65,7 @@ function NotFound() {
             {services.map((service) => (
               <li key={service.id}>
                 <a
-                  href={service.href}
+                  href={linkToService(service.id, locale) ?? "/"}
                   className="flex items-center gap-3 rounded-lg border border-nimbus-line p-4 transition hover:border-nimbus-orange hover:shadow-soft"
                 >
                   <VisualIcon name={service.icon} className="size-5 shrink-0 text-nimbus-orange" />

@@ -16,7 +16,8 @@ import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { VideoSection } from "@/components/VideoSection";
 import { VisualIcon } from "@/components/VisualIcon";
 import { NIMBUS_ANTENNA_IMAGE } from "@/lib/brand";
-import { I18nProvider, useI18n } from "@/lib/i18n";
+import { LanguageBanner } from "@/components/LanguageBanner";
+import { DEFAULT_LOCALE, I18nProvider, useI18n, type Locale } from "@/lib/i18n";
 
 const solutionChecks = [
   "radio-tower",
@@ -31,9 +32,12 @@ const solutionChecks = [
 
 const heroCardIcons = ["home", "briefcase", "navigation"] as const;
 
-export function MobilePageContent() {
+export function MobilePageContent({ locale = DEFAULT_LOCALE }: { locale?: Locale } = {}) {
   return (
-    <I18nProvider>
+    <I18nProvider locale={locale}>
+      {/* El aviso solo va en las paginas catalanas, que son las que no
+          llevan prefijo y donde puede caer quien no lee catalan. */}
+      {locale === DEFAULT_LOCALE ? <LanguageBanner page="mobil" /> : null}
       <HomeContent />
     </I18nProvider>
   );
@@ -46,7 +50,7 @@ function HomeContent() {
     <>
       <LandingTracker />
       <ChatbaseEmbed />
-      <Header />
+      <Header page="mobil" />
       <main>
         <section className="relative overflow-hidden py-16 md:py-24">
           <div className="mx-auto grid max-w-6xl gap-10 px-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
