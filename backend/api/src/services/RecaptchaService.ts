@@ -22,6 +22,7 @@ type RespuestaGoogle = {
   success?: boolean;
   score?: number;
   action?: string;
+  hostname?: string;
   "error-codes"?: string[];
 };
 
@@ -49,7 +50,8 @@ export class RecaptchaService implements IRecaptchaService {
     const result = (await response.json()) as RespuestaGoogle;
 
     if (!result.success) {
-      console.warn("reCAPTCHA rejected the token", { errors: result["error-codes"] });
+      // El hostname distingue un problema de claves de uno de dominio.
+      console.warn("reCAPTCHA rejected the token", { errors: result["error-codes"], hostname: result.hostname });
       throw new ValidationError("reCAPTCHA verification failed");
     }
 

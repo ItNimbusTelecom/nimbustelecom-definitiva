@@ -5,9 +5,17 @@
  *
  * La clave de SITIO es publica por diseno: viaja en el HTML de cualquier web
  * que use reCAPTCHA. La privada es la secreta, y esa vive en el backend
- * (RECAPTCHA_SECRET, en backend/infra/.env.prod). Es la misma pareja de claves
- * que ya usaba el backend de formularios de la web de WordPress, asi que el
- * dominio ya esta dado de alta y no hay que registrar nada nuevo.
+ * (RECAPTCHA_SECRET, en backend/infra/.env.prod).
+ *
+ * OJO CON DE DONDE SALE ESTA CLAVE. La primera version puso aqui la que
+ * aparecia en un comentario del stack de formularios del WordPress
+ * ("Secret key de reCAPTCHA v3 (sitekey 6Le240At...)"), y ese comentario
+ * estaba obsoleto: no era pareja del secreto desplegado. Resultado, el 30/09,
+ * al activar la verificacion: Google respondia 'invalid-keys' y la API
+ * rechazaba TODOS los envios. La buena es la que el HTML del WordPress usaba
+ * de verdad, la de aqui abajo, que ademas comparte prefijo con el secreto.
+ * Si alguna vez hay que cambiarla, la fuente fiable es el par que acepta
+ * siteverify, no un comentario.
  *
  * El script NO se carga al entrar en la web: se carga la primera vez que
  * alguien empieza a rellenar un formulario. Dos motivos. Uno, no cargar un
@@ -19,7 +27,7 @@
  */
 
 export const RECAPTCHA_SITE_KEY =
-  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6Le240AtAAAAANz_-yCkJ5fyJqeB0ppxA6617-B1";
+  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6LetOf8sAAAAAN5JFTmc8Aqah3Dcs8MC7zqwcsfo";
 
 type Grecaptcha = {
   ready: (cb: () => void) => void;
