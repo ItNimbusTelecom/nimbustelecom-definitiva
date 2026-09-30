@@ -30,8 +30,12 @@ const mobilePlans = [
   { data: "400GB", price: "14,95€" },
 ];
 
+// Sense data de caducitat a proposito: la que hi havia (30/09/2026) va vencer,
+// i una oferta que anuncia una data passada es pitjor que una sense data. Si
+// la promo torna a tenir data de fi, va aqui i tambe al promoBadge del
+// diccionari, que es el que es pinta a les tarifes de /mobil/.
 const mobilePromoTerms =
-  "Tarifes JUNTS ESTIU vàlides fins al 30/09/2026. Promo de per vida mentre es mantingui la tarifa. No acumulable amb altres promocions.";
+  "Promo JUNTS ESTIU de per vida mentre es mantingui la tarifa. No acumulable amb altres promocions.";
 
 const sharedDataPlans = [
   { data: "120GB", price: "21,90€" },

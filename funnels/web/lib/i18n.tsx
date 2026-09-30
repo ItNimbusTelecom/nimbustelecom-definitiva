@@ -138,7 +138,7 @@ export const translations = {
       scrollLeft: "Ver tarifas anteriores",
       scrollRight: "Ver más tarifas",
       carouselHint: "Desliza o usa las flechas para ver más tarifas",
-      promoBadge: "Para nuevas contrataciones hasta el 30/09/2026",
+      promoBadge: "Para nuevas contrataciones",
       promoNote:
         "Tarifas JUNTS ESTIU. Promo de por vida mientras se mantenga la tarifa. No acumulable con otras promociones.",
       description: (data: string) =>
@@ -593,7 +593,7 @@ export const translations = {
       scrollLeft: "Veure tarifes anteriors",
       scrollRight: "Veure més tarifes",
       carouselHint: "Fes lliscar o usa les fletxes per veure més tarifes",
-      promoBadge: "Per noves contractacions fins el 30/09/2026",
+      promoBadge: "Per noves contractacions",
       promoNote:
         "Tarifes JUNTS ESTIU. Promo de per vida mentre es mantingui la tarifa. No acumulable amb altres promocions.",
       description: (data: string) =>
@@ -1046,7 +1046,7 @@ export const translations = {
       scrollLeft: "View previous plans",
       scrollRight: "View more plans",
       carouselHint: "Swipe or use the arrows to view more plans",
-      promoBadge: "For new sign-ups until 30/09/2026",
+      promoBadge: "For new sign-ups",
       promoNote:
         "JUNTS ESTIU plans. Lifetime promo while keeping the same plan. Not combinable with other promotions.",
       description: (data: string) =>
