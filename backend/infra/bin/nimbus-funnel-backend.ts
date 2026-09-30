@@ -81,6 +81,15 @@ function entornoDeProduccion(): cdk.Environment {
     );
   }
 
+  // Activar la verificacion sin clave secreta hace que RecaptchaService lance
+  // en cada peticion: un 500 per envio, o sea cero leads. Millor parar aqui.
+  if (process.env.RECAPTCHA_ENABLED === "true" && !process.env.RECAPTCHA_SECRET) {
+    throw new Error(
+      "RECAPTCHA_ENABLED=true pero falta RECAPTCHA_SECRET.\n" +
+        "Sense la clau secreta, cada enviament respon 500 i no entra cap lead."
+    );
+  }
+
   return { account: cuenta, region: process.env.NIMBUS_PROD_REGION ?? "eu-west-1" };
 }
 
