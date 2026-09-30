@@ -19,10 +19,14 @@ export class NimbusFunnelBackendStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: NimbusFunnelBackendStackProps) {
     super(scope, id, props);
 
-    // Ojo con el operador: cdk.json define allowedOrigins como cadena vacia y
-    // recaptchaEnabled como "false". Con ?? esos valores ganan siempre —una
-    // cadena vacia no es nullish— y las variables de entorno no se leen nunca.
-    // Con || la cadena vacia cae al siguiente, que es lo que se buscaba.
+    // Estas dos NO estan en el context de cdk.json a proposito, y conviene que
+    // siga siendo asi: son configuracion por entorno y viven en .env.prod.
+    //
+    // Cuando estaban, el valor del fichero ganaba siempre y la variable de
+    // entorno no se leia nunca. Con ?? por la cadena vacia; y al cambiarlo a
+    // || segui sin funcionar para recaptchaEnabled, porque el valor era la
+    // cadena "false", que es truthy. Dos intentos de arreglarlo sin tocar el
+    // origen del problema. El origen era tener el valor en dos sitios.
     const allowedOrigins: string = this.node.tryGetContext("allowedOrigins") || process.env.FRONTEND_ALLOWED_ORIGINS || "";
     const recaptchaEnabled: string = this.node.tryGetContext("recaptchaEnabled") || process.env.RECAPTCHA_ENABLED || "false";
     const tableNamePrefix = this.node.tryGetContext("tableNamePrefix") ?? "NimbusFunnel";
