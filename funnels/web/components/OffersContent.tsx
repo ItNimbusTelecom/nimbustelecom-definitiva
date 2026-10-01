@@ -94,7 +94,8 @@ function OffersPageContent() {
                   <PricePill key={plan.speed} label={plan.speed} price={plan.price} suffix={content.perMonth} />
                 ))}
               </div>
-              <div className="mt-6 rounded-lg bg-orange-50 p-5 text-center">
+              <p className="mt-3 text-center text-sm font-bold text-nimbus-muted">{content.fiber.terms}</p>
+              <div className="mt-5 rounded-lg bg-orange-50 p-5 text-center">
                 <p className="text-3xl font-black text-nimbus-orange">{content.fiber.discountTitle}</p>
                 <p className="mt-2 text-base font-black leading-7 text-nimbus-ink md:text-lg">
                   {content.fiber.discountText}
@@ -239,6 +240,7 @@ function OffersPageContent() {
           <div>
             <p className="text-sm font-black uppercase tracking-[0.16em] text-nimbus-orange">Nimbus Telecom</p>
             <h2 className="mt-2 text-3xl font-black tracking-tight text-nimbus-ink">{content.closing.title}</h2>
+            <p className="mt-3 text-sm font-bold text-nimbus-muted">{content.vatNote}</p>
           </div>
           <ContactButtons className="md:w-[420px]" position="closing" />
         </div>

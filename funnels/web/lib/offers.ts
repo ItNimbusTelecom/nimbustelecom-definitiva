@@ -44,7 +44,7 @@ export type OffersContent = {
   meta: { title: string; description: string };
   hero: { title: string; badges: string[] };
   perMonth: string;
-  fiber: { eyebrow: string; title: string; discountTitle: string; discountText: string };
+  fiber: { eyebrow: string; title: string; terms: string; discountTitle: string; discountText: string };
   mobile: {
     eyebrow: string;
     title: string;
@@ -62,6 +62,8 @@ export type OffersContent = {
   closing: { title: string; links: string };
   contact: { whatsapp: string; call: string };
   legal: { legalNotice: string; privacy: string; cookies: string };
+  /** Preu final amb impostos: a una oferta per a particulars es obligatori dir-ho. */
+  vatNote: string;
 };
 
 export const OFFERS_CONTENT: Record<Locale, OffersContent> = {
@@ -79,6 +81,7 @@ export const OFFERS_CONTENT: Record<Locale, OffersContent> = {
     fiber: {
       eyebrow: "Fibra òptica",
       title: "Fibra per a casa o negoci",
+      terms: "IVA inclòs. Permanència de 12 mesos.",
       discountTitle: "10% de descompte",
       discountText: "A totes les línies mòbils en contractar la fibra.",
     },
@@ -115,6 +118,7 @@ export const OFFERS_CONTENT: Record<Locale, OffersContent> = {
     },
     contact: { whatsapp: "WhatsApp", call: "Trucar" },
     legal: { legalNotice: "Avís legal", privacy: "Privacitat", cookies: "Cookies" },
+    vatNote: "Tots els preus amb IVA inclòs.",
   },
   es: {
     meta: {
@@ -130,6 +134,7 @@ export const OFFERS_CONTENT: Record<Locale, OffersContent> = {
     fiber: {
       eyebrow: "Fibra óptica",
       title: "Fibra para casa o negocio",
+      terms: "IVA incluido. Permanencia de 12 meses.",
       discountTitle: "10% de descuento",
       discountText: "En todas las líneas móviles al contratar la fibra.",
     },
@@ -166,6 +171,7 @@ export const OFFERS_CONTENT: Record<Locale, OffersContent> = {
     },
     contact: { whatsapp: "WhatsApp", call: "Llamar" },
     legal: { legalNotice: "Aviso legal", privacy: "Privacidad", cookies: "Cookies" },
+    vatNote: "Todos los precios con IVA incluido.",
   },
   en: {
     meta: {
@@ -181,6 +187,7 @@ export const OFFERS_CONTENT: Record<Locale, OffersContent> = {
     fiber: {
       eyebrow: "Fibre",
       title: "Fibre for your home or business",
+      terms: "VAT included. 12-month minimum term.",
       discountTitle: "10% off",
       discountText: "On every mobile line when you sign up for fibre.",
     },
@@ -217,5 +224,6 @@ export const OFFERS_CONTENT: Record<Locale, OffersContent> = {
     },
     contact: { whatsapp: "WhatsApp", call: "Call" },
     legal: { legalNotice: "Legal notice", privacy: "Privacy", cookies: "Cookies" },
+    vatNote: "All prices include VAT.",
   },
 };
