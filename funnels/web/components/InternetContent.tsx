@@ -238,6 +238,33 @@ function InternetPageContent() {
           </div>
         </section>
 
+        {/* REFERITS: es retira el 31/12/2026, quan acaba la promocio */}
+        <section className="bg-white pb-20">
+          <div className="mx-auto max-w-6xl px-5">
+            <div className="flex flex-col gap-5 rounded-lg bg-nimbus-ink p-6 text-white shadow-soft md:flex-row md:items-center md:justify-between md:p-8">
+              <div className="flex items-start gap-4">
+                <span className="grid size-12 shrink-0 place-items-center rounded-full bg-nimbus-orange text-white">
+                  <VisualIcon name="users" className="size-6" />
+                </span>
+                <div>
+                  <p className="text-sm font-black uppercase tracking-[0.16em] text-orange-200">
+                    {content.referral.eyebrow}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">{content.referral.title}</h2>
+                  <p className="mt-3 max-w-3xl leading-7 text-white/75">{content.referral.text}</p>
+                </div>
+              </div>
+              <a
+                href={linkTo("amics", locale)}
+                hrefLang={locale === "ca" ? undefined : "ca"}
+                className="inline-flex shrink-0 items-center justify-center rounded-full bg-white px-6 py-3.5 text-sm font-black text-nimbus-ink transition hover:bg-orange-50 hover:text-nimbus-orange"
+              >
+                {content.referral.cta}
+              </a>
+            </div>
+          </div>
+        </section>
+
         <LocalServiceSection
           content={content.localService}
           cta={{

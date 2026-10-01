@@ -1447,7 +1447,7 @@ export function resolveLocale(): Locale {
  *
  * Sin `locale` se mantiene el comportamiento anterior —seguir al navegador y
  * recordar la eleccion— para las paginas que todavia no estan separadas por
- * idioma: las legales y /ofertas-qr/.
+ * idioma: las legales.
  *
  * A quien llega a una URL catalana con el navegador en otro idioma no se le
  * redirige: se le avisa con LanguageBanner y decide. Redirigir por JavaScript

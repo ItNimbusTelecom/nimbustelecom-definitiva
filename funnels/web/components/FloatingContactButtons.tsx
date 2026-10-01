@@ -13,6 +13,7 @@ const WHATSAPP_TOPIC_BY_SECTION: Record<string, string> = {
   internet: "internet o fibra",
   seguridad: "los servicios de seguridad",
   empreses: "los servicios para empresas",
+  amics: "la promoción Amics de la fibra",
 };
 
 function getWhatsappMessage(pathname: string | null) {
