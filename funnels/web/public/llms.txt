@@ -11,15 +11,15 @@ funcioni millor segons on visqui o es mogui cada persona.
 
 - Adreça: Carrer Major, 42 — 17410 Sils (Girona)
 - Telèfon: +34 972 85 01 55
-- Horari d'atenció: de dilluns a divendres, de 9:00 a 17:00
+- Horari d'atenció: de dilluns a divendres, de 9:00 a 13:00 i de 15:00 a 18:00 (a l'agost, de 9:00 a 15:00)
 - Zona de servei: la Selva i el Gironès
 
 ## Pàgines
 
 - [Inici](https://nimbustelecom.cat/): qui som, els quatre serveis i com contactar.
-- [Cobertura mòbil](https://nimbustelecom.cat/movil/): problemes de cobertura, tarifes mòbils i estudi de cobertura gratuït.
+- [Cobertura mòbil](https://nimbustelecom.cat/mobil/): problemes de cobertura, tarifes mòbils i estudi de cobertura.
 - [Internet a casa](https://nimbustelecom.cat/internet/): fibra i connexions per a habitatges on no arriba la fibra.
-- [Seguretat](https://nimbustelecom.cat/seguridad/): càmeres, alarmes i control d'accessos.
+- [Seguretat](https://nimbustelecom.cat/seguretat/): càmeres, alarmes i control d'accessos.
 - [Empreses](https://nimbustelecom.cat/empreses/): connectivitat i serveis TIC per a negocis i naus industrials.
 
 ## Documentació i condicions
