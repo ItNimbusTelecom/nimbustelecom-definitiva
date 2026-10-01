@@ -11,6 +11,7 @@ funcioni millor segons on visqui o es mogui cada persona.
 
 - Adreça: Carrer Major, 42 — 17410 Sils (Girona)
 - Telèfon: +34 972 85 01 55
+- WhatsApp: +34 622 81 26 04
 - Horari d'atenció: de dilluns a divendres, de 9:00 a 13:00 i de 15:00 a 18:00 (a l'agost, de 9:00 a 15:00)
 - Zona de servei: la Selva i el Gironès
 
@@ -41,4 +42,6 @@ funcioni millor segons on visqui o es mogui cada persona.
 - Cap operador pot garantir cobertura perfecta a tot arreu. Nimbus revisa cada
   cas abans de recomanar una línia.
 - Les tarifes mòbils indicades al web són sense permanència.
-- L'atenció de suport entra pel xat del web; el telèfon és per a vendes.
+- Contacte: telèfon, WhatsApp, formulari i xat del web. Els clients poden
+  obrir incidències des de l'Àrea Clients
+  (https://clientesnimbustelecom.ispgestion.com/site/login).
