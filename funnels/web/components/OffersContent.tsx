@@ -5,7 +5,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { LanguageBanner } from "@/components/LanguageBanner";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { VisualIcon } from "@/components/VisualIcon";
-import { trackEvent } from "@/lib/analytics";
+import { openCookieSettings, trackEvent } from "@/lib/analytics";
 import { NIMBUS_LOGO_URL } from "@/lib/brand";
 import { CONTACT_INFO, LEGAL_LINKS } from "@/lib/contact";
 import { DEFAULT_LOCALE, I18nProvider, useI18n, type Locale } from "@/lib/i18n";
@@ -36,7 +36,7 @@ export function OffersContent({ locale = DEFAULT_LOCALE }: { locale?: Locale } =
 }
 
 function OffersPageContent() {
-  const { locale } = useI18n();
+  const { locale, dictionary } = useI18n();
   const content = OFFERS_CONTENT[locale];
 
   return (
@@ -263,6 +263,9 @@ function OffersPageContent() {
                 {label}
               </a>
             ))}
+            <button type="button" onClick={openCookieSettings} className="underline-offset-4 hover:text-nimbus-orange hover:underline">
+              {dictionary.cookies.footerLink}
+            </button>
           </nav>
         </div>
       </section>
