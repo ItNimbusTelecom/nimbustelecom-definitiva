@@ -27,6 +27,10 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   applicationName: "Nimbus Telecom",
+  // GitHub Pages no deja poner cabeceras HTTP; esta es de las pocas que
+  // tambien valen como <meta>. A otras webs solo les llega el dominio de
+  // origen, nunca la ruta ni los parametros (utm, etc.).
+  referrer: "strict-origin-when-cross-origin",
   authors: [{ name: "Nimbus Telecom" }],
   creator: "Nimbus Telecom",
   publisher: "Nimbus Telecom",

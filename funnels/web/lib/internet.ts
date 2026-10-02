@@ -35,6 +35,8 @@ export type InternetContent = {
     items: InternetOption[];
   };
   banner: { text: string; primary: string; secondary: string };
+  /** Bloc del programa de referits «Amics de la fibra» (fins al 31/12/2026). */
+  referral: { eyebrow: string; title: string; text: string; cta: string };
   reviewsSection: { eyebrow: string; title: string; subtitle: string };
   faq: { eyebrow: string; title: string; items: [string, string][] };
   localService: {
@@ -177,6 +179,12 @@ export const INTERNET_CONTENT: Record<Locale, InternetContent> = {
           ],
         },
       ],
+    },
+    referral: {
+      eyebrow: "Amics de la fibra",
+      title: "¿Ya tienes la fibra de Nimbus? Recomiéndala y gana meses gratis",
+      text: "Hasta el 31 de diciembre, por cada amigo que contrate la fibra diciendo tu nombre y tu móvil, tienes un mes gratis. Sin límite. Y si vienes recomendado por un cliente, dinos su nombre al contratar.",
+      cta: "Cómo funciona (en catalán)",
     },
     banner: {
       text: "¿No sabes qué opción te encaja? Cuéntanos tu caso y lo miramos.",
@@ -390,6 +398,12 @@ export const INTERNET_CONTENT: Record<Locale, InternetContent> = {
         },
       ],
     },
+    referral: {
+      eyebrow: "Amics de la fibra",
+      title: "Ja tens la fibra de Nimbus? Recomana-la i guanya mesos gratis",
+      text: "Fins al 31 de desembre, per cada amic que contracti la fibra dient el teu nom i el teu mòbil, tens un mes gratis. Sense límit. I si vens recomanat per un client, digues-nos el seu nom quan contractis.",
+      cta: "Com funciona",
+    },
     banner: {
       text: "No saps quina opció t'encaixa? Explica'ns el teu cas i ho mirem.",
       primary: "Estudiar el meu cas",
@@ -599,6 +613,12 @@ export const INTERNET_CONTENT: Record<Locale, InternetContent> = {
           ],
         },
       ],
+    },
+    referral: {
+      eyebrow: "Amics de la fibra",
+      title: "Already on Nimbus fibre? Recommend it and earn free months",
+      text: "Until 31 December, for every friend who signs up for fibre giving your name and mobile number, you get one month free. No limit. And if a customer referred you, tell us their name when you sign up.",
+      cta: "How it works (in Catalan)",
     },
     banner: {
       text: "Not sure which option fits? Tell us your case and we'll look into it.",

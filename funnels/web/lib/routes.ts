@@ -15,7 +15,7 @@ import type { Locale } from "@/lib/i18n";
  * Los slugs no son traducciones automaticas: son los terminos por los que se
  * busca en cada idioma. Por eso /en/business/ y no /en/companies/.
  */
-export type PageKey = "home" | "mobil" | "internet" | "seguretat" | "empreses";
+export type PageKey = "home" | "mobil" | "internet" | "seguretat" | "empreses" | "ofertes" | "amics";
 
 export const ROUTES: Record<PageKey, Partial<Record<Locale, string>>> = {
   home: { ca: "/", es: "/es/", en: "/en/" },
@@ -23,6 +23,13 @@ export const ROUTES: Record<PageKey, Partial<Record<Locale, string>>> = {
   internet: { ca: "/internet/", es: "/es/internet/", en: "/en/internet/" },
   seguretat: { ca: "/seguretat/", es: "/es/seguridad/", en: "/en/security/" },
   empreses: { ca: "/empreses/", es: "/es/empresas/", en: "/en/business/" },
+  // Landing del QR dels flyers. El slug catala no es toca: es el que va
+  // imprès al QR. Les tres versions porten noindex (veure lib/offers.ts).
+  ofertes: { ca: "/ofertas-qr/", es: "/es/ofertas-qr/", en: "/en/offers-qr/" },
+  // Promocio de referits de la campanya de fibra: nomes en catala, que es
+  // l'idioma del SMS i del email que hi porten. Des de /es/ i /en/ s'hi
+  // enllaca igualment, via el fallback de linkTo.
+  amics: { ca: "/amics/" },
 };
 
 /**

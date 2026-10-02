@@ -1,5 +1,6 @@
 "use client";
 
+import { openCookieSettings } from "@/lib/analytics";
 import { DOC_LINKS, LEGAL_LINKS } from "@/lib/contact";
 import { useI18n } from "@/lib/i18n";
 import { useEffect, useState } from "react";
@@ -56,6 +57,18 @@ export function Footer({ anchorId = "contacto" }: { anchorId?: string }) {
                   </a>
                 </span>
               ))}
+              {/* Para cambiar de opinion despues: retirar el consentimiento
+                  tiene que ser tan facil como darlo. */}
+              <span className="inline-flex items-center gap-x-2">
+                <span aria-hidden="true">·</span>
+                <button
+                  type="button"
+                  onClick={openCookieSettings}
+                  className="font-bold transition hover:text-nimbus-orange"
+                >
+                  {dictionary.cookies.footerLink}
+                </button>
+              </span>
             </nav>
 
             <p className="mt-3">
