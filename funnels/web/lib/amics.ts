@@ -81,12 +81,8 @@ export const AMICS_BASES: AmicsBase[] = [
   },
   {
     title: "Altres promocions",
-    // PENDENT de Javi (reunio del 02/10): si el mes gratis es compatible amb
-    // les altres promocions de qui recomana. Quan es decideixi, s'afegeix al
-    // final una de les dues frases:
-    //   «El mes gratis és compatible amb les altres promocions que tingui qui recomana.»
-    //   «No és acumulable amb altres promocions.»
-    text: "El client nou no té premi propi.",
+    // Decidit a la reunio del 02/10: compatible amb les altres promocions.
+    text: "El client nou no té premi propi. El mes gratis és compatible amb les altres promocions que tingui qui recomana.",
   },
   {
     title: "Dades",
