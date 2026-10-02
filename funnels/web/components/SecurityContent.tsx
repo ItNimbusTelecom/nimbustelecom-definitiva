@@ -10,7 +10,7 @@ import { LandingTracker } from "@/components/LandingTracker";
 import { LocalServiceSection } from "@/components/LocalServiceSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { VisualIcon } from "@/components/VisualIcon";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { linkTo } from "@/lib/routes";
 import { LanguageBanner } from "@/components/LanguageBanner";
 import { DEFAULT_LOCALE, I18nProvider, useI18n, type Locale } from "@/lib/i18n";
@@ -321,6 +321,23 @@ function SecurityPageContent() {
         {/* DUDAS */}
         <section id="dubtes" className="scroll-mt-24 bg-white py-20">
           <div className="mx-auto max-w-6xl px-5">
+            {/* Marcado FAQPage: sale de la misma lista que las preguntas de
+                pantalla, asi que no se puede desincronizar. Las respuestas
+                tienen que estar en el HTML (ver FaqItem) para que sea valido. */}
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  mainEntity: content.faq.items.map(([question, answer]) => ({
+                    "@type": "Question",
+                    name: question,
+                    acceptedAnswer: { "@type": "Answer", text: answer },
+                  })),
+                }).replace(/</g, "\\u003c"),
+              }}
+            />
             <p className="text-sm font-black uppercase tracking-[0.2em] text-nimbus-orange">
               {content.faq.eyebrow}
             </p>
@@ -379,18 +396,25 @@ function SecurityPageContent() {
 
 function FaqItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false);
+  const panelId = useId();
 
   return (
     <div className="rounded-lg border border-nimbus-line bg-white">
       <button
         type="button"
+        aria-expanded={open}
+        aria-controls={panelId}
         onClick={() => setOpen((value) => !value)}
         className="flex w-full items-center justify-between gap-4 p-5 text-left font-black text-nimbus-ink"
       >
         {question}
         <VisualIcon name={open ? "chevron-up" : "chevron-down"} className="size-5 shrink-0 text-nimbus-orange" />
       </button>
-      {open ? <p className="px-5 pb-5 leading-7 text-nimbus-muted">{answer}</p> : null}
+      {/* La respuesta se queda en el HTML y solo se oculta: asi la leen
+          el buscador y los asistentes, y coincide con el marcado FAQPage. */}
+      <p id={panelId} hidden={!open} className="px-5 pb-5 leading-7 text-nimbus-muted">
+        {answer}
+      </p>
     </div>
   );
 }

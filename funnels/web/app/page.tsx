@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { HomePageContent } from "@/components/HomePageContent";
+import { StructuredData } from "@/components/StructuredData";
 import { alternatesFor } from "@/lib/routes";
 import { HOME_SEO, openGraphFor } from "@/lib/seo";
 
@@ -15,5 +16,11 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <HomePageContent locale={LOCALE} />;
+  return (
+    <>
+      {/* Ficha de negocio (LocalBusiness): solo en la home, ver lib/structuredData.ts. */}
+      <StructuredData />
+      <HomePageContent locale={LOCALE} />
+    </>
+  );
 }

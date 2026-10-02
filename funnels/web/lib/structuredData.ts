@@ -12,6 +12,10 @@ import { SITE_URL } from "@/lib/seo";
  * horario se repite aquí en formato máquina porque CONTACT_INFO.hours es una
  * frase en castellano y no se puede convertir sin adivinar: si cambia allí,
  * hay que cambiarlo aquí.
+ *
+ * Aquí va solo el horario habitual. El de agosto (9:00 a 15:00) no se marca:
+ * necesitaría fechas de un año concreto y caducaría. Lo cubren la ficha de
+ * Google, que se edita cada año, y el texto de CONTACT_INFO.hours.
  */
 
 const PERFILES = [
@@ -53,7 +57,13 @@ export function localBusinessJsonLd() {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         opens: "09:00",
-        closes: "17:00",
+        closes: "13:00",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "15:00",
+        closes: "18:00",
       },
     ],
     areaServed: [

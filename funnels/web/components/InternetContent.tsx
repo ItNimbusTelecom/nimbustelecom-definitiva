@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { ChatbaseEmbed } from "@/components/ChatbaseEmbed";
 import { CookieConsent } from "@/components/CookieConsent";
 import { CoverageStudyFunnel } from "@/components/CoverageStudyFunnel";
@@ -252,6 +252,23 @@ function InternetPageContent() {
         {/* DUDAS */}
         <section id="dubtes" className="scroll-mt-24 bg-nimbus-soft py-20">
           <div className="mx-auto max-w-6xl px-5">
+            {/* Marcado FAQPage: sale de la misma lista que las preguntas de
+                pantalla, asi que no se puede desincronizar. Las respuestas
+                tienen que estar en el HTML (ver FaqItem) para que sea valido. */}
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  mainEntity: content.faq.items.map(([question, answer]) => ({
+                    "@type": "Question",
+                    name: question,
+                    acceptedAnswer: { "@type": "Answer", text: answer },
+                  })),
+                }).replace(/</g, "\\u003c"),
+              }}
+            />
             <p className="text-sm font-black uppercase tracking-[0.2em] text-nimbus-orange">
               {content.faq.eyebrow}
             </p>
@@ -319,11 +336,13 @@ function InternetPageContent() {
 
 function FaqItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
+  const panelId = useId();
 
   return (
     <div className="rounded-lg border border-nimbus-line bg-white">
       <button
         type="button"
+        aria-controls={panelId}
         onClick={() => setIsOpen((current) => !current)}
         aria-expanded={isOpen}
         className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-black text-nimbus-ink"
@@ -334,7 +353,11 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
           className="size-4 shrink-0 text-nimbus-orange"
         />
       </button>
-      {isOpen ? <p className="px-5 pb-5 leading-7 text-nimbus-muted">{answer}</p> : null}
+      {/* La respuesta se queda en el HTML y solo se oculta: asi la leen
+          el buscador y los asistentes, y coincide con el marcado FAQPage. */}
+      <p id={panelId} hidden={!isOpen} className="px-5 pb-5 leading-7 text-nimbus-muted">
+        {answer}
+      </p>
     </div>
   );
 }
