@@ -11,3 +11,15 @@ export const GA_MEASUREMENT_ID = "G-2XPZFZDCPG";
  * que React monte nada.
  */
 export const COOKIE_CONSENT_KEY = "nimbus-cookie-consent";
+
+/** Valores que guarda el banner. Sin valor: todavia no ha elegido. */
+export type CookieChoice = "accepted" | "rejected";
+
+/**
+ * Funcion global que inyecta gtag.js. La define el script de <head>
+ * (components/GoogleAnalytics.tsx) y la llama el banner al aceptar.
+ */
+export const GA_LOADER_FN = "nimbusLoadGa";
+
+/** Evento con el que el enlace "Configurar cookies" reabre el banner. */
+export const COOKIE_SETTINGS_EVENT = "nimbus:cookie-settings";
