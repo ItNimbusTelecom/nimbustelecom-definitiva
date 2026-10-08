@@ -1,6 +1,7 @@
 "use client";
 
-import { COOKIE_SETTINGS_EVENT, GA_MEASUREMENT_ID } from "@/lib/analyticsConfig";
+import { COOKIE_SETTINGS_EVENT, GA_MEASUREMENT_ID, type CookieConsentState } from "@/lib/analyticsConfig";
+import { getCampaignParams } from "@/lib/utm";
 
 type GtagCommand = "event" | "config" | "consent" | "js";
 
@@ -21,35 +22,61 @@ export function trackEvent(name: string, params?: Record<string, unknown>) {
 }
 
 /**
- * Se llama al aceptar las cookies de analisis. Hasta ese momento gtag.js no
- * esta cargado (ver components/GoogleAnalytics.tsx): aqui se levanta el
- * consentimiento y se carga.
+ * Conversiones para Google Ads. No hay etiqueta AW propia: se marcan como
+ * eventos clave en GA4 y se importan desde Google Ads, que ya tiene la
+ * propiedad vinculada. Llevan los utm guardados al entrar, porque GA4 solo los
+ * ve en la primera pagina y la conversion puede pasar en otra.
+ *
+ * - conversion_formulario: solo cuando la API responde OK, no al pulsar.
+ * - conversion_whatsapp / conversion_telefono: clic en cualquier enlace
+ *   wa.me o tel: de la web (components/AttributionTracker.tsx).
  */
-export function grantAnalyticsConsent() {
-  if (typeof window === "undefined") {
-    return;
-  }
+export type ConversionEvent = "conversion_formulario" | "conversion_whatsapp" | "conversion_telefono";
 
-  window.gtag?.("consent", "update", { analytics_storage: "granted" });
-  window.nimbusLoadGa?.();
+export function trackConversion(name: ConversionEvent, params?: Record<string, unknown>) {
+  trackEvent(name, { ...getCampaignParams(), page_path: window.location.pathname, ...params });
 }
 
 /**
- * Se llama al rechazar, tambien cuando alguien que habia aceptado cambia de
- * opinion desde "Configurar cookies". gtag.js, si ya estaba cargado, sigue en
- * la pagina hasta que se navegue a otra, pero deja de escribir cookies; y las
- * que ya habia escrito se borran, que es lo que pide retirar el consentimiento.
+ * Aplica lo elegido en el banner. Hasta que se acepta algo gtag.js no esta
+ * cargado (ver components/GoogleAnalytics.tsx): aqui se actualiza el
+ * consentimiento y, si hace falta, se carga.
+ *
+ * Al retirar un consentimiento, gtag.js, si ya estaba cargado, sigue en la
+ * pagina hasta que se navegue a otra, pero deja de escribir cookies; y las que
+ * ya habia escrito se borran, que es lo que pide retirar el consentimiento.
+ *
+ * ad_personalization queda siempre denegado: las cookies de publicidad solo
+ * sirven para saber que anuncio acaba en una solicitud, no para remarketing.
  */
-export function denyAnalyticsConsent() {
+export function applyCookieConsent({ analytics, ads }: CookieConsentState) {
   if (typeof window === "undefined") {
     return;
   }
 
-  window.gtag?.("consent", "update", { analytics_storage: "denied" });
+  const adsConsent = ads ? "granted" : "denied";
+  window.gtag?.("consent", "update", {
+    analytics_storage: analytics ? "granted" : "denied",
+    ad_storage: adsConsent,
+    ad_user_data: adsConsent,
+  });
 
-  // GA4 escribe _ga y _ga_<id sin "G-"> en el dominio raiz (.nimbustelecom.cat).
-  // Se borran en el dominio raiz y en el host, por si acaso.
-  const names = ["_ga", `_ga_${GA_MEASUREMENT_ID.replace(/^G-/, "")}`];
+  if (analytics || ads) {
+    window.nimbusLoadGa?.();
+  }
+
+  if (!analytics) {
+    // GA4 escribe _ga y _ga_<id sin "G-">.
+    deleteCookies(["_ga", `_ga_${GA_MEASUREMENT_ID.replace(/^G-/, "")}`]);
+  }
+  if (!ads) {
+    // Las de Google Ads que escribe gtag.js con ad_storage concedido.
+    deleteCookies(["_gcl_au", "_gcl_aw", "_gcl_dc", "_gcl_gb"]);
+  }
+}
+
+/** Se borran en el dominio raiz (.nimbustelecom.cat) y en el host, por si acaso. */
+function deleteCookies(names: string[]) {
   const host = window.location.hostname;
   const rootDomain = host.split(".").slice(-2).join(".");
   for (const name of names) {

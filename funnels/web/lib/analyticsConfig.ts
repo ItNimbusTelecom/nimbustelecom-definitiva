@@ -12,8 +12,18 @@ export const GA_MEASUREMENT_ID = "G-2XPZFZDCPG";
  */
 export const COOKIE_CONSENT_KEY = "nimbus-cookie-consent";
 
+/**
+ * Eleccion de las cookies de medicion publicitaria (Google Ads). Va en otra
+ * clave porque es una finalidad que se anadio despues: quien ya habia
+ * aceptado la analitica no habia dicho nada sobre esto y se le vuelve a
+ * preguntar.
+ */
+export const ADS_CONSENT_KEY = "nimbus-cookie-consent-ads";
+
 /** Valores que guarda el banner. Sin valor: todavia no ha elegido. */
 export type CookieChoice = "accepted" | "rejected";
+
+export type CookieConsentState = { analytics: boolean; ads: boolean };
 
 /**
  * Funcion global que inyecta gtag.js. La define el script de <head>
