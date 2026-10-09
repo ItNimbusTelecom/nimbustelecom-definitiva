@@ -15,7 +15,7 @@ export const RADIOLINKS_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Radioenlaces para empresas en la Selva y el Gironès | Nimbus Telecom",
       description:
-        "Instalamos radioenlaces punto a punto en Sils, Santa Coloma, Maçanet, Vidreres, Caldes y toda la Selva y el Gironès: unir naves y sedes, cámaras remotas y masías sin fibra. Técnicos propios en Sils.",
+        "Radioenlaces punto a punto en Sils, Santa Coloma, Maçanet y toda la Selva: unimos naves y sedes, cámaras remotas y masías sin fibra. Técnicos propios en Sils.",
     },
     serviceType: "Point-to-point wireless link installation",
     nav: {
@@ -125,7 +125,7 @@ export const RADIOLINKS_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Radioenllaços per a empreses a la Selva i el Gironès | Nimbus Telecom",
       description:
-        "Instal·lem radioenllaços punt a punt a Sils, Santa Coloma, Maçanet, Vidreres, Caldes i tota la Selva i el Gironès: unir naus i seus, càmeres remotes i masies sense fibra. Tècnics propis a Sils.",
+        "Radioenllaços punt a punt a Sils, Santa Coloma, Maçanet i tota la Selva: unim naus i seus, càmeres remotes i masies sense fibra. Tècnics propis a Sils.",
     },
     serviceType: "Point-to-point wireless link installation",
     nav: {
@@ -235,7 +235,7 @@ export const RADIOLINKS_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Point-to-point wireless links for businesses in Girona | Nimbus Telecom",
       description:
-        "We install point-to-point wireless links in Sils, Santa Coloma, Maçanet, Vidreres, Caldes and across La Selva and El Gironès: linking buildings, remote cameras and farmhouses without fibre. Our own technicians, based in Sils.",
+        "Point-to-point wireless links in Sils, Santa Coloma, Maçanet and La Selva: we connect buildings, remote cameras and farmhouses without fibre. Based in Sils.",
     },
     serviceType: "Point-to-point wireless link installation",
     nav: {

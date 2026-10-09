@@ -16,7 +16,7 @@ export const INTERNET_BACKUP_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Backup de internet para empresas en Girona: línea de backup WiMAX | Nimbus Telecom",
       description:
-        "Segunda conexión de internet con conmutación automática para que tu empresa no pare cuando cae la fibra. Backup por nuestra red WiMAX propia, instalado y mantenido por técnicos propios en Sils, la Selva y el Gironès.",
+        "Segunda conexión con conmutación automática para que la empresa no pare si cae la fibra. Backup por nuestra red WiMAX. Técnicos propios en Sils.",
     },
     serviceType: "Business internet backup line with automatic failover",
     nav: {
@@ -126,7 +126,7 @@ export const INTERNET_BACKUP_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Backup d'internet per a empreses a Girona: línia de backup WiMAX | Nimbus Telecom",
       description:
-        "Segona connexió d'internet amb commutació automàtica perquè la teva empresa no s'aturi quan cau la fibra. Backup per la nostra xarxa WiMAX pròpia, instal·lat i mantingut per tècnics propis a Sils, la Selva i el Gironès.",
+        "Segona connexió amb commutació automàtica perquè l'empresa no s'aturi si cau la fibra. Backup per la nostra xarxa WiMAX. Tècnics propis a Sils.",
     },
     serviceType: "Business internet backup line with automatic failover",
     nav: {
@@ -236,7 +236,7 @@ export const INTERNET_BACKUP_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Internet backup for businesses in Girona: WiMAX backup line | Nimbus Telecom",
       description:
-        "A second internet connection with automatic failover so your business keeps running when the fibre goes down. Backup over our own WiMAX network, installed and maintained by in-house technicians in Sils, La Selva and Gironès.",
+        "A second connection with automatic failover so your business keeps running if the fibre drops. Backup over our own WiMAX network. Technicians in Sils.",
     },
     serviceType: "Business internet backup line with automatic failover",
     nav: {
