@@ -233,7 +233,7 @@ export const RADIOLINKS_CONTENT: Record<Locale, BusinessServiceContent> = {
   },
   en: {
     meta: {
-      title: "Point-to-point wireless links for businesses in Girona | Nimbus Telecom",
+      title: "Point-to-point wireless links in Girona | Nimbus Telecom",
       description:
         "Point-to-point wireless links in Sils, Santa Coloma, Maçanet and La Selva: we connect buildings, remote cameras and farmhouses without fibre. Based in Sils.",
     },
