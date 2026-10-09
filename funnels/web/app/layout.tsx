@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AttributionTracker } from "@/components/AttributionTracker";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import {
   NIMBUS_APPLE_TOUCH_ICON,
@@ -89,7 +90,10 @@ export default function RootLayout({
       <head>
         <GoogleAnalytics />
       </head>
-      <body>{children}</body>
+      <body>
+        <AttributionTracker />
+        {children}
+      </body>
     </html>
   );
 }

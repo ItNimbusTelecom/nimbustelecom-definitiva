@@ -21,6 +21,9 @@ export const CoverageStudySchema = z
     preferredContactMethod: PreferredContactMethodSchema,
     currentProblem: z.string().trim().min(1, "Current problem is required"),
     currentOperator: OptionalTrimmedString,
+    // "Com ens has conegut?": clave fija (anuncio_google, recomendacion...)
+    // para contrastarla con el utm de source.
+    howDidYouHear: OptionalTrimmedString,
     serviceType: ServiceTypeSchema,
     source: OptionalTrimmedString,
     language: LanguageSchema,

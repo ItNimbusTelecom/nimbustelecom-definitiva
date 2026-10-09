@@ -1,7 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { captureAttribution, isPaidAttribution } from "@/lib/utm";
 
 const WHATSAPP_PHONE = "34622812604";
 const CLOSING_LINE =
@@ -16,16 +18,29 @@ const WHATSAPP_TOPIC_BY_SECTION: Record<string, string> = {
   amics: "la promoción Amics de la fibra",
 };
 
-function getWhatsappMessage(pathname: string | null) {
+/**
+ * Quien viene de un anuncio lo dice en el primer mensaje: asi en la oficina
+ * se sabe el origen aunque no pase por el formulario.
+ */
+function getWhatsappMessage(pathname: string | null, fromAd: boolean) {
   const section = (pathname ?? "").split("/").filter(Boolean)[0] ?? "";
   const topic = WHATSAPP_TOPIC_BY_SECTION[section] ?? "vuestros servicios";
+  if (fromAd) {
+    return `Hola Nimbus, vengo del anuncio y tengo una duda sobre ${topic}.${CLOSING_LINE}`;
+  }
   return `Hola Nimbus, tengo una duda sobre ${topic}.${CLOSING_LINE}`;
 }
 
 export function FloatingContactButtons() {
   const { dictionary } = useI18n();
   const pathname = usePathname();
-  const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(getWhatsappMessage(pathname))}`;
+  // El origen esta en sessionStorage: se lee tras montar para que el HTML
+  // estatico y la primera pintura coincidan.
+  const [fromAd, setFromAd] = useState(false);
+  useEffect(() => {
+    queueMicrotask(() => setFromAd(isPaidAttribution(captureAttribution())));
+  }, []);
+  const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(getWhatsappMessage(pathname, fromAd))}`;
 
   return (
     <a
