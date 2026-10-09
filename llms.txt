@@ -22,6 +22,15 @@ funcioni millor segons on visqui o es mogui cada persona.
 - [Internet a casa](https://nimbustelecom.cat/internet/): fibra i connexions per a habitatges on no arriba la fibra.
 - [Seguretat](https://nimbustelecom.cat/seguretat/): càmeres, alarmes i control d'accessos.
 - [Empreses](https://nimbustelecom.cat/empreses/): connectivitat i serveis TIC per a negocis i naus industrials.
+- [Radioenllaços](https://nimbustelecom.cat/empreses/radioenllacos/): enllaços punt a punt per unir naus o seus, càmeres remotes i masies sense fibra, a la Selva i el Gironès.
+- [Xarxes i WiFi professional](https://nimbustelecom.cat/empreses/xarxes/): cablejat, LAN/WAN, WiFi professional i infraestructura TIC per a empreses, dissenyada i instal·lada per un sol proveïdor.
+- [Backup d'internet](https://nimbustelecom.cat/empreses/backup-internet/): segona connexió per la xarxa WiMAX pròpia amb commutació automàtica perquè l'empresa no s'aturi quan cau la fibra.
+- [Centraleta VoIP](https://nimbustelecom.cat/empreses/centraleta/): centraleta per internet amb extensions al mòbil, cues, horaris i portabilitat, amb les línies fixes i mòbils d'empresa.
+
+## Pàgines en castellà i anglès
+
+- Castellà: [Inicio](https://nimbustelecom.cat/es/), [Móvil](https://nimbustelecom.cat/es/movil/), [Internet](https://nimbustelecom.cat/es/internet/), [Seguridad](https://nimbustelecom.cat/es/seguridad/), [Empresas](https://nimbustelecom.cat/es/empresas/), [Radioenlaces](https://nimbustelecom.cat/es/empresas/radioenlaces/), [Redes y WiFi](https://nimbustelecom.cat/es/empresas/redes/), [Backup de internet](https://nimbustelecom.cat/es/empresas/backup-internet/), [Centralita VoIP](https://nimbustelecom.cat/es/empresas/centralita/)
+- English: [Home](https://nimbustelecom.cat/en/), [Mobile](https://nimbustelecom.cat/en/mobile/), [Internet](https://nimbustelecom.cat/en/internet/), [Security](https://nimbustelecom.cat/en/security/), [Business](https://nimbustelecom.cat/en/business/), [Wireless links](https://nimbustelecom.cat/en/business/wireless-links/), [Networks and WiFi](https://nimbustelecom.cat/en/business/networks/), [Internet backup](https://nimbustelecom.cat/en/business/internet-backup/), [VoIP phone system](https://nimbustelecom.cat/en/business/voip-pbx/)
 
 ## Documentació i condicions
 
