@@ -25,10 +25,3 @@ Thumbs.db
 npm-debug.log*
 *-original.mp4
 *.tsbuildinfo
-
-# Paquetes para subir a SWHosting (los genera preparar-swhosting.sh)
-funnels/web/nimbus-web-*.zip
-
-# Configuracion real de enviar.php: solo en el servidor (data/), nunca en git
-funnels/web/public/api/enviar.config.php
-data/

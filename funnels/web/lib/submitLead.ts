@@ -77,13 +77,7 @@ async function submitToServerlessApi(payload: unknown) {
       ? toCoverageStudyPayload(legacyPayload)
       : toLeadPayload(legacyPayload);
 
-  // Dos formas de montar la URL:
-  //   AWS:       NEXT_PUBLIC_API_BASE_URL=https://xxx.execute-api...   -> {base}/leads
-  //   SWHosting: NEXT_PUBLIC_API_BASE_URL=/api/enviar.php             -> {base}?tipus=leads
-  const base = API_BASE_URL ?? "";
-  const url = base.endsWith(".php") ? `${base}?tipus=${endpoint.slice(1)}` : `${base}${endpoint}`;
-
-  const response = await fetchWithRetry(url, {
+  const response = await fetchWithRetry(`${API_BASE_URL}${endpoint}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(apiPayload),

@@ -1,17 +1,10 @@
 # =============================================================================
-#  nimbustelecom.cat  -  Apache (SWHosting)
+#  nimbustelecom.cat  -  Apache
 #  Web estatica (Next.js export). Sin PHP, sin base de datos.
 #
-#  Este fichero es la BASE. Las redirecciones de las URLs antiguas NO se
-#  escriben a mano: funnels/scripts/preparar-swhosting.sh las genera a partir
-#  de las paginas de redireccion (stubs) que hay en public/ y las anade al
-#  final de out/.htaccess. Asi no pueden quedar desfasadas respecto a las
-#  rutas reales de la web.
-#
-#  Vale igual para staging y para produccion: el bloque noindex se activa solo
-#  si el host contiene "staging". NO hay que editarlo al publicar.
-#
-#  En GitHub Pages este fichero se ignora.
+#  Este fichero vale IGUAL para staging y para produccion:
+#  el bloque noindex se activa solo si el host contiene "staging".
+#  NO hay que editarlo al publicar.
 # =============================================================================
 
 # -------------------------------------------------- no listar directorios
@@ -20,59 +13,30 @@ Options -Indexes
 # -------------------------------------------------- pagina 404 propia
 ErrorDocument 404 /404.html
 
-# -------------------------------------------------- tipos que Apache puede no conocer
-AddType application/manifest+json .webmanifest
-AddType font/woff2 .woff2
-AddType text/plain .txt
-AddDefaultCharset utf-8
-AddCharset utf-8 .txt .xml .html .css .js
-
-# -------------------------------------------------- https y dominio sin www
-# Una sola URL buena: https://nimbustelecom.cat/...
-# Se deja pasar /.well-known/acme-challenge/ para que el certificado de
-# Let's Encrypt se pueda renovar por http.
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-
-  RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
-  RewriteCond %{HTTP_HOST} ^www\.nimbustelecom\.cat$ [NC]
-  RewriteRule ^ https://nimbustelecom.cat%{REQUEST_URI} [R=301,L,NE]
-
-  RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
-  RewriteCond %{HTTPS} !=on
-  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
-  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]
-</IfModule>
-
 # -------------------------------------------------- staging: fuera de Google
 # Evita que el buscador indexe una copia de la web (contenido duplicado).
-# Se aplica SOLO si el dominio contiene "staging". Requiere mod_headers.
+# Se aplica SOLO si el dominio contiene "staging", asi que en produccion
+# no hace nada. Requiere mod_headers.
 <IfModule mod_headers.c>
   <If "%{HTTP_HOST} =~ /staging/">
     Header always set X-Robots-Tag "noindex, nofollow"
   </If>
 </IfModule>
 
-# -------------------------------------------------- cache
-# Los ficheros de /_next/static/ llevan un hash en el nombre: si cambia el
+# -------------------------------------------------- cache de los assets
+# Los ficheros de /_next/ llevan un hash en el nombre: si cambia el
 # contenido, cambia el nombre. Por eso se pueden cachear un ano entero.
-# El HTML no se cachea, para que una publicacion se vea al momento.
-# (No se usa <LocationMatch>: en .htaccess no esta permitido y da error 500.)
-<IfModule mod_headers.c>
-  <If "%{REQUEST_URI} =~ m#^/_next/static/#">
-    Header set Cache-Control "public, max-age=31536000, immutable"
-  </If>
-  <If "%{REQUEST_URI} =~ m#(\.html|/)$#">
-    Header set Cache-Control "no-cache"
-  </If>
-</IfModule>
 <IfModule mod_expires.c>
   ExpiresActive On
+  <LocationMatch "^/_next/">
+    ExpiresDefault "access plus 1 year"
+    Header append Cache-Control "immutable"
+  </LocationMatch>
+  ExpiresByType text/html "access plus 0 seconds"
   ExpiresByType image/webp "access plus 1 month"
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType image/svg+xml "access plus 1 month"
-  ExpiresByType image/x-icon "access plus 1 month"
   ExpiresByType video/mp4 "access plus 1 month"
 </IfModule>
 
@@ -80,7 +44,7 @@ AddCharset utf-8 .txt .xml .html .css .js
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
   AddOutputFilterByType DEFLATE application/javascript application/json
-  AddOutputFilterByType DEFLATE application/xml image/svg+xml
+  AddOutputFilterByType DEFLATE image/svg+xml
 </IfModule>
 
 # -------------------------------------------------- cabeceras de seguridad
@@ -91,6 +55,96 @@ AddCharset utf-8 .txt .xml .html .css .js
 </IfModule>
 
 # =============================================================================
-#  REDIRECCIONES 301 DE LAS URLS ANTIGUAS
-#  (las anade preparar-swhosting.sh debajo de esta linea; no editar a mano)
+#  REDIRECCIONES 301 DE LAS URLS DEL WORDPRESS ANTIGUO
+#
+#  Se usa RedirectMatch con la ruta ANCLADA (^...$) en vez de Redirect,
+#  porque Redirect funciona por prefijo: "Redirect 301 /es /" se llevaria
+#  tambien /es/aviso-legal, y /internet entraria en bucle con
+#  /internet/fibra. Con anclaje cada regla coincide con su ruta exacta.
+#
+#  Generado a partir de los 83 stubs de funnels/web/public/.
 # =============================================================================
+
+RedirectMatch 301 ^/alarma-de-seguridad-sms-fraudulentos-en-facturas-protegete/?$ /
+RedirectMatch 301 ^/alerta-cuidado-con-las-llamadas-fraudulentas-la-doble-trucada/?$ /
+RedirectMatch 301 ^/author/nimbustelecom/?$ /
+RedirectMatch 301 ^/avis-legal-2/?$ /aviso-legal/
+RedirectMatch 301 ^/blog/?$ /
+RedirectMatch 301 ^/category/alerta/?$ /
+RedirectMatch 301 ^/category/nimbustelecom-2/?$ /
+RedirectMatch 301 ^/category/noticias/?$ /
+RedirectMatch 301 ^/chat/?$ /
+RedirectMatch 301 ^/cobertura/?$ /movil/
+RedirectMatch 301 ^/contacte/?$ /#contacte
+RedirectMatch 301 ^/contacto/?$ /#contacte
+RedirectMatch 301 ^/el-portal-del-client-de-nimbustelecom-mes-transparencia-i-control/?$ /
+RedirectMatch 301 ^/empresa/?$ /empreses/
+RedirectMatch 301 ^/es/aviso-legal/?$ /aviso-legal/
+RedirectMatch 301 ^/es/cobertura/?$ /movil/
+RedirectMatch 301 ^/es/contacto/?$ /#contacte
+RedirectMatch 301 ^/es/empresa/?$ /empreses/
+RedirectMatch 301 ^/es/fibra/?$ /internet/
+RedirectMatch 301 ^/es/fibra-fijo/?$ /internet/
+RedirectMatch 301 ^/es/fibra-fijo-movil/?$ /internet/
+RedirectMatch 301 ^/es/fibra-fix/?$ /internet/
+RedirectMatch 301 ^/es/?$ /
+RedirectMatch 301 ^/es/movil/?$ /movil/
+RedirectMatch 301 ^/es/politica-de-cookies/?$ /politica-de-cookies/
+RedirectMatch 301 ^/es/politica-de-privacidad/?$ /politica-de-privacidad/
+RedirectMatch 301 ^/es/servicios/?$ /empreses/
+RedirectMatch 301 ^/es/servicios/ingenieria/?$ /empreses/
+RedirectMatch 301 ^/es/servicios/redes-informaticas-y-wifi/?$ /empreses/
+RedirectMatch 301 ^/es/servicios/sonorizacion-megafonia-y-multimedia/?$ /empreses/
+RedirectMatch 301 ^/es/tarifas/tarifas-internet/?$ /internet/
+RedirectMatch 301 ^/es/tarifas/tarifas-telefonia-fija/?$ /movil/
+RedirectMatch 301 ^/es/tarifas/tarifas-telefonia-movil/?$ /movil/
+RedirectMatch 301 ^/faqs/?$ /movil/#faq
+RedirectMatch 301 ^/faqs-2/?$ /movil/#faq
+RedirectMatch 301 ^/fibra/?$ /internet/
+RedirectMatch 301 ^/fibra-fijo-movil/?$ /internet/
+RedirectMatch 301 ^/fibra-fijo-y-movil-en-girona/?$ /internet/
+RedirectMatch 301 ^/fibra-fix/?$ /internet/
+RedirectMatch 301 ^/fibra-fix-2/?$ /internet/
+RedirectMatch 301 ^/fibra-fix-mobil/?$ /internet/
+RedirectMatch 301 ^/fibra-para-naves-industriales-en-girona/?$ /empreses/
+RedirectMatch 301 ^/informacion-tarifas/?$ /
+RedirectMatch 301 ^/inicio/?$ /
+RedirectMatch 301 ^/internet/fibra/?$ /internet/
+RedirectMatch 301 ^/internet/wimax/?$ /internet/
+RedirectMatch 301 ^/internet-en-nave-industrial-en-girona/?$ /empreses/
+RedirectMatch 301 ^/mobil/?$ /movil/
+RedirectMatch 301 ^/nimbus-tv/?$ /
+RedirectMatch 301 ^/no-pagues-de-mas-en-tu-tarifa-de-datos/?$ /
+RedirectMatch 301 ^/novedades/?$ /
+RedirectMatch 301 ^/nuevas-tarifas-internacionales-y-roaming/?$ /
+RedirectMatch 301 ^/nueva-tarifa-fija-para-el-numero-060/?$ https://documentacio.nimbustelecom.cat/numeracion_especial/
+RedirectMatch 301 ^/ofertas-fibra-y-movil-en-girona/?$ /internet/
+RedirectMatch 301 ^/oferta-vuelta-al-cole/?$ /movil/
+RedirectMatch 301 ^/packs/fibra-fijo-movil/?$ /internet/
+RedirectMatch 301 ^/packs/?$ /internet/
+RedirectMatch 301 ^/politica-de-privacitat/?$ /politica-de-privacidad/
+RedirectMatch 301 ^/projecte/?$ /
+RedirectMatch 301 ^/projectes/?$ /
+RedirectMatch 301 ^/serveis/control-accessos-presencia/?$ /seguridad/
+RedirectMatch 301 ^/serveis/enginyeria/?$ /empreses/
+RedirectMatch 301 ^/serveis/sonoritzacio-megafonia-i-multimedia/?$ /empreses/
+RedirectMatch 301 ^/serveis/telefonia-veuip-i-videoconferencies/?$ /empreses/
+RedirectMatch 301 ^/serveis/xarxes-informatiques-i-wifi/?$ /empreses/
+RedirectMatch 301 ^/servicios/alarmas/?$ /seguridad/#serveis
+RedirectMatch 301 ^/servicios/antenas-satelite-y-tdt/?$ /empreses/
+RedirectMatch 301 ^/servicios/base-click-tarifas/?$ /movil/
+RedirectMatch 301 ^/servicios/camaras-de-videovigilancia-cctv/control-de-accesos-y-presencia/?$ /seguridad/#serveis
+RedirectMatch 301 ^/servicios/camaras-de-videovigilancia-cctv/?$ /seguridad/#protegim
+RedirectMatch 301 ^/servicios/?$ /#serveis
+RedirectMatch 301 ^/servicios/ingenieria/?$ /empreses/
+RedirectMatch 301 ^/servicios/redes-informaticas/?$ /#contacte
+RedirectMatch 301 ^/servicios/sonorizacion-megafonia-y-multimedia/?$ /empreses/
+RedirectMatch 301 ^/servicios/telefonia-veuip-y-videoconferencias/?$ /#contacte
+RedirectMatch 301 ^/servicios-tic-para-empresas-en-girona/?$ /empreses/
+RedirectMatch 301 ^/tarifes/?$ /movil/
+RedirectMatch 301 ^/telefonia/fijo/?$ /#serveis
+RedirectMatch 301 ^/telefonia/?$ /movil/
+RedirectMatch 301 ^/telefonia/movil/?$ /movil/
+RedirectMatch 301 ^/telefono-en-nave-industrial-en-girona/?$ /empreses/
+RedirectMatch 301 ^/wifi-para-naves-industriales-en-girona/?$ /empreses/
+RedirectMatch 301 ^/wimax/?$ /internet/
