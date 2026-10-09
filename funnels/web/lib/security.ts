@@ -83,9 +83,9 @@ export type SecurityContent = {
 export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
   es: {
     meta: {
-      title: "Seguridad para tu casa y tu negocio | Nimbus Telecom",
+      title: "Cámaras, alarmas y control de accesos en Sils y la Selva | Nimbus Telecom",
       description:
-        "Cámaras, alarmas y control de accesos con proyecto a medida. Un técnico de ingeniería valora tu espacio y diseña la protección que necesitas.",
+        "Cámaras, alarmas y control de accesos en Sils, la Selva y el Gironès, para empresas y particulares. Técnicos propios: valoramos tu espacio y diseñamos la protección que necesitas.",
     },
     nav: { what: "Qué protegemos", how: "Cómo funciona", study: "Pedir valoración", faq: "Dudas", contact: "Contacto", business: "Soy empresa" },
     primaryCta: "Pedir valoración",
@@ -157,6 +157,10 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
       eyebrow: "Dudas frecuentes",
       title: "Lo que nos preguntan antes de empezar",
       items: [
+        [
+          "¿Quién instala cámaras y control de accesos en Sils y la Selva?",
+          "Nimbus Telecom, con técnicos propios y tienda en Sils. Instalamos cámaras, alarmas y control de accesos para empresas, comunidades y particulares de la Selva y el Gironès. Somos partners oficiales de iLOQ en la provincia de Girona.",
+        ],
         [
           "¿Cuánto cuesta una instalación?",
           "Depende del espacio y de lo que haya que proteger: no hay dos proyectos iguales. Por eso la valoración con el técnico es gratuita hasta 20 km de nuestras oficinas, y el precio de la instalación te lo damos cerrado antes de empezar, sin sorpresas.",
@@ -295,9 +299,9 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
   },
   ca: {
     meta: {
-      title: "Seguretat per a casa teva i el teu negoci | Nimbus Telecom",
+      title: "Càmeres, alarmes i control d'accessos a Sils i la Selva | Nimbus Telecom",
       description:
-        "Càmeres, alarmes i control d'accessos amb projecte a mida. Un tècnic d'enginyeria valora el teu espai i dissenya la protecció que necessites.",
+        "Càmeres, alarmes i control d'accessos a Sils, la Selva i el Gironès, per a empreses i particulars. Tècnics propis: valorem el teu espai i dissenyem la protecció que necessites.",
     },
     nav: { what: "Què protegim", how: "Com funciona", study: "Demanar valoració", faq: "Dubtes", contact: "Contacte", business: "Soc empresa" },
     primaryCta: "Demanar valoració",
@@ -369,6 +373,10 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
       eyebrow: "Dubtes freqüents",
       title: "El que ens pregunten abans de començar",
       items: [
+        [
+          "Qui instal·la càmeres i control d'accessos a Sils i la Selva?",
+          "Nimbus Telecom, amb tècnics propis i botiga a Sils. Instal·lem càmeres, alarmes i control d'accessos per a empreses, comunitats i particulars de la Selva i el Gironès. Som partners oficials d'iLOQ a la província de Girona.",
+        ],
         [
           "Quant costa una instal·lació?",
           "Depèn de l'espai i del que calgui protegir: no hi ha dos projectes iguals. Per això la valoració amb el tècnic és gratuïta fins a 20 km de les nostres oficines, i el preu de la instal·lació te'l donem tancat abans de començar, sense sorpreses.",
@@ -507,9 +515,9 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
   },
   en: {
     meta: {
-      title: "Security for your home and business | Nimbus Telecom",
+      title: "CCTV, alarms and access control in Sils and La Selva | Nimbus Telecom",
       description:
-        "CCTV, alarms and access control with tailor-made projects. An engineering technician assesses your space and designs the protection you need.",
+        "CCTV, alarms and access control in Sils, La Selva and Gironès, for businesses and homes. In-house technicians: we assess your space and design the protection you need.",
     },
     nav: { what: "What we protect", how: "How it works", study: "Request assessment", faq: "FAQ", contact: "Contact", business: "For business" },
     primaryCta: "Request assessment",
@@ -581,6 +589,10 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
       eyebrow: "Frequently asked",
       title: "What people ask us before starting",
       items: [
+        [
+          "Who installs CCTV and access control in Sils and La Selva?",
+          "Nimbus Telecom, with in-house technicians and a shop in Sils. We install CCTV, alarms and access control for businesses, residential communities and homes across La Selva and Gironès. We are official iLOQ partners in the province of Girona.",
+        ],
         [
           "How much does an installation cost?",
           "It depends on the space and what needs protecting: no two projects are the same. That's why the assessment with the technician is free within 20 km of our offices, and we give you a fixed installation price before starting, with no surprises.",

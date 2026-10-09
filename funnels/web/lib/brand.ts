@@ -8,6 +8,10 @@ export const NIMBUS_FAVICON_192 = `${PUBLIC_BASE_PATH}/brand/favicon-192x192.png
 export const NIMBUS_APPLE_TOUCH_ICON = `${PUBLIC_BASE_PATH}/brand/apple-touch-icon.png`;
 export const NIMBUS_MS_TILE_IMAGE = `${PUBLIC_BASE_PATH}/brand/mstile-270x270.png`;
 export const NIMBUS_WIMAX_IMAGE = `${PUBLIC_BASE_PATH}/brand/nimbus-wimax.jpg`;
+// Fotos de les pagines de servei per a empreses (/empreses/<servei>/).
+export const NIMBUS_RADIOLINKS_IMAGE = `${PUBLIC_BASE_PATH}/brand/nimbus-radioenllacos.webp`;
+export const NIMBUS_NETWORKS_IMAGE = `${PUBLIC_BASE_PATH}/brand/nimbus-xarxes.webp`;
+export const NIMBUS_PBX_IMAGE = `${PUBLIC_BASE_PATH}/brand/nimbus-centraleta.webp`;
 export const NIMBUS_SECURITY_IMAGES = [
   { src: `${PUBLIC_BASE_PATH}/brand/nimbus-seguridad-puerto.webp`, alt: "Càmeres de videovigilància en un port instal·lades per Nimbus Telecom" },
   { src: `${PUBLIC_BASE_PATH}/brand/nimbus-seguridad-masia.webp`, alt: "Càmeres de seguretat en una masia instal·lades per Nimbus Telecom" },

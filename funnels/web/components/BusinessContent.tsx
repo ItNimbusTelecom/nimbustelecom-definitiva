@@ -196,6 +196,21 @@ function BusinessPageContent() {
             <p className="mt-8 rounded-lg border-l-4 border-nimbus-orange bg-orange-50 p-4 text-base leading-7 text-nimbus-ink">
               {content.services.note}
             </p>
+
+            <h3 className="mt-10 text-xl font-black text-nimbus-ink">{content.services.pages.title}</h3>
+            <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {content.services.pages.items.map((item) => (
+                <li key={item.page}>
+                  <a
+                    href={linkTo(item.page, locale)}
+                    className="block h-full rounded-lg border border-nimbus-line bg-white p-5 shadow-soft transition hover:border-nimbus-orange"
+                  >
+                    <span className="font-black text-nimbus-orange">{item.label} →</span>
+                    <p className="mt-2 text-sm leading-6 text-nimbus-muted">{item.text}</p>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 

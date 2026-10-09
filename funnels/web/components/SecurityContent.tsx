@@ -17,6 +17,9 @@ import { DEFAULT_LOCALE, I18nProvider, useI18n, type Locale } from "@/lib/i18n";
 import { SECURITY_CONTENT } from "@/lib/security";
 import Image from "next/image";
 import { NIMBUS_SECURITY_IMAGES, NIMBUS_SECURITY_VIDEOS } from "@/lib/brand";
+import { SERVICE_TOWNS } from "@/lib/businessService";
+import { pathFor } from "@/lib/routes";
+import { SITE_URL } from "@/lib/seo";
 
 const heroCardIcons = ["technician", "sliders", "wrench"] as const;
 
@@ -321,6 +324,37 @@ function SecurityPageContent() {
         {/* DUDAS */}
         <section id="dubtes" className="scroll-mt-24 bg-white py-20">
           <div className="mx-auto max-w-6xl px-5">
+            {/* Marcado Service: que es, quien lo hace y donde (Sils y la
+                Selva). Es lo que lee un asistente para responder "qui
+                instal·la camares i control d'accessos a Sils". */}
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "Service",
+                  name: content.meta.title.split(" | ")[0],
+                  serviceType: "CCTV, alarm and access control installation",
+                  description: content.meta.description,
+                  url: `${SITE_URL}${pathFor("seguretat", locale)}`,
+                  provider: {
+                    "@type": "LocalBusiness",
+                    name: "Nimbus Telecom",
+                    url: SITE_URL,
+                    telephone: "+34972850155",
+                    address: {
+                      "@type": "PostalAddress",
+                      streetAddress: "Carrer Major, 42",
+                      postalCode: "17410",
+                      addressLocality: "Sils",
+                      addressRegion: "Girona",
+                      addressCountry: "ES",
+                    },
+                  },
+                  areaServed: SERVICE_TOWNS.map((town) => ({ "@type": "City", name: town })),
+                }).replace(/</g, "\\u003c"),
+              }}
+            />
             {/* Marcado FAQPage: sale de la misma lista que las preguntas de
                 pantalla, asi que no se puede desincronizar. Las respuestas
                 tienen que estar en el HTML (ver FaqItem) para que sea valido. */}
