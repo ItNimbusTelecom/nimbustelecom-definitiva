@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useId, useState } from "react";
 import { ChatbaseEmbed } from "@/components/ChatbaseEmbed";
 import { CookieConsent } from "@/components/CookieConsent";
 import { FloatingContactButtons } from "@/components/FloatingContactButtons";
+import { FaqList } from "@/components/FaqList";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LandingTracker } from "@/components/LandingTracker";
@@ -278,10 +278,10 @@ function ServicePageContent({
 
         {/* DUDAS */}
         <section id="dubtes" className="scroll-mt-24 bg-nimbus-soft py-20">
-          <div className="mx-auto max-w-6xl px-5">
+          <div className="mx-auto max-w-3xl px-5">
             {/* Marcado FAQPage: sale de la misma lista que las preguntas de
                 pantalla, asi que no se puede desincronizar. Las respuestas
-                tienen que estar en el HTML (ver FaqItem) para que sea valido. */}
+                tienen que estar en el HTML (ver FaqList) para que sea valido. */}
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={{
@@ -299,14 +299,10 @@ function ServicePageContent({
             <p className="text-sm font-black uppercase tracking-[0.2em] text-nimbus-orange">
               {content.faq.eyebrow}
             </p>
-            <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-tight text-nimbus-ink md:text-4xl">
+            <h2 className="mt-3 text-3xl font-black tracking-tight text-nimbus-ink md:text-4xl">
               {content.faq.title}
             </h2>
-            <div className="mt-8 grid gap-3 md:grid-cols-2">
-              {content.faq.items.map(([question, answer]) => (
-                <FaqItem key={question} question={question} answer={answer} />
-              ))}
-            </div>
+            <FaqList items={content.faq.items} />
           </div>
         </section>
 
@@ -340,27 +336,3 @@ function ServicePageContent({
   );
 }
 
-function FaqItem({ question, answer }: { question: string; answer: string }) {
-  const [open, setOpen] = useState(false);
-  const panelId = useId();
-
-  return (
-    <div className="rounded-lg border border-nimbus-line bg-white">
-      <button
-        type="button"
-        aria-expanded={open}
-        aria-controls={panelId}
-        onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center justify-between gap-4 p-5 text-left font-black text-nimbus-ink"
-      >
-        {question}
-        <VisualIcon name={open ? "chevron-up" : "chevron-down"} className="size-5 shrink-0 text-nimbus-orange" />
-      </button>
-      {/* La respuesta se queda en el HTML y solo se oculta: asi la leen
-          el buscador y los asistentes, y coincide con el marcado FAQPage. */}
-      <p id={panelId} hidden={!open} className="px-5 pb-5 leading-7 text-nimbus-muted">
-        {answer}
-      </p>
-    </div>
-  );
-}
