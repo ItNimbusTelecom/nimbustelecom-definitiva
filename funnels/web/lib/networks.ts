@@ -13,7 +13,7 @@ export const NETWORKS_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Redes, WiFi profesional e infraestructura TIC para empresas en Girona | Nimbus Telecom",
       description:
-        "Diseñamos e instalamos la red de tu empresa en la Selva y el Gironès: cableado, LAN/WAN, WiFi profesional, rack y electrónica de red. Un solo proveedor para toda la infraestructura de comunicaciones. Técnicos propios en Sils.",
+        "Red para empresas en la Selva y el Gironès: cableado, LAN/WAN, WiFi profesional, rack y electrónica de red. Técnicos propios en Sils.",
     },
     serviceType: "Business network, professional WiFi and ICT infrastructure installation",
     nav: {
@@ -123,7 +123,7 @@ export const NETWORKS_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Xarxes, WiFi professional i infraestructura TIC per a empreses a Girona | Nimbus Telecom",
       description:
-        "Dissenyem i instal·lem la xarxa de la teva empresa a la Selva i el Gironès: cablejat, LAN/WAN, WiFi professional, rack i electrònica de xarxa. Un sol proveïdor per a tota la infraestructura de comunicacions. Tècnics propis a Sils.",
+        "Xarxa per a empreses a la Selva i el Gironès: cablejat, LAN/WAN, WiFi professional, rack i electrònica de xarxa. Tècnics propis a Sils.",
     },
     serviceType: "Business network, professional WiFi and ICT infrastructure installation",
     nav: {
@@ -233,7 +233,7 @@ export const NETWORKS_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Business networks, professional WiFi and ICT infrastructure in Girona | Nimbus Telecom",
       description:
-        "We design and install your company network in La Selva and El Gironès: cabling, LAN/WAN, professional WiFi, rack and network equipment. One provider for the whole communications infrastructure. Our own technicians, based in Sils.",
+        "Business networks in La Selva and Gironès: cabling, LAN/WAN, professional WiFi, rack and network equipment. In-house technicians in Sils.",
     },
     serviceType: "Business network, professional WiFi and ICT infrastructure installation",
     nav: {

@@ -13,7 +13,7 @@ export const PBX_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Centralita VoIP y telefonía IP para empresas en Girona | Nimbus Telecom",
       description:
-        "Centralita VoIP para empresas de la Selva y el Gironès: extensiones, colas, horarios, locución y el teléfono de la empresa en el móvil. Instalada y mantenida por técnicos propios en Sils, integrada con tus líneas fijas y móviles.",
+        "Centralita VoIP para empresas de la Selva y el Gironès: extensiones, colas, horarios y el teléfono de la empresa en el móvil. Técnicos propios en Sils.",
     },
     serviceType: "Business VoIP phone system (PBX) installation and telephony",
     nav: {
@@ -123,7 +123,7 @@ export const PBX_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "Centraleta VoIP i telefonia IP per a empreses a Girona | Nimbus Telecom",
       description:
-        "Centraleta VoIP per a empreses de la Selva i el Gironès: extensions, cues, horaris, locució i el telèfon de l'empresa al mòbil. Instal·lada i mantinguda per tècnics propis a Sils, integrada amb les teves línies fixes i mòbils.",
+        "Centraleta VoIP per a empreses de la Selva i el Gironès: extensions, cues, horaris i el telèfon de l'empresa al mòbil. Tècnics propis a Sils.",
     },
     serviceType: "Business VoIP phone system (PBX) installation and telephony",
     nav: {
@@ -233,7 +233,7 @@ export const PBX_CONTENT: Record<Locale, BusinessServiceContent> = {
     meta: {
       title: "VoIP phone systems and IP telephony for businesses in Girona | Nimbus Telecom",
       description:
-        "VoIP phone system (PBX) for businesses in La Selva and Gironès: extensions, queues, opening hours, greetings and your business number on your mobile. Installed and maintained by in-house technicians in Sils, integrated with your landline and mobile lines.",
+        "VoIP phone system for businesses in La Selva and Gironès: extensions, queues, opening hours and your business number on your mobile. Technicians in Sils.",
     },
     serviceType: "Business VoIP phone system (PBX) installation and telephony",
     nav: {

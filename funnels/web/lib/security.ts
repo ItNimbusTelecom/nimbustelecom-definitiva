@@ -85,7 +85,7 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
     meta: {
       title: "Cámaras, alarmas y control de accesos en Sils y la Selva | Nimbus Telecom",
       description:
-        "Cámaras, alarmas y control de accesos en Sils, la Selva y el Gironès, para empresas y particulares. Técnicos propios: valoramos tu espacio y diseñamos la protección que necesitas.",
+        "Cámaras, alarmas y control de accesos en Sils, la Selva y el Gironès, para empresas y particulares. Técnicos propios que diseñan tu protección.",
     },
     nav: { what: "Qué protegemos", how: "Cómo funciona", study: "Pedir valoración", faq: "Dudas", contact: "Contacto", business: "Soy empresa" },
     primaryCta: "Pedir valoración",
@@ -301,7 +301,7 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
     meta: {
       title: "Càmeres, alarmes i control d'accessos a Sils i la Selva | Nimbus Telecom",
       description:
-        "Càmeres, alarmes i control d'accessos a Sils, la Selva i el Gironès, per a empreses i particulars. Tècnics propis: valorem el teu espai i dissenyem la protecció que necessites.",
+        "Càmeres, alarmes i control d'accessos a Sils, la Selva i el Gironès, per a empreses i particulars. Tècnics propis que dissenyen la teva protecció.",
     },
     nav: { what: "Què protegim", how: "Com funciona", study: "Demanar valoració", faq: "Dubtes", contact: "Contacte", business: "Soc empresa" },
     primaryCta: "Demanar valoració",
@@ -517,7 +517,7 @@ export const SECURITY_CONTENT: Record<Locale, SecurityContent> = {
     meta: {
       title: "CCTV, alarms and access control in Sils and La Selva | Nimbus Telecom",
       description:
-        "CCTV, alarms and access control in Sils, La Selva and Gironès, for businesses and homes. In-house technicians: we assess your space and design the protection you need.",
+        "CCTV, alarms and access control in Sils, La Selva and Gironès, for businesses and homes. In-house technicians who design your protection.",
     },
     nav: { what: "What we protect", how: "How it works", study: "Request assessment", faq: "FAQ", contact: "Contact", business: "For business" },
     primaryCta: "Request assessment",
