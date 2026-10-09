@@ -9,7 +9,17 @@ export const dynamic = "force-static";
 // idioma, cada una declarando sus alternativas. Asi el buscador sabe que
 // /mobil/, /es/movil/ y /en/mobile/ son la misma pagina en tres idiomas y no
 // tres paginas que compiten.
-const PAGINAS_TRADUCIDAS: PageKey[] = ["home", "mobil", "internet", "seguretat", "empreses"];
+const PAGINAS_TRADUCIDAS: PageKey[] = [
+  "home",
+  "mobil",
+  "internet",
+  "seguretat",
+  "empreses",
+  "radioenllacos",
+  "xarxes",
+  "backupInternet",
+  "centraleta",
+];
 
 // Las legales existen en un solo idioma, asi que van sueltas. Las
 // redirecciones de /public (stubs del WordPress viejo, y los de /movil/ y
