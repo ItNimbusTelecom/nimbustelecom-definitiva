@@ -14,7 +14,7 @@ import { SERVICE_TOWNS, type BusinessServiceContent } from "@/lib/businessServic
 export const INTERNET_BACKUP_CONTENT: Record<Locale, BusinessServiceContent> = {
   es: {
     meta: {
-      title: "Backup de internet para empresas en Girona: línea de backup WiMAX | Nimbus Telecom",
+      title: "Backup de internet WiMAX para empresas en Girona | Nimbus Telecom",
       description:
         "Segunda conexión con conmutación automática para que la empresa no pare si cae la fibra. Backup por nuestra red WiMAX. Técnicos propios en Sils.",
     },
@@ -124,7 +124,7 @@ export const INTERNET_BACKUP_CONTENT: Record<Locale, BusinessServiceContent> = {
   },
   ca: {
     meta: {
-      title: "Backup d'internet per a empreses a Girona: línia de backup WiMAX | Nimbus Telecom",
+      title: "Backup d'internet WiMAX per a empreses a Girona | Nimbus Telecom",
       description:
         "Segona connexió amb commutació automàtica perquè l'empresa no s'aturi si cau la fibra. Backup per la nostra xarxa WiMAX. Tècnics propis a Sils.",
     },
@@ -234,7 +234,7 @@ export const INTERNET_BACKUP_CONTENT: Record<Locale, BusinessServiceContent> = {
   },
   en: {
     meta: {
-      title: "Internet backup for businesses in Girona: WiMAX backup line | Nimbus Telecom",
+      title: "WiMAX internet backup for businesses in Girona | Nimbus Telecom",
       description:
         "A second connection with automatic failover so your business keeps running if the fibre drops. Backup over our own WiMAX network. Technicians in Sils.",
     },

@@ -11,7 +11,7 @@ import { SERVICE_TOWNS, type BusinessServiceContent } from "@/lib/businessServic
 export const NETWORKS_CONTENT: Record<Locale, BusinessServiceContent> = {
   es: {
     meta: {
-      title: "Redes, WiFi profesional e infraestructura TIC para empresas en Girona | Nimbus Telecom",
+      title: "Redes, WiFi e infraestructura TIC en Girona | Nimbus Telecom",
       description:
         "Red para empresas en la Selva y el Gironès: cableado, LAN/WAN, WiFi profesional, rack y electrónica de red. Técnicos propios en Sils.",
     },
@@ -121,7 +121,7 @@ export const NETWORKS_CONTENT: Record<Locale, BusinessServiceContent> = {
   },
   ca: {
     meta: {
-      title: "Xarxes, WiFi professional i infraestructura TIC per a empreses a Girona | Nimbus Telecom",
+      title: "Xarxes, WiFi i infraestructura TIC a Girona | Nimbus Telecom",
       description:
         "Xarxa per a empreses a la Selva i el Gironès: cablejat, LAN/WAN, WiFi professional, rack i electrònica de xarxa. Tècnics propis a Sils.",
     },
@@ -231,7 +231,7 @@ export const NETWORKS_CONTENT: Record<Locale, BusinessServiceContent> = {
   },
   en: {
     meta: {
-      title: "Business networks, professional WiFi and ICT infrastructure in Girona | Nimbus Telecom",
+      title: "Networks, WiFi and ICT infrastructure in Girona | Nimbus Telecom",
       description:
         "Business networks in La Selva and Gironès: cabling, LAN/WAN, professional WiFi, rack and network equipment. In-house technicians in Sils.",
     },
