@@ -11,7 +11,7 @@ import { SERVICE_TOWNS, type BusinessServiceContent } from "@/lib/businessServic
 export const PBX_CONTENT: Record<Locale, BusinessServiceContent> = {
   es: {
     meta: {
-      title: "Centralita VoIP y telefonía IP para empresas en Girona | Nimbus Telecom",
+      title: "Centralita VoIP para empresas en Girona | Nimbus Telecom",
       description:
         "Centralita VoIP para empresas de la Selva y el Gironès: extensiones, colas, horarios y el teléfono de la empresa en el móvil. Técnicos propios en Sils.",
     },
@@ -121,7 +121,7 @@ export const PBX_CONTENT: Record<Locale, BusinessServiceContent> = {
   },
   ca: {
     meta: {
-      title: "Centraleta VoIP i telefonia IP per a empreses a Girona | Nimbus Telecom",
+      title: "Centraleta VoIP per a empreses a Girona | Nimbus Telecom",
       description:
         "Centraleta VoIP per a empreses de la Selva i el Gironès: extensions, cues, horaris i el telèfon de l'empresa al mòbil. Tècnics propis a Sils.",
     },
@@ -231,7 +231,7 @@ export const PBX_CONTENT: Record<Locale, BusinessServiceContent> = {
   },
   en: {
     meta: {
-      title: "VoIP phone systems and IP telephony for businesses in Girona | Nimbus Telecom",
+      title: "VoIP phone systems for businesses in Girona | Nimbus Telecom",
       description:
         "VoIP phone system for businesses in La Selva and Gironès: extensions, queues, opening hours and your business number on your mobile. Technicians in Sils.",
     },
