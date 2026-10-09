@@ -18,6 +18,14 @@ import { linkTo } from "@/lib/routes";
 import { LanguageBanner } from "@/components/LanguageBanner";
 import { DEFAULT_LOCALE, I18nProvider, useI18n, type Locale } from "@/lib/i18n";
 
+// Texto alternativo de la foto de la tienda de la portada. Lo leen los
+// buscadores y los lectores de pantalla (Bing Site Scan lo marcaba vacio).
+const STOREFRONT_ALT: Record<Locale, string> = {
+  ca: "Botiga de Nimbus Telecom a Sils",
+  es: "Tienda de Nimbus Telecom en Sils",
+  en: "Nimbus Telecom shop in Sils",
+};
+
 export function HomePageContent({ locale = DEFAULT_LOCALE }: { locale?: Locale } = {}) {
   return (
     <I18nProvider locale={locale}>
@@ -98,7 +106,7 @@ function HomeContent() {
               <div className="overflow-hidden rounded-3xl border border-nimbus-line bg-white shadow-soft">
                 <Image
                   src={NIMBUS_STOREFRONT_IMAGE}
-                  alt=""
+                  alt={STOREFRONT_ALT[locale]}
                   width={560}
                   height={420}
                   className="aspect-[4/3] w-full object-cover"
