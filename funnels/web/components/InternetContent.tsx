@@ -46,7 +46,7 @@ function InternetPageContent() {
 
   return (
     <>
-      <LandingTracker />
+      <LandingTracker funnel="internet" />
       <ChatbaseEmbed />
       <Header
         page="internet"

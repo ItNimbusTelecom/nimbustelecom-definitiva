@@ -63,7 +63,7 @@ function ServicePageContent({
 
   return (
     <>
-      <LandingTracker />
+      <LandingTracker funnel={page} />
       <ChatbaseEmbed />
       <Header
         page={page}

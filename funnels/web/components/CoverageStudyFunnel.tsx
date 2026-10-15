@@ -121,19 +121,19 @@ const completedSteps = [
     startIfNeeded();
     setCoverageProblem(value);
     setError("");
-    trackEvent("estudio_cobertura_step_1_answered", { answer: value });
+    trackEvent("estudio_cobertura_step_1_answered", { funnel: v.funnel, answer: value });
   }
 
   function chooseLocationType(value: string) {
     setProblemLocationType(value);
     setError("");
-    trackEvent("estudio_cobertura_step_2_answered", { answer: value });
+    trackEvent("estudio_cobertura_step_2_answered", { funnel: v.funnel, answer: value });
   }
 
   function toggleUsage(value: string) {
     setMobileUsage((current) => {
       const next = current.includes(value) ? current.filter((item) => item !== value) : [...current, value];
-      trackEvent("estudio_cobertura_step_3_answered", { answers: next });
+      trackEvent("estudio_cobertura_step_3_answered", { funnel: v.funnel, answers: next });
       return next;
     });
     setError("");
@@ -236,7 +236,7 @@ const completedSteps = [
       return;
     }
 
-    trackEvent("estudio_cobertura_contact_submitted", { preferred_contact: preferredContact });
+    trackEvent("estudio_cobertura_contact_submitted", { funnel: v.funnel, preferred_contact: preferredContact });
     const elapsedSeconds = getElapsedSeconds(formStartedAt);
 
     const payload = {
@@ -272,11 +272,11 @@ const completedSteps = [
 
     try {
       await submitLead(payload);
-      trackEvent("estudio_cobertura_completed", { preferred_contact: preferredContact });
+      trackEvent("estudio_cobertura_completed", { funnel: v.funnel, preferred_contact: preferredContact });
       trackConversion("conversion_formulario", { funnel: v.funnel, preferred_contact: preferredContact });
       setCompleted(true);
     } catch (submitError) {
-      trackEvent("estudio_cobertura_submit_error", { preferred_contact: preferredContact });
+      trackEvent("estudio_cobertura_submit_error", { funnel: v.funnel, preferred_contact: preferredContact });
       setContactError(submitError instanceof Error ? submitError.message : dictionary.form.errors.submit);
     } finally {
       setIsSubmitting(false);

@@ -41,7 +41,7 @@ function SecurityPageContent() {
 
   return (
     <>
-      <LandingTracker />
+      <LandingTracker funnel="seguridad" />
       <ChatbaseEmbed />
       <Header
         page="seguretat"

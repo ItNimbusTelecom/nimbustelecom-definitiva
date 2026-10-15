@@ -22,10 +22,13 @@ export function trackEvent(name: string, params?: Record<string, unknown>) {
 }
 
 /**
- * Conversiones para Google Ads. No hay etiqueta AW propia: se marcan como
- * eventos clave en GA4 y se importan desde Google Ads, que ya tiene la
- * propiedad vinculada. Llevan los utm guardados al entrar, porque GA4 solo los
- * ve en la primera pagina y la conversion puede pasar en otra.
+ * Conversiones para Google Ads. No hay etiqueta AW propia: estos tres eventos
+ * se marcan como eventos clave en GA4 y se importan desde Google Ads, con la
+ * propiedad vinculada a la cuenta de Ads (las dos cosas se hacen en GA4, no
+ * aqui). Son estos, y no estudio_cobertura_completed, porque cubren todos los
+ * formularios y no se cuenta dos veces la misma solicitud. Llevan los utm
+ * guardados al entrar, porque GA4 solo los ve en la primera pagina y la
+ * conversion puede pasar en otra.
  *
  * - conversion_formulario: solo cuando la API responde OK, no al pulsar.
  * - conversion_whatsapp / conversion_telefono: clic en cualquier enlace

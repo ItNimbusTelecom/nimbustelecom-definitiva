@@ -43,7 +43,7 @@ function HomeContent() {
 
   return (
     <>
-      <LandingTracker />
+      <LandingTracker funnel="home" />
       <ChatbaseEmbed />
 
       <Header
