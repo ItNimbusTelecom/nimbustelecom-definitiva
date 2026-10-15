@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { trackEvent } from "@/lib/analytics";
+import { trackConversion, trackEvent } from "@/lib/analytics";
 import { getElapsedSeconds } from "@/lib/antispam";
 import { isValidEmail, isValidPersonName, isValidSpanishPhone } from "@/lib/formValidation";
 import { useI18n } from "@/lib/i18n";
@@ -87,6 +87,7 @@ export function CoverageStudyFunnel({ variant }: { variant?: StudyFunnelVariant 
   const [email, setEmail] = useState("");
   const [currentOperator, setCurrentOperator] = useState("");
   const [additionalComment, setAdditionalComment] = useState("");
+  const [howDidYouHear, setHowDidYouHear] = useState("");
   const [consent, setConsent] = useState(false);
   const [company, setCompany] = useState("");
   const [formStartedAt, setFormStartedAt] = useState(() => new Date().toISOString());
@@ -120,19 +121,19 @@ const completedSteps = [
     startIfNeeded();
     setCoverageProblem(value);
     setError("");
-    trackEvent("estudio_cobertura_step_1_answered", { answer: value });
+    trackEvent("estudio_cobertura_step_1_answered", { funnel: v.funnel, answer: value });
   }
 
   function chooseLocationType(value: string) {
     setProblemLocationType(value);
     setError("");
-    trackEvent("estudio_cobertura_step_2_answered", { answer: value });
+    trackEvent("estudio_cobertura_step_2_answered", { funnel: v.funnel, answer: value });
   }
 
   function toggleUsage(value: string) {
     setMobileUsage((current) => {
       const next = current.includes(value) ? current.filter((item) => item !== value) : [...current, value];
-      trackEvent("estudio_cobertura_step_3_answered", { answers: next });
+      trackEvent("estudio_cobertura_step_3_answered", { funnel: v.funnel, answers: next });
       return next;
     });
     setError("");
@@ -187,6 +188,7 @@ const completedSteps = [
     setEmail("");
     setCurrentOperator("");
     setAdditionalComment("");
+    setHowDidYouHear("");
     setConsent(false);
     setCompany("");
     setFormStartedAt(new Date().toISOString());
@@ -234,7 +236,7 @@ const completedSteps = [
       return;
     }
 
-    trackEvent("estudio_cobertura_contact_submitted", { preferred_contact: preferredContact });
+    trackEvent("estudio_cobertura_contact_submitted", { funnel: v.funnel, preferred_contact: preferredContact });
     const elapsedSeconds = getElapsedSeconds(formStartedAt);
 
     const payload = {
@@ -244,6 +246,7 @@ const completedSteps = [
       submittedAt: new Date().toISOString(),
       serviceType: v.serviceType,
       source: getLeadSource(),
+      howDidYouHear,
       recaptchaToken,
       antiSpam: {
         formStartedAt,
@@ -269,10 +272,11 @@ const completedSteps = [
 
     try {
       await submitLead(payload);
-      trackEvent("estudio_cobertura_completed", { preferred_contact: preferredContact });
+      trackEvent("estudio_cobertura_completed", { funnel: v.funnel, preferred_contact: preferredContact });
+      trackConversion("conversion_formulario", { funnel: v.funnel, preferred_contact: preferredContact });
       setCompleted(true);
     } catch (submitError) {
-      trackEvent("estudio_cobertura_submit_error", { preferred_contact: preferredContact });
+      trackEvent("estudio_cobertura_submit_error", { funnel: v.funnel, preferred_contact: preferredContact });
       setContactError(submitError instanceof Error ? submitError.message : dictionary.form.errors.submit);
     } finally {
       setIsSubmitting(false);
@@ -478,6 +482,24 @@ const completedSteps = [
                         onChange={(event) => setAdditionalComment(event.target.value)}
                         className="mt-2 min-h-24 w-full rounded-lg border border-nimbus-line px-4 py-3 font-normal text-nimbus-ink"
                       />
+                    </label>
+
+                    {/* Para contrastar el utm con lo que dice el cliente. Se
+                        envia la clave, no el texto, para que no dependa del idioma. */}
+                    <label className="mt-4 block text-sm font-bold text-nimbus-ink">
+                      {dictionary.form.howDidYouHear.label}
+                      <select
+                        value={howDidYouHear}
+                        onChange={(event) => setHowDidYouHear(event.target.value)}
+                        className="mt-2 w-full rounded-lg border border-nimbus-line bg-white px-4 py-3 font-normal text-nimbus-ink"
+                      >
+                        <option value="">{dictionary.form.howDidYouHear.placeholder}</option>
+                        {Object.entries(dictionary.form.howDidYouHear.options).map(([value, label]) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
+                      </select>
                     </label>
 
                     <RecaptchaNotice className="mt-4" />

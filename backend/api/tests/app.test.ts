@@ -227,6 +227,34 @@ describe("Nimbus funnel API", () => {
     expect(response.body.ok).toBe(true);
   });
 
+  it("passes how the customer heard about us on to Make", async () => {
+    const makeWebhookService: IMakeWebhookService = { send: vi.fn(async () => undefined) };
+    const app = createApp({
+      repository: { async create(record) { return mapRecordToItem(record, new Date("2026-01-01T10:00:00.000Z")); } },
+      makeWebhookService,
+      antiSpamService: { validate: vi.fn(() => undefined) },
+      recaptchaService: { verify: vi.fn(async () => undefined) }
+    });
+
+    const response = await invoke(app, "POST", "/coverage-study", {
+      name: "Patricia",
+      phone: "972850155",
+      problemLocationText: "Sils",
+      preferredContactMethod: "phone",
+      currentProblem: "Internet va lent",
+      serviceType: "internet",
+      source: "utm_source=google; utm_medium=cpc; utm_campaign=fibra-q4-2026; utm_content=precio; gclid=test123",
+      howDidYouHear: "anuncio_google",
+      language: "ca",
+      consentAccepted: true
+    });
+
+    expect(response.status).toBe(201);
+    const item = vi.mocked(makeWebhookService.send).mock.calls[0][0];
+    expect(item.source).toContain("utm_content=precio");
+    expect(item.payload).toMatchObject({ howDidYouHear: "anuncio_google" });
+  });
+
   it("rejects a coverage study without problem location", async () => {
     const response = await invoke(createTestApp(), "POST", "/coverage-study", {
       name: "Patricia",

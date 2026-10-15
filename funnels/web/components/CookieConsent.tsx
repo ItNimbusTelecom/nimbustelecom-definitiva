@@ -1,8 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { denyAnalyticsConsent, grantAnalyticsConsent } from "@/lib/analytics";
-import { COOKIE_CONSENT_KEY, COOKIE_SETTINGS_EVENT, type CookieChoice } from "@/lib/analyticsConfig";
+import { applyCookieConsent } from "@/lib/analytics";
+import {
+  ADS_CONSENT_KEY,
+  COOKIE_CONSENT_KEY,
+  COOKIE_SETTINGS_EVENT,
+  type CookieChoice,
+  type CookieConsentState,
+} from "@/lib/analyticsConfig";
 import { LEGAL_LINKS } from "@/lib/contact";
 import { useI18n } from "@/lib/i18n";
 
@@ -10,51 +16,57 @@ import { useI18n } from "@/lib/i18n";
  * Banner de cookies alineado con lo que dice la Politica de cookies: se
  * pueden ACEPTAR, RECHAZAR o CONFIGURAR, y si se aceptan no se vuelve a
  * preguntar. Aceptar y rechazar van con el mismo peso visual, como pide la
- * guia de la AEPD. Las unicas cookies que necesitan consentimiento son las de
- * Google Analytics; las tecnicas no se pueden desactivar.
+ * guia de la AEPD. Necesitan consentimiento, cada una por separado, las de
+ * Google Analytics y las de medicion de anuncios de Google Ads; las tecnicas
+ * no se pueden desactivar.
  *
  * La eleccion se puede cambiar despues desde "Configurar cookies" en el pie,
  * que dispara COOKIE_SETTINGS_EVENT y reabre el panel.
  */
 type View = "hidden" | "banner" | "settings";
 
-function readChoice(): CookieChoice | null {
+function readChoice(key: string): CookieChoice | null {
   try {
-    const value = localStorage.getItem(COOKIE_CONSENT_KEY);
+    const value = localStorage.getItem(key);
     return value === "accepted" || value === "rejected" ? value : null;
   } catch {
     return null;
   }
 }
 
-function saveChoice(choice: CookieChoice) {
+function saveConsent(consent: CookieConsentState) {
   try {
-    localStorage.setItem(COOKIE_CONSENT_KEY, choice);
+    localStorage.setItem(COOKIE_CONSENT_KEY, consent.analytics ? "accepted" : "rejected");
+    localStorage.setItem(ADS_CONSENT_KEY, consent.ads ? "accepted" : "rejected");
   } catch {
     // Sin localStorage la eleccion vale para esta pagina y se volvera a
     // preguntar en la siguiente. Mejor eso que no poder elegir.
   }
 
-  if (choice === "accepted") {
-    grantAnalyticsConsent();
-  } else {
-    denyAnalyticsConsent();
-  }
+  applyCookieConsent(consent);
 }
+
+const ALL: CookieConsentState = { analytics: true, ads: true };
+const NONE: CookieConsentState = { analytics: false, ads: false };
 
 export function CookieConsent() {
   const [view, setView] = useState<View>("hidden");
   const [analytics, setAnalytics] = useState(false);
+  const [ads, setAds] = useState(false);
   const { dictionary } = useI18n();
   const text = dictionary.cookies;
 
   useEffect(() => {
     queueMicrotask(() => {
-      setView(readChoice() === null ? "banner" : "hidden");
+      // Tambien se muestra a quien solo habia elegido la analitica: la de
+      // anuncios es una finalidad nueva sobre la que no se le pregunto.
+      const pending = readChoice(COOKIE_CONSENT_KEY) === null || readChoice(ADS_CONSENT_KEY) === null;
+      setView(pending ? "banner" : "hidden");
     });
 
     function openSettings() {
-      setAnalytics(readChoice() === "accepted");
+      setAnalytics(readChoice(COOKIE_CONSENT_KEY) === "accepted");
+      setAds(readChoice(ADS_CONSENT_KEY) === "accepted");
       setView("settings");
     }
 
@@ -62,8 +74,8 @@ export function CookieConsent() {
     return () => window.removeEventListener(COOKIE_SETTINGS_EVENT, openSettings);
   }, []);
 
-  function choose(choice: CookieChoice) {
-    saveChoice(choice);
+  function choose(consent: CookieConsentState) {
+    saveConsent(consent);
     setView("hidden");
   }
 
@@ -131,14 +143,26 @@ export function CookieConsent() {
               className="mt-1 size-5 shrink-0 accent-nimbus-orange"
             />
           </label>
+          <label className="flex cursor-pointer items-start justify-between gap-4 rounded-lg bg-nimbus-soft p-4">
+            <span>
+              <span className="block font-black text-nimbus-ink">{text.adsTitle}</span>
+              <span className="mt-1 block text-sm leading-6 text-nimbus-muted">{text.adsText}</span>
+            </span>
+            <input
+              type="checkbox"
+              checked={ads}
+              onChange={(event) => setAds(event.target.checked)}
+              className="mt-1 size-5 shrink-0 accent-nimbus-orange"
+            />
+          </label>
           <div className="flex flex-wrap justify-end gap-3">
-            <button type="button" onClick={() => choose("rejected")} className={choiceButton}>
+            <button type="button" onClick={() => choose(NONE)} className={choiceButton}>
               {text.reject}
             </button>
-            <button type="button" onClick={() => choose(analytics ? "accepted" : "rejected")} className={secondaryButton}>
+            <button type="button" onClick={() => choose({ analytics, ads })} className={secondaryButton}>
               {text.save}
             </button>
-            <button type="button" onClick={() => choose("accepted")} className={choiceButton}>
+            <button type="button" onClick={() => choose(ALL)} className={choiceButton}>
               {text.accept}
             </button>
           </div>
@@ -150,16 +174,17 @@ export function CookieConsent() {
             type="button"
             onClick={() => {
               setAnalytics(false);
+              setAds(false);
               setView("settings");
             }}
             className={`${secondaryButton} order-last col-span-2 sm:order-none`}
           >
             {text.configure}
           </button>
-          <button type="button" onClick={() => choose("rejected")} className={choiceButton}>
+          <button type="button" onClick={() => choose(NONE)} className={choiceButton}>
             {text.reject}
           </button>
-          <button type="button" onClick={() => choose("accepted")} className={choiceButton}>
+          <button type="button" onClick={() => choose(ALL)} className={choiceButton}>
             {text.accept}
           </button>
         </div>

@@ -48,7 +48,7 @@ function HomeContent() {
 
   return (
     <>
-      <LandingTracker />
+      <LandingTracker funnel="cobertura-movil" />
       <ChatbaseEmbed />
       <Header page="mobil" />
       <main>

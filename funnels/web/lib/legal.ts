@@ -156,6 +156,13 @@ export const politicaCookies: LegalDocument = {
       "Cookies de preferencias o personalización: Son aquellas que permiten recordar información para que el usuario acceda al servicio con determinadas características que pueden diferenciar su experiencia de la de otros usuarios, como, por ejemplo, el idioma, el número de resultados a mostrar cuando el usuario realiza una búsqueda, el aspecto o contenido del servicio en función del tipo de navegador a través del cual el usuario accede al servicio o de la región desde la que accede al servicio, etc.",
       "Publicitarias comportamentales: Son aquellas que, tratadas por nosotros o por terceros, nos permiten analizar sus hábitos de navegación en Internet para que podamos mostrarle publicidad relacionada con su perfil de navegación.",
     ] },
+    { type: "paragraph", text: "COOKIES QUE USA ESTA WEB" },
+    { type: "list", items: [
+      "Técnicas (propias, siempre activas): guardan en tu navegador el idioma elegido, tu elección de cookies y, mientras dura la visita, el origen por el que llegaste (por ejemplo, el anuncio), para adjuntarlo a la solicitud que envíes.",
+      "Análisis (Google Analytics, de terceros, solo si las aceptas): _ga y _ga_2XPZFZDCPG, hasta 2 años. Cuentan visitas y páginas vistas para mejorar la web.",
+      "Medición de anuncios (Google Ads, de terceros, solo si las aceptas): _gcl_au y _gcl_aw, hasta 90 días. Sirven para saber si llegaste desde uno de nuestros anuncios y si acabaste enviando una solicitud o contactando por teléfono o WhatsApp. No las usamos para mostrarte publicidad personalizada.",
+    ] },
+    { type: "paragraph", text: "Puedes cambiar tu elección en cualquier momento desde el enlace «Configurar cookies» del pie de página." },
     { type: "paragraph", text: "SEGÚN EL PLAZO DE TIEMPO QUE PERMANECEN ACTIVADAS" },
     { type: "list", items: [
       "Cookies de sesión: Son aquellas diseñadas para recabar y almacenar datos mientras el usuario accede a una página web. Se suelen emplear para almacenar información que solo interesa conservar para la prestación del servicio solicitado por el usuario en una sola ocasión (por ejemplo, una lista de productos adquiridos) y desaparecen al terminar la sesión.",

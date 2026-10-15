@@ -35,7 +35,7 @@ function BusinessPageContent() {
 
   return (
     <>
-      <LandingTracker />
+      <LandingTracker funnel="empreses" />
       <ChatbaseEmbed />
       <Header
         page="empreses"

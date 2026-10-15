@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { trackEvent } from "@/lib/analytics";
+import { trackConversion, trackEvent } from "@/lib/analytics";
 import { getElapsedSeconds } from "@/lib/antispam";
 import { isValidPersonName, isValidSpanishPhone } from "@/lib/formValidation";
 import { useI18n } from "@/lib/i18n";
@@ -72,6 +72,8 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
 
   function openWhatsapp() {
     trackEvent("contratacion_whatsapp_clicked", { plan_id: plan?.id });
+    // No es un enlace, asi que AttributionTracker no lo ve.
+    trackConversion("conversion_whatsapp", { plan_id: plan?.id });
     window.open(plan ? WHATSAPP_URL : WHATSAPP_URL_GENERAL, "_blank", "noopener,noreferrer");
   }
 
@@ -145,6 +147,11 @@ export function DirectContractModal({ plan, onClose }: DirectContractModalProps)
     try {
       await submitLeadRequest(payload);
       trackEvent(plan ? "contratacion_directa_completed" : "contacto_general_completed", {
+        plan_id: plan?.id,
+        preferred_contact: preferredContact,
+      });
+      trackConversion("conversion_formulario", {
+        funnel: plan ? "contratacion-directa" : "contacto-general",
         plan_id: plan?.id,
         preferred_contact: preferredContact,
       });

@@ -7,6 +7,7 @@ type LegacyLeadPayload = {
   serviceType?: unknown;
   recaptchaToken?: unknown;
   message?: unknown;
+  howDidYouHear?: unknown;
   selectedPlan?: {
     id?: unknown;
     name?: unknown;
@@ -23,6 +24,7 @@ type LegacyLeadPayload = {
     utm_campaign?: unknown;
     utm_content?: unknown;
     utm_term?: unknown;
+    gclid?: unknown;
   };
   answers?: {
     coverageProblem?: unknown;
@@ -179,6 +181,7 @@ function toCoverageStudyPayload(payload: LegacyLeadPayload) {
     preferredContactMethod: toPreferredContactMethod(contact.preferredContact),
     currentProblem,
     currentOperator: toText(answers.currentOperator),
+    howDidYouHear: toText(payload.howDidYouHear),
     source: getSourceLabel(payload),
     serviceType:
       payload.serviceType === "internet" ||
@@ -246,6 +249,7 @@ function getSourceLabel(payload: LegacyLeadPayload) {
     toText(source.utm_campaign) ? `utm_campaign=${toText(source.utm_campaign)}` : "",
     toText(source.utm_content) ? `utm_content=${toText(source.utm_content)}` : "",
     toText(source.utm_term) ? `utm_term=${toText(source.utm_term)}` : "",
+    toText(source.gclid) ? `gclid=${toText(source.gclid)}` : "",
     toText(source.referrer) ? `referrer=${toText(source.referrer)}` : "",
   ].filter(Boolean);
 
