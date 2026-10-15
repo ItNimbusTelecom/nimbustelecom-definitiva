@@ -94,12 +94,14 @@ export function CookieConsent() {
   const secondaryButton =
     "rounded-full border border-nimbus-line bg-white px-6 py-3 text-sm font-black text-nimbus-ink transition hover:border-nimbus-orange hover:text-nimbus-orange focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nimbus-orange";
 
+  // z-index maximo: la burbuja de Chatbase se pinta con 2147483645 y en movil
+  // tapaba el boton "Configurar". Mientras se elige, el banner va encima.
   return (
     <div
       role="dialog"
       aria-modal="false"
       aria-labelledby="cookie-consent-title"
-      className="fixed inset-x-4 bottom-4 z-[60] mx-auto max-h-[calc(100vh-2rem)] max-w-4xl overflow-y-auto rounded-lg border border-nimbus-line bg-white p-4 shadow-soft md:p-5"
+      className="fixed inset-x-4 bottom-4 z-[2147483647] mx-auto max-h-[calc(100vh-2rem)] max-w-4xl overflow-y-auto rounded-lg border border-nimbus-line bg-white p-4 shadow-soft md:p-5"
     >
       <p id="cookie-consent-title" className="text-sm font-black uppercase tracking-[0.16em] text-nimbus-orange">
         {view === "settings" ? text.settingsTitle : text.eyebrow}
