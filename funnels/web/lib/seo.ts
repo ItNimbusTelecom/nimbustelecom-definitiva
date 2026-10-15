@@ -52,7 +52,7 @@ export const MOBILE_SEO: Record<Locale, { title: string; description: string }> 
   es: {
     title: "Problemas de cobertura móvil | Nimbus Telecom",
     description:
-      "Líneas móviles con triple cobertura y atención cercana desde Sils. Revisamos tu caso para ayudarte a encontrar una opción con más posibilidades reales de cobertura.",
+      "Líneas móviles con triple cobertura y atención cercana desde Sils. Revisamos tu caso para encontrar una opción con más posibilidades reales de cobertura.",
   },
   en: {
     title: "Mobile coverage problems | Nimbus Telecom",

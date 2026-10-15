@@ -23,9 +23,17 @@ type HeaderProps = {
   logoHref?: string;
   /** Contenedor mas ancho para paginas con muchos items de menu (ej. seguretat). */
   wide?: boolean;
+  /** Items del menu sempre en una linia (pagines de servei d'empreses). */
+  singleLineNav?: boolean;
 };
 
-export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide, page }: HeaderProps = {}) {
+export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide, singleLineNav, page }: HeaderProps = {}) {
+  // Amb el menu en una linia, el menu complet surt a partir de xl (1280px);
+  // per sota, el desplegable. Classes literals perque Tailwind les detecti.
+  const navPad = singleLineNav ? "whitespace-nowrap px-3 2xl:px-4" : "px-4";
+  const desktopFlex = singleLineNav ? "xl:flex" : "lg:flex";
+  const desktopBlock = singleLineNav ? "xl:block" : "lg:block";
+  const mobileHidden = singleLineNav ? "xl:hidden" : "lg:hidden";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { dictionary, locale } = useI18n();
   const items: HeaderNavItem[] = navItems ?? [
@@ -71,15 +79,15 @@ export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide, page }: He
             unoptimized
           />
         </a>
-        <nav className="hidden items-center gap-1 lg:flex" aria-label={dictionary.nav.aria}>
+        <nav className={`hidden items-center gap-1 ${desktopFlex}`} aria-label={dictionary.nav.aria}>
           {items.map((item) => (
             <a
               key={item.href}
               href={item.href}
               className={
                 item.highlight
-                  ? "rounded-full border-2 border-nimbus-orange bg-orange-50 px-4 py-2 text-sm font-black text-nimbus-orange transition hover:bg-nimbus-orange hover:text-white text-center"
-                  : "rounded-full border-2 border-transparent px-4 py-2 text-sm font-bold text-nimbus-muted transition hover:border-nimbus-orange hover:bg-orange-100 hover:text-nimbus-ink text-center"
+                  ? `rounded-full border-2 border-nimbus-orange bg-orange-50 ${navPad} py-2 text-sm font-black text-nimbus-orange transition hover:bg-nimbus-orange hover:text-white text-center`
+                  : `rounded-full border-2 border-transparent ${navPad} py-2 text-sm font-bold text-nimbus-muted transition hover:border-nimbus-orange hover:bg-orange-100 hover:text-nimbus-ink text-center`
               }
             >
               {item.label}
@@ -87,7 +95,7 @@ export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide, page }: He
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <div className="hidden lg:block">
+          <div className={`hidden ${desktopBlock}`}>
             <LanguageSwitcher compact page={page} />
           </div>
           <a
@@ -118,7 +126,7 @@ export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide, page }: He
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-            className="grid size-10 place-items-center rounded-full border border-nimbus-orange bg-white text-nimbus-ink shadow-sm transition hover:bg-orange-50 hover:text-nimbus-orange focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nimbus-orange lg:hidden"
+            className={`grid size-10 place-items-center rounded-full border border-nimbus-orange bg-white text-nimbus-ink shadow-sm transition hover:bg-orange-50 hover:text-nimbus-orange focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-nimbus-orange ${mobileHidden}`}
           >
             <span className="sr-only">{isMenuOpen ? "Cerrar menú" : "Abrir menú"}</span>
             <span aria-hidden="true" className="grid gap-1.5">
@@ -140,7 +148,7 @@ export function Header({ navItems, ctaLabel, ctaHref, logoHref, wide, page }: He
         </div>
       </div>
       {isMenuOpen ? (
-        <div id="mobile-menu" className="border-t border-nimbus-line bg-white px-4 py-4 shadow-soft lg:hidden">
+        <div id="mobile-menu" className={`border-t border-nimbus-line bg-white px-4 py-4 shadow-soft ${mobileHidden}`}>
           <nav className="mx-auto grid max-w-6xl gap-2" aria-label={dictionary.nav.aria}>
             {items.map((item) => (
               <a

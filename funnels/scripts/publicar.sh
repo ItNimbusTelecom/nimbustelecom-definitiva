@@ -32,6 +32,9 @@ RAMA_PUBLICACION="gh-pages"
 APP="funnels/web"
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# Aviso a Bing (IndexNow) de las paginas que cambian. Ver indexnow.sh.
+# shellcheck source=indexnow.sh
+source "$RAIZ/funnels/scripts/indexnow.sh"
 WORKTREE="${TMPDIR:-/tmp}/nimbus-gh-pages"
 
 DRY_RUN=0
@@ -95,6 +98,14 @@ fi
 if [ "$FALLOS" -gt 0 ]; then
   echo ""; echo "  >> $FALLOS comprobacion(es) fallida(s). No se publica nada."
   exit 1
+fi
+
+# --- fichero de la clave de IndexNow (Bing lo pide para aceptar los avisos)
+CLAVE_FUENTE="$RAIZ/$APP/public/$INDEXNOW_CLAVE.txt"
+if [ -f "$CLAVE_FUENTE" ] && [ "$(tr -d '\r\n' < "$CLAVE_FUENTE")" = "$INDEXNOW_CLAVE" ]; then
+  ok "clave de IndexNow en public/"
+else
+  aviso "falta o no coincide public/$INDEXNOW_CLAVE.txt: se publica igual, pero Bing rechazara el aviso"
 fi
 
 # ============================================================ 2. BUILD
@@ -164,6 +175,20 @@ git -C "$WORKTREE" diff --cached --stat | tail -15
 echo ""
 git -C "$WORKTREE" diff --cached --name-status | awk '{print $1}' | sort | uniq -c | sed 's/^/     /'
 
+# Paginas con cambios de contenido (no solo de hashes del build): de estas se
+# avisa a Bing despues de publicar. Se calcula ahora, antes del commit, porque
+# compara con lo publicado (HEAD de gh-pages).
+CAMBIADAS=()
+while IFS= read -r url; do [ -n "$url" ] && CAMBIADAS+=("$url"); done \
+  < <(indexnow_cambiadas "$WORKTREE" "$SITE_URL" || true)
+echo ""
+if [ "${#CAMBIADAS[@]}" -gt 0 ]; then
+  echo "  Paginas con contenido nuevo (se avisara a Bing con IndexNow):"
+  printf '    %s\n' "${CAMBIADAS[@]}"
+else
+  echo "  Ninguna pagina del sitemap cambia de contenido: no se avisara a Bing."
+fi
+
 if [ "$DRY_RUN" = "1" ]; then
   titulo "ENSAYO COMPLETADO"
   echo "  No se ha comiteado ni subido nada."
@@ -192,11 +217,15 @@ fi
 git -C "$WORKTREE" commit -q -m "publicacio: $(git -C "$RAIZ" rev-parse --short HEAD)"
 git -C "$WORKTREE" push origin "$RAMA_PUBLICACION"
 
+titulo "6. AVISO A BING (IndexNow)"
+indexnow_enviar ${CAMBIADAS[@]+"${CAMBIADAS[@]}"}
+
 titulo "PUBLICADO"
 echo "  Comprobar en unos minutos:"
 for p in "" movil/ internet/ seguridad/ empreses/ ofertas-qr/ servicios/; do
   echo "    https://$DOMINIO_ESPERADO/$p"
 done
 echo ""
-echo "  Y despues: reenviar el sitemap en Search Console si han cambiado rutas."
+echo "  Bing ya esta avisado por IndexNow. Google no lo usa: si hay paginas"
+echo "  nuevas, reenviar el sitemap y pedir la indexacion en Search Console."
 echo ""

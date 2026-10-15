@@ -15,7 +15,18 @@ import type { Locale } from "@/lib/i18n";
  * Los slugs no son traducciones automaticas: son los terminos por los que se
  * busca en cada idioma. Por eso /en/business/ y no /en/companies/.
  */
-export type PageKey = "home" | "mobil" | "internet" | "seguretat" | "empreses" | "ofertes" | "amics";
+export type PageKey =
+  | "home"
+  | "mobil"
+  | "internet"
+  | "seguretat"
+  | "empreses"
+  | "radioenllacos"
+  | "xarxes"
+  | "backupInternet"
+  | "centraleta"
+  | "ofertes"
+  | "amics";
 
 export const ROUTES: Record<PageKey, Partial<Record<Locale, string>>> = {
   home: { ca: "/", es: "/es/", en: "/en/" },
@@ -23,6 +34,29 @@ export const ROUTES: Record<PageKey, Partial<Record<Locale, string>>> = {
   internet: { ca: "/internet/", es: "/es/internet/", en: "/en/internet/" },
   seguretat: { ca: "/seguretat/", es: "/es/seguridad/", en: "/en/security/" },
   empreses: { ca: "/empreses/", es: "/es/empresas/", en: "/en/business/" },
+  // Pagina de servei per a empreses: penja de /empreses/. El slug es la
+  // paraula amb que es busca en cada idioma ("radioenllaç", "radioenlace",
+  // "wireless link"), no una traduccio.
+  radioenllacos: {
+    ca: "/empreses/radioenllacos/",
+    es: "/es/empresas/radioenlaces/",
+    en: "/en/business/wireless-links/",
+  },
+  xarxes: {
+    ca: "/empreses/xarxes/",
+    es: "/es/empresas/redes/",
+    en: "/en/business/networks/",
+  },
+  backupInternet: {
+    ca: "/empreses/backup-internet/",
+    es: "/es/empresas/backup-internet/",
+    en: "/en/business/internet-backup/",
+  },
+  centraleta: {
+    ca: "/empreses/centraleta/",
+    es: "/es/empresas/centralita/",
+    en: "/en/business/voip-pbx/",
+  },
   // Landing del QR dels flyers. El slug catala no es toca: es el que va
   // imprès al QR. Les tres versions porten noindex (veure lib/offers.ts).
   ofertes: { ca: "/ofertas-qr/", es: "/es/ofertas-qr/", en: "/en/offers-qr/" },

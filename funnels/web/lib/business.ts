@@ -1,4 +1,5 @@
 import type { Locale } from "./i18n";
+import type { PageKey } from "./routes";
 
 export type BusinessContent = {
   meta: { title: string; description: string };
@@ -38,6 +39,8 @@ export type BusinessContent = {
     }[];
     note: string;
     hubLabel: string;
+    /** Enlaces a las paginas de servicio (lib/routes.ts): la de /empreses/ es el indice. */
+    pages: { title: string; items: { page: PageKey; label: string; text: string }[] };
   };
   how: {
     eyebrow: string;
@@ -179,6 +182,15 @@ export const BUSINESS_CONTENT: Record<Locale, BusinessContent> = {
       ],
       note: "Tu empresa puede necesitar algo que no aparece aquí: pregúntanos, si es TIC, sabemos hacerlo.",
       hubLabel: "Tu empresa",
+      pages: {
+        title: "Nuestros servicios en detalle",
+        items: [
+          { page: "xarxes", label: "Redes y WiFi profesional", text: "Cableado, LAN/WAN, rack y WiFi para naves y oficinas." },
+          { page: "backupInternet", label: "Backup de internet", text: "Segunda línea WiMAX con conmutación automática." },
+          { page: "centraleta", label: "Centralita VoIP", text: "Extensiones en el móvil, colas, horarios y portabilidad." },
+          { page: "radioenllacos", label: "Radioenlaces", text: "Unir naves, sedes y cámaras remotas sin cable." },
+        ],
+      },
     },
     how: {
       eyebrow: "Cómo funciona",
@@ -376,6 +388,15 @@ export const BUSINESS_CONTENT: Record<Locale, BusinessContent> = {
       ],
       note: "La teva empresa pot necessitar alguna cosa que no apareix aquí, pregunta'ns: si és TIC, en sabem.",
       hubLabel: "La teva empresa",
+      pages: {
+        title: "Els nostres serveis en detall",
+        items: [
+          { page: "xarxes", label: "Xarxes i WiFi professional", text: "Cablejat, LAN/WAN, rack i WiFi per a naus i oficines." },
+          { page: "backupInternet", label: "Backup d'internet", text: "Segona línia WiMAX amb commutació automàtica." },
+          { page: "centraleta", label: "Centraleta VoIP", text: "Extensions al mòbil, cues, horaris i portabilitat." },
+          { page: "radioenllacos", label: "Radioenllaços", text: "Unir naus, seus i càmeres remotes sense cable." },
+        ],
+      },
     },
     how: {
       eyebrow: "Com funciona",
@@ -573,6 +594,15 @@ export const BUSINESS_CONTENT: Record<Locale, BusinessContent> = {
       ],
       note: "Your business might need something that isn't listed here: ask us — if it's ICT, we know how.",
       hubLabel: "Your business",
+      pages: {
+        title: "Our services in detail",
+        items: [
+          { page: "xarxes", label: "Networks and professional WiFi", text: "Cabling, LAN/WAN, rack and WiFi for warehouses and offices." },
+          { page: "backupInternet", label: "Internet backup", text: "Second WiMAX line with automatic failover." },
+          { page: "centraleta", label: "VoIP phone system", text: "Extensions on mobiles, queues, hours and number porting." },
+          { page: "radioenllacos", label: "Wireless links", text: "Connect warehouses, sites and remote cameras without cable." },
+        ],
+      },
     },
     how: {
       eyebrow: "How it works",

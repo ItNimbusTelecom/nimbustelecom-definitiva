@@ -4,19 +4,23 @@ import { ChatbaseEmbed } from "@/components/ChatbaseEmbed";
 import { CookieConsent } from "@/components/CookieConsent";
 import { CoverageStudyFunnel } from "@/components/CoverageStudyFunnel";
 import { FloatingContactButtons } from "@/components/FloatingContactButtons";
+import { FaqList } from "@/components/FaqList";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LandingTracker } from "@/components/LandingTracker";
 import { LocalServiceSection } from "@/components/LocalServiceSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { VisualIcon } from "@/components/VisualIcon";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 import { linkTo } from "@/lib/routes";
 import { LanguageBanner } from "@/components/LanguageBanner";
 import { DEFAULT_LOCALE, I18nProvider, useI18n, type Locale } from "@/lib/i18n";
 import { SECURITY_CONTENT } from "@/lib/security";
 import Image from "next/image";
 import { NIMBUS_SECURITY_IMAGES, NIMBUS_SECURITY_VIDEOS } from "@/lib/brand";
+import { SERVICE_TOWNS } from "@/lib/businessService";
+import { pathFor } from "@/lib/routes";
+import { SITE_URL } from "@/lib/seo";
 
 const heroCardIcons = ["technician", "sliders", "wrench"] as const;
 
@@ -320,10 +324,41 @@ function SecurityPageContent() {
 
         {/* DUDAS */}
         <section id="dubtes" className="scroll-mt-24 bg-white py-20">
-          <div className="mx-auto max-w-6xl px-5">
+          <div className="mx-auto max-w-3xl px-5">
+            {/* Marcado Service: que es, quien lo hace y donde (Sils y la
+                Selva). Es lo que lee un asistente para responder "qui
+                instal·la camares i control d'accessos a Sils". */}
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "Service",
+                  name: content.meta.title.split(" | ")[0],
+                  serviceType: "CCTV, alarm and access control installation",
+                  description: content.meta.description,
+                  url: `${SITE_URL}${pathFor("seguretat", locale)}`,
+                  provider: {
+                    "@type": "LocalBusiness",
+                    name: "Nimbus Telecom",
+                    url: SITE_URL,
+                    telephone: "+34972850155",
+                    address: {
+                      "@type": "PostalAddress",
+                      streetAddress: "Carrer Major, 42",
+                      postalCode: "17410",
+                      addressLocality: "Sils",
+                      addressRegion: "Girona",
+                      addressCountry: "ES",
+                    },
+                  },
+                  areaServed: SERVICE_TOWNS.map((town) => ({ "@type": "City", name: town })),
+                }).replace(/</g, "\\u003c"),
+              }}
+            />
             {/* Marcado FAQPage: sale de la misma lista que las preguntas de
                 pantalla, asi que no se puede desincronizar. Las respuestas
-                tienen que estar en el HTML (ver FaqItem) para que sea valido. */}
+                tienen que estar en el HTML (ver FaqList) para que sea valido. */}
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={{
@@ -341,14 +376,10 @@ function SecurityPageContent() {
             <p className="text-sm font-black uppercase tracking-[0.2em] text-nimbus-orange">
               {content.faq.eyebrow}
             </p>
-            <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-tight text-nimbus-ink md:text-4xl">
+            <h2 className="mt-3 text-3xl font-black tracking-tight text-nimbus-ink md:text-4xl">
               {content.faq.title}
             </h2>
-            <div className="mt-8 grid gap-3 md:grid-cols-2">
-              {content.faq.items.map(([question, answer]) => (
-                <FaqItem key={question} question={question} answer={answer} />
-              ))}
-            </div>
+            <FaqList items={content.faq.items} />
           </div>
         </section>
 
@@ -394,30 +425,6 @@ function SecurityPageContent() {
   );
 }
 
-function FaqItem({ question, answer }: { question: string; answer: string }) {
-  const [open, setOpen] = useState(false);
-  const panelId = useId();
-
-  return (
-    <div className="rounded-lg border border-nimbus-line bg-white">
-      <button
-        type="button"
-        aria-expanded={open}
-        aria-controls={panelId}
-        onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center justify-between gap-4 p-5 text-left font-black text-nimbus-ink"
-      >
-        {question}
-        <VisualIcon name={open ? "chevron-up" : "chevron-down"} className="size-5 shrink-0 text-nimbus-orange" />
-      </button>
-      {/* La respuesta se queda en el HTML y solo se oculta: asi la leen
-          el buscador y los asistentes, y coincide con el marcado FAQPage. */}
-      <p id={panelId} hidden={!open} className="px-5 pb-5 leading-7 text-nimbus-muted">
-        {answer}
-      </p>
-    </div>
-  );
-}
 
 function SecuritySlideshow() {
   const [active, setActive] = useState(0);
